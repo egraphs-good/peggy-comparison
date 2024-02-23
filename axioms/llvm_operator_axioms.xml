@@ -1,0 +1,657 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset>
+   <!-- temporary crap axioms -->
+
+   <!-- end of crap axioms -->
+
+
+   <rule name="reorder alloca on top of malloc">
+      <trigger>
+         <exists>
+            <op id="ASIGMA" value="rho_sigma">
+               <op id="ALLOCA" value="alloca">
+                  <op id="MSIGMA" value="rho_sigma">
+                     <op id="MALLOC" value="malloc">
+                        <variable id="SIGMA"/>
+                        <variable id="B2"/>
+                        <variable id="C2"/>
+                        <variable id="D2"/>
+                     </op>
+                  </op>
+                  <variable id="B1"/>
+                  <variable id="C1"/>
+                  <variable id="D1"/>
+               </op>
+            </op>
+
+            <op id="AVALUE" value="rho_value">
+               <ref id="ALLOCA"/>
+            </op>
+   
+            <op id="MVALUE" value="rho_value">
+               <ref id="MALLOC"/>
+            </op>
+         </exists>
+      </trigger>
+
+      <response>
+         <creates>
+            <op id="OUTMSIGMA" value="rho_sigma">
+               <op id="OUTMALLOC" value="malloc">
+                  <op id="OUTASIGMA" value="rho_sigma">
+                     <op id="OUTALLOCA" value="alloca">
+                        <ref id="SIGMA"/>
+                        <ref id="B1"/>
+                        <ref id="C1"/>
+                        <ref id="D1"/>
+                     </op>
+                  </op>
+                  <ref id="B2"/>
+                  <ref id="C2"/>
+                  <ref id="D2"/>
+               </op>
+            </op>
+
+            <op id="OUTMVALUE" value="rho_value">
+               <ref id="OUTMALLOC"/>
+            </op>
+
+            <op id="OUTAVALUE" value="rho_value">
+               <ref id="OUTALLOCA"/>
+            </op>
+         </creates>
+
+         <equalities>
+            <ref id="ASIGMA"/>
+            <ref id="OUTMSIGMA"/>
+
+            <ref id="MVALUE"/>
+            <ref id="OUTMVALUE"/>
+   
+            <ref id="AVALUE"/>
+            <ref id="OUTAVALUE"/>
+         </equalities>
+      </response>
+   </rule>
+
+
+   <rule name="reorder malloc on top of alloca">
+      <trigger>
+         <exists>
+            <op id="MSIGMA" value="rho_sigma">
+               <op id="MALLOC" value="malloc">
+                  <op id="ASIGMA" value="rho_sigma">
+                     <op id="ALLOCA" value="alloca">
+                        <variable id="SIGMA"/>
+                        <variable id="B2"/>
+                        <variable id="C2"/>
+                        <variable id="D2"/>
+                     </op>
+                  </op>
+                  <variable id="B1"/>
+                  <variable id="C1"/>
+                  <variable id="D1"/>
+               </op>
+            </op>
+
+            <op id="MVALUE" value="rho_value">
+               <ref id="MALLOC"/>
+            </op>
+   
+            <op id="AVALUE" value="rho_value">
+               <ref id="ALLOCA"/>
+            </op>
+         </exists>
+      </trigger>
+
+      <response>
+         <creates>
+            <op id="OUTASIGMA" value="rho_sigma">
+               <op id="OUTALLOCA" value="alloca">
+                  <op id="OUTMSIGMA" value="rho_sigma">
+                     <op id="OUTMALLOC" value="malloc">
+                        <ref id="SIGMA"/>
+                        <ref id="B1"/>
+                        <ref id="C1"/>
+                        <ref id="D1"/>
+                     </op>
+                  </op>
+                  <ref id="B2"/>
+                  <ref id="C2"/>
+                  <ref id="D2"/>
+               </op>
+            </op>
+
+            <op id="OUTAVALUE" value="rho_value">
+               <ref id="OUTALLOCA"/>
+            </op>
+
+            <op id="OUTMVALUE" value="rho_value">
+               <ref id="OUTMALLOC"/>
+            </op>
+         </creates>
+
+         <equalities>
+            <ref id="MSIGMA"/>
+            <ref id="OUTASIGMA"/>
+
+            <ref id="MVALUE"/>
+            <ref id="OUTMVALUE"/>
+   
+            <ref id="AVALUE"/>
+            <ref id="OUTAVALUE"/>
+         </equalities>
+      </response>
+   </rule>
+
+
+
+   <transform name="free (gep X ....) = free X">
+      <op value="free">
+         <variable id="SIGMA"/>
+         <op value="getelementptr">
+            <variable id="X"/>
+            <variable/>
+            <variable/>
+         </op>
+      </op>
+      
+      <op value="free">
+         <ref id="SIGMA"/>
+         <ref id="X"/>
+      </op>
+   </transform>
+
+
+   <transform name="free(rho_sigma(M:malloc(sigma)),rho_value(M)) == sigma">
+      <op value="free">
+         <op value="rho_sigma">
+            <op value="malloc" id="M">
+               <variable id="SIGMA"/>
+               <variable/>
+               <variable/>
+               <variable/>
+            </op>
+         </op>
+         <op value="rho_value">
+            <ref id="M"/>
+         </op>
+      </op>
+
+      <ref id="SIGMA"/>
+   </transform>
+
+
+
+
+   <transform name="call llvm.memcpy.i32 dest src 1 align  =  store dest (load src align) align">
+            <op value="rho_sigma">
+               <op value="call">
+                  <variable id="SIGMA"/>
+                  <function name="llvm.memcpy.i32" signature="void(i8*,i8*,i32,i32)"/>
+                  <variable id="CC"/>
+                  <op value="params">
+                     <variable id="DEST"/>
+                     <variable id="SRC"/>
+                     <intconstant value="1" width="32"/>
+                     <variable id="ALIGN"/>
+                  </op>
+               </op>
+            </op>
+
+            <op value="rho_sigma">
+               <op value="store">
+                  <ref id="SIGMA"/>
+                  <ref id="DEST"/>
+                  <op value="load">
+                     <ref id="SIGMA"/>
+                     <ref id="SRC"/>
+                     <ref id="ALIGN"/>
+                  </op>
+                  <ref id="ALIGN"/>
+               </op>
+            </op>
+   </transform>
+
+   <transform name="call llvm.memcpy.i64 dest src 1 align  =  store dest (load src align) align">
+            <op value="rho_sigma">
+               <op value="call">
+                  <variable id="SIGMA"/>
+                  <function name="llvm.memcpy.i64" signature="void(i8*,i8*,i64,i32)"/>
+                  <variable id="CC"/>
+                  <op value="params">
+                     <variable id="DEST"/>
+                     <variable id="SRC"/>
+                     <intconstant value="1" width="64"/>
+                     <variable id="ALIGN"/>
+                  </op>
+               </op>
+            </op>
+
+            <op value="rho_sigma">
+               <op value="store">
+                  <ref id="SIGMA"/>
+                  <ref id="DEST"/>
+                  <op value="load">
+                     <ref id="SIGMA"/>
+                     <ref id="SRC"/>
+                     <ref id="ALIGN"/>
+                  </op>
+                  <ref id="ALIGN"/>
+               </op>
+            </op>
+   </transform>
+
+
+   <transform name="call llvm.memset.i32 dest val 1 align = store dest val align">
+            <op value="rho_sigma">
+               <op value="call">
+                  <variable id="SIGMA"/>
+                  <function name="llvm.memset.i32" signature="void(i8*,i8,i32,i32)"/>
+                  <variable id="CC"/>
+                  <op value="params">
+                     <variable id="DEST"/>
+                     <variable id="VAL"/>
+                     <intconstant value="1" width="32"/>
+                     <variable id="ALIGN"/>
+                  </op>
+               </op>
+            </op>
+
+            <op value="rho_sigma">
+               <op value="store">
+                  <ref id="SIGMA"/>
+                  <ref id="DEST"/>
+                  <ref id="VAL"/>
+                  <ref id="ALIGN"/>
+               </op>
+            </op>
+   </transform>
+
+   <transform name="call llvm.memset.i64 dest val 1 align = store dest val align">
+      <op value="rho_sigma">
+         <op value="call">
+            <variable id="SIGMA"/>
+            <function name="llvm.memset.i64" signature="void(i8*,i8,i64,i32)"/>
+            <variable id="CC"/>
+            <op value="params">
+               <variable id="DEST"/>
+               <variable id="VAL"/>
+               <intconstant value="1" width="64"/>
+               <variable id="ALIGN"/>
+            </op>
+         </op>
+      </op>
+
+      <op value="rho_sigma">
+         <op value="store">
+            <ref id="SIGMA"/>
+            <ref id="DEST"/>
+            <ref id="VAL"/>
+            <ref id="ALIGN"/>
+         </op>
+      </op>
+   </transform>
+
+   
+   <!-- call llvm.{memmove,memcpy,memset}.*  of 0 bytes is a noop" -->
+
+      
+   <transform name="call llvm.memmove.i32  of 0 bytes is a noop">
+      <op value="rho_sigma">
+         <op value="call">
+            <variable id="SIGMA"/>
+            <function name="llvm.memmove.i32" signature="void(i8*,i8*,i32,i32)"/>
+            <variable id="CC"/>
+            <op value="params">
+               <variable id="DEST"/>
+               <variable id="SRC"/>
+               <intconstant value="0" width="32"/>
+               <variable id="ALIGN"/>
+            </op>
+         </op>
+      </op>
+
+      <ref id="SIGMA"/>
+   </transform>
+   <transform name="call llvm.memmove.i64  of 0 bytes is a noop">
+      <op value="rho_sigma">
+         <op value="call">
+            <variable id="SIGMA"/>
+            <function name="llvm.memmove.i64" signature="void(i8*,i8*,i64,i32)"/>
+            <variable id="CC"/>
+            <op value="params">
+               <variable id="DEST"/>
+               <variable id="SRC"/>
+               <intconstant value="0" width="64"/>
+               <variable id="ALIGN"/>
+            </op>
+         </op>
+      </op>
+
+      <ref id="SIGMA"/>
+   </transform>
+
+
+   <transform name="call llvm.memcpy.i32  of 0 bytes is a noop">
+      <op value="rho_sigma">
+         <op value="call">
+            <variable id="SIGMA"/>
+            <function name="llvm.memcpy.i32" signature="void(i8*,i8*,i32,i32)"/>
+            <variable id="CC"/>
+            <op value="params">
+               <variable id="DEST"/>
+               <variable id="SRC"/>
+               <intconstant value="0" width="32"/>
+               <variable id="ALIGN"/>
+            </op>
+         </op>
+      </op>
+
+      <ref id="SIGMA"/>
+   </transform>
+   <transform name="call llvm.memcpy.i64  of 0 bytes is a noop">
+      <op value="rho_sigma">
+         <op value="call">
+            <variable id="SIGMA"/>
+            <function name="llvm.memcpy.i64" signature="void(i8*,i8*,i64,i32)"/>
+            <variable id="CC"/>
+            <op value="params">
+               <variable id="DEST"/>
+               <variable id="SRC"/>
+               <intconstant value="0" width="64"/>
+               <variable id="ALIGN"/>
+            </op>
+         </op>
+      </op>
+
+      <ref id="SIGMA"/>
+   </transform>
+
+
+
+   <transform name="call llvm.memset.i32  of 0 bytes is a noop">
+      <op value="rho_sigma">
+         <op value="call">
+            <variable id="SIGMA"/>
+            <function name="llvm.memset.i32" signature="void(i8*,i8,i32,i32)"/>
+            <variable id="CC"/>
+            <op value="params">
+               <variable id="DEST"/>
+               <variable id="VAL"/>
+               <intconstant value="0" width="32"/>
+               <variable id="ALIGN"/>
+            </op>
+         </op>
+      </op>
+
+      <ref id="SIGMA"/>
+   </transform>
+   <transform name="call llvm.memset.i64  of 0 bytes is a noop">
+      <op value="rho_sigma">
+         <op value="call">
+            <variable id="SIGMA"/>
+            <function name="llvm.memset.i64" signature="void(i8*,i8,i64,i32)"/>
+            <variable id="CC"/>
+            <op value="params">
+               <variable id="DEST"/>
+               <variable id="VAL"/>
+               <intconstant value="0" width="64"/>
+               <variable id="ALIGN"/>
+            </op>
+         </op>
+      </op>
+
+      <ref id="SIGMA"/>
+   </transform>
+
+
+
+   <!-- sigma(alloca on store) = sigma(store on alloca) (one-way) -->
+
+   <transform 
+      name="rho_sigma(alloca(rho_sigma(store(SIGMA,PTR,VAL,ALIGN)),TYPE,NUMELTS,ALIGN2)) == rho_sigma(store(rho_sigma(alloca(SIGMA,TYPE,NUMELTS,ALIGN2)),PTR,VAL,ALIGN))">
+      <op value="rho_sigma">
+         <op value="alloca">
+            <op value="rho_sigma">
+               <op value="store">
+                  <variable id="SIGMA"/>
+                  <variable id="PTR"/>
+                  <variable id="VAL"/>
+                  <variable id="ALIGN"/>
+               </op>
+            </op>
+            <variable id="TYPE"/>
+            <variable id="NUMELTS"/>
+            <variable id="ALIGN2"/>
+         </op>
+      </op>
+
+      <op value="rho_sigma">
+         <op value="store">
+            <op value="rho_sigma">
+               <op value="alloca">
+                  <ref id="SIGMA"/>
+                  <ref id="TYPE"/>
+                  <ref id="NUMELTS"/>
+                  <ref id="ALIGN2"/>
+               </op>
+            </op>
+            <ref id="PTR"/>
+            <ref id="VAL"/>
+            <ref id="ALIGN"/>
+         </op>
+      </op>
+   </transform>
+
+
+   <transform 
+      name="rho_sigma(alloca(rho_sigma(vol_store(SIGMA,PTR,VAL,ALIGN)),TYPE,NUMELTS,ALIGN2)) == rho_sigma(vol_store(rho_sigma(alloca(SIGMA,TYPE,NUMELTS,ALIGN2)),PTR,VAL,ALIGN))">
+      <op value="rho_sigma">
+         <op value="alloca">
+            <op value="rho_sigma">
+               <op value="volatile_store">
+                  <variable id="SIGMA"/>
+                  <variable id="PTR"/>
+                  <variable id="VAL"/>
+                  <variable id="ALIGN"/>
+               </op>
+            </op>
+            <variable id="TYPE"/>
+            <variable id="NUMELTS"/>
+            <variable id="ALIGN2"/>
+         </op>
+      </op>
+
+      <op value="rho_sigma">
+         <op value="volatile_store">
+            <op value="rho_sigma">
+               <op value="alloca">
+                  <ref id="SIGMA"/>
+                  <ref id="TYPE"/>
+                  <ref id="NUMELTS"/>
+                  <ref id="ALIGN2"/>
+               </op>
+            </op>
+            <ref id="PTR"/>
+            <ref id="VAL"/>
+            <ref id="ALIGN"/>
+         </op>
+      </op>
+   </transform>
+   
+
+
+   <!-- sigma(malloc on store) = sigma(store on malloc) (one-way) -->
+
+x   <transform 
+      name="rho_sigma(malloc(rho_sigma(store(SIGMA,PTR,VAL,ALIGN)),TYPE,NUMELTS,ALIGN2)) == rho_sigma(store(rho_sigma(malloc(SIGMA,TYPE,NUMELTS,ALIGN2)),PTR,VAL,ALIGN))">
+      <op value="rho_sigma">
+         <op value="malloc">
+            <op value="rho_sigma">
+               <op value="store">
+                  <variable id="SIGMA"/>
+                  <variable id="PTR"/>
+                  <variable id="VAL"/>
+                  <variable id="ALIGN"/>
+               </op>
+            </op>
+            <variable id="TYPE"/>
+            <variable id="NUMELTS"/>
+            <variable id="ALIGN2"/>
+         </op>
+      </op>
+
+      <op value="rho_sigma">
+         <op value="store">
+            <op value="rho_sigma">
+               <op value="malloc">
+                  <ref id="SIGMA"/>
+                  <ref id="TYPE"/>
+                  <ref id="NUMELTS"/>
+                  <ref id="ALIGN2"/>
+               </op>
+            </op>
+            <ref id="PTR"/>
+            <ref id="VAL"/>
+            <ref id="ALIGN"/>
+         </op>
+      </op>
+   </transform>
+
+
+   <transform 
+      name="rho_sigma(malloc(rho_sigma(vol_store(SIGMA,PTR,VAL,ALIGN)),TYPE,NUMELTS,ALIGN2)) == rho_sigma(vol_store(rho_sigma(malloc(SIGMA,TYPE,NUMELTS,ALIGN2)),PTR,VAL,ALIGN))">
+      <op value="rho_sigma">
+         <op value="malloc">
+            <op value="rho_sigma">
+               <op value="volatile_store">
+                  <variable id="SIGMA"/>
+                  <variable id="PTR"/>
+                  <variable id="VAL"/>
+                  <variable id="ALIGN"/>
+               </op>
+            </op>
+            <variable id="TYPE"/>
+            <variable id="NUMELTS"/>
+            <variable id="ALIGN2"/>
+         </op>
+      </op>
+
+      <op value="rho_sigma">
+         <op value="volatile_store">
+            <op value="rho_sigma">
+               <op value="malloc">
+                  <ref id="SIGMA"/>
+                  <ref id="TYPE"/>
+                  <ref id="NUMELTS"/>
+                  <ref id="ALIGN2"/>
+               </op>
+            </op>
+            <ref id="PTR"/>
+            <ref id="VAL"/>
+            <ref id="ALIGN"/>
+         </op>
+      </op>
+   </transform>
+   
+
+
+   <!-- load/store axioms -->
+
+   <transform name="load(store(SIGMA,V:rho_value(alloca(*,i32,*,*)),STORED,*),V,4) = STORED">
+      <op value="load">
+         <op value="store">
+            <variable id="SIGMA"/>
+            <op id="PTR" value="rho_value">
+               <op value="alloca">
+                  <variable/>
+                  <type value="i32"/>
+                  <variable/>
+                  <variable/>
+               </op>
+            </op>
+            <variable id="STORED"/>
+            <variable/>
+         </op>
+         <ref id="PTR"/>
+         <numeral value="4"/>
+      </op>
+
+      <ref id="STORED"/>
+   </transform>
+
+
+   <transform name="load(store(SIGMA,PTR,V,0),PTR,1) = V">
+      <op value="load">
+         <op value="store">
+            <variable id="SIGMA"/>
+            <variable id="PTR"/>
+            <variable id="V"/>
+            <numeral value="0"/>
+         </op>
+         <ref id="PTR"/>
+         <numeral value="1"/>
+      </op>
+
+      <ref id="V"/>
+   </transform>
+
+
+   <transform name="load(store(SIGMA,PTR,V,ALIGN),PTR,0) = V">
+      <op value="load">
+         <op value="store">
+            <variable/>
+            <variable id="PTR"/>
+            <variable id="V"/>
+            <variable id="ALIGN"/>
+         </op>
+         <ref id="PTR"/>
+         <numeral value="0"/>
+      </op>
+
+      <ref id="V"/>
+   </transform>
+
+
+
+
+   <transform name="load(store(SIGMA,PTR,V,ALIGN),PTR,ALIGN) = V">
+      <op value="load">
+         <op value="store">
+            <variable/>
+            <variable id="PTR"/>
+            <variable id="V"/>
+            <variable id="ALIGN"/>
+         </op>
+         <ref id="PTR"/>
+         <ref id="ALIGN"/>
+      </op>
+
+      <ref id="V"/>
+   </transform>
+
+
+
+   <transform name="store(store(SIGMA,PTR,V1,ALIGN),PTR,V2,ALIGN) == store(SIGMA,PTR,V2,ALIGN)">
+      <op value="store">
+         <op value="store">
+            <variable id="SIGMA"/>
+            <variable id="PTR"/>
+            <variable id="V1"/>
+            <variable id="ALIGN"/>
+         </op>
+         <ref id="PTR"/>
+         <variable id="V2"/>
+         <ref id="ALIGN"/>
+      </op>
+
+      <op value="store">
+         <ref id="SIGMA"/>
+         <ref id="PTR"/>
+         <ref id="V2"/>
+         <ref id="ALIGN"/>
+      </op>
+   </transform>
+</ruleset>

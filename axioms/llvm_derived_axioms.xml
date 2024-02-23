@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset>
+  <simpleRule name="Derived pointer has same stackPointer-ness as base">
+    @A:annotation("stackPointer", @P:*)
+    {annotation("derivedPointer", @D:*, @P)}
+    ==>
+    @A = annotation("stackPointer", @D)
+  </simpleRule>
+
+  <simpleRule name="Pointers derived from non-aliasing pointers DNA">
+    {annotation("derivedPointer", @D1:*, @P1:*)
+     annotation("derivedPointer", @D2:*, @P2:*)
+     annotation("doesNotAlias", @P1, @P2)}
+    ==>
+    {annotation("doesNotAlias", @D1, @D2)}
+  </simpleRule>
+
+  <simpleRule name="GEP of derived is derived">
+    @G:getelementptr(@D:*,*,*)
+    {annotation("derivedPointer", @D, @P:*)}
+    ==>
+    {annotation("derivedPointer", @G, @P)}
+  </simpleRule>
+  
+  <simpleRule name="GEP of alloca is derived">
+    @G:getelementptr(@P:rho_value(alloca(*,*,*,*)),*,*)
+    ==>
+    {annotation("derivedPointer", @G,@P)}
+  </simpleRule>
+  <simpleRule name="GEP of malloc is derived">
+    @G:getelementptr(@P:rho_value(malloc(*,*,*,*)),*,*)
+    ==>
+    {annotation("derivedPointer", @G,@P)}
+  </simpleRule>
+</ruleset>

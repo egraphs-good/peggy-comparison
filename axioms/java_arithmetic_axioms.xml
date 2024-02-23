@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset>
+  <simpleTransform name="A*0=0">
+    mul(*,@Z:int("0")) = @Z
+  </simpleTransform>
+  <simpleTransform name="A*0=0">
+    mul(*,@Z:long("0")) = @Z
+  </simpleTransform>
+  <simpleTransform name="A*0=0">
+    mul(*,@Z:double("0.0")) = @Z
+  </simpleTransform>
+  <simpleTransform name="A*0=0">
+    mul(*,@Z:float("0.0")) = @Z
+  </simpleTransform>
+
+  <simpleTransform name="A/1=A">
+    div(@A:*,int("1")) = @A
+  </simpleTransform>
+  <simpleTransform name="A/1=A">
+    div(@A:*,long("1")) = @A
+  </simpleTransform>
+  <simpleTransform name="A/1=A">
+    div(@A:*,float("1")) = @A
+  </simpleTransform>
+  <simpleTransform name="A/1=A">
+    div(@A:*,double("1")) = @A
+  </simpleTransform>
+
+  <simpleTransform name="A*1=A">
+    mul(@A:*,int("1")) = @A
+  </simpleTransform>
+  <simpleTransform name="A*1=A">
+    mul(@A:*,long("1")) = @A
+  </simpleTransform>
+  <simpleTransform name="A*1=A">
+    mul(@A:*,float("1")) = @A
+  </simpleTransform>
+  <simpleTransform name="A*1=A">
+    mul(@A:*,double("1")) = @A
+  </simpleTransform>
+
+  <simpleTransform name="A+0=A">
+    add(@A:*,int("0")) = @A
+  </simpleTransform>
+  <simpleTransform name="A+0=A">
+    add(@A:*,long("0")) = @A
+  </simpleTransform>
+  <simpleTransform name="A+0=A">
+    add(@A:*,float("0")) = @A
+  </simpleTransform>
+  <simpleTransform name="A+0=A">
+    add(@A:*,double("0")) = @A
+  </simpleTransform>
+
+  <simpleTransform name="A-0=A">
+    sub(@A:*,int("0")) = @A
+  </simpleTransform>
+  <simpleTransform name="A-0=A">
+    sub(@A:*,long("0")) = @A
+  </simpleTransform>
+  <simpleTransform name="A-0=A">
+    sub(@A:*,float("0")) = @A
+  </simpleTransform>
+  <simpleTransform name="A-0=A">
+    sub(@A:*,double("0")) = @A
+  </simpleTransform>
+
+  <simpleTransform name="A*B = B*A">
+    mul(@A:*,@B:*) = mul(@B,@A)
+  </simpleTransform>
+
+  <simpleTransform name="A+B = B+A">
+    add(@A:*,@B:*) = add(@B,@A)
+  </simpleTransform>
+
+  <simpleTransform name="A*(B+C) = A*B + A*C">
+    mul(@A:*,add(@B:*,@C:*)) = add(mul(@A,@B),mul(@A,@C))
+  </simpleTransform>
+
+  <simpleTransform name="A*(B-C) = A*B - A*C">
+    mul(@A:*,sub(@B:*,@C:*)) = sub(mul(@A,@B),mul(@A,@C))
+  </simpleTransform>
+  
+  <simpleTransform name="A+(B+C) = (A+B)+C">
+    add(@A:*,add(@B:*,@C:*)) = add(add(@A,@B),@C)
+  </simpleTransform>
+  <simpleTransform name="(A+B)+C = A+(B+C)">
+    add(add(@A:*,@B:*),@C:*) = add(@A,add(@B,@C))
+  </simpleTransform>
+
+  <simpleTransform name="[A lt B] = [B gt A]">
+    lt(@A:*,@B:*) = gt(@B,@A)
+  </simpleTransform>
+  <simpleTransform name="[A gt B] = [B lt A]">
+    gt(@A:*,@B:*) = lt(@B,@A)
+  </simpleTransform>
+  <simpleTransform name="[A lte B] = [B gte A]">
+    lte(@A:*,@B:*) = gte(@B,@A)
+  </simpleTransform>
+  <simpleTransform name="[A gte B] = [B lte A]">
+    gte(@A:*,@B:*) = lte(@B,@A)
+  </simpleTransform>
+
+  
+  <simpleRule name="[A lt 0, B lt 0] ==> [A*B gt 0, A+B lt 0]">
+    {lt(@A:*,@Z:int("0"))
+     lt(@B:*,@Z)}
+    ==>
+    {gt(mul(@A,@B),@Z)
+     lt(add(@A,@B),@Z)}
+  </simpleRule>
+  <simpleRule name="[A lt 0, B lt 0] ==> [A*B gt 0, A+B lt 0]">
+    {lt(@A:*,@Z:long("0"))
+     lt(@B:*,@Z)}
+    ==>
+    {gt(mul(@A,@B),@Z)
+     lt(add(@A,@B),@Z)}
+  </simpleRule>
+  <simpleRule name="[A lt 0, B lt 0] ==> [A*B gt 0, A+B lt 0]">
+    {lt(@A:*,@Z:float("0"))
+     lt(@B:*,@Z)}
+    ==>
+    {gt(mul(@A,@B),@Z)
+     lt(add(@A,@B),@Z)}
+  </simpleRule>
+  <simpleRule name="[A lt 0, B lt 0] ==> [A*B gt 0, A+B lt 0]">
+    {lt(@A:*,@Z:double("0"))
+     lt(@B:*,@Z)}
+    ==>
+    {gt(mul(@A,@B),@Z)
+     lt(add(@A,@B),@Z)}
+  </simpleRule>
+
+
+  <simpleRule name="[A gt 0, B gt 0] ==> [A*B gt 0, A+B gt 0]">
+    {gt(@A:*,@Z:int("0"))
+     gt(@B:*,@Z)}
+    ==>
+    {gt(mul(@A,@B),@Z)
+     gt(add(@A,@B),@Z)}
+  </simpleRule>
+  <simpleRule name="[A gt 0, B gt 0] ==> [A*B gt 0, A+B gt 0]">
+    {gt(@A:*,@Z:long("0"))
+     gt(@B:*,@Z)}
+    ==>
+    {gt(mul(@A,@B),@Z)
+     gt(add(@A,@B),@Z)}
+  </simpleRule>
+  <simpleRule name="[A gt 0, B gt 0] ==> [A*B gt 0, A+B gt 0]">
+    {gt(@A:*,@Z:double("0"))
+     gt(@B:*,@Z)}
+    ==>
+    {gt(mul(@A,@B),@Z)
+     gt(add(@A,@B),@Z)}
+  </simpleRule>
+  <simpleRule name="[A gt 0, B gt 0] ==> [A*B gt 0, A+B gt 0]">
+    {gt(@A:*,@Z:float("0"))
+     gt(@B:*,@Z)}
+    ==>
+    {gt(mul(@A,@B),@Z)
+     gt(add(@A,@B),@Z)}
+  </simpleRule>
+
+
+  <simpleRule name="[A gt 0, B lt 0] ==> [A*B lt 0]">
+    {gt(@A:*,@Z:int("0"))
+     lt(@B:*,@Z)}
+    ==>
+    {lt(mul(@A,@B),@Z)}
+  </simpleRule>
+  <simpleRule name="[A gt 0, B lt 0] ==> [A*B lt 0]">
+    {gt(@A:*,@Z:long("0"))
+     lt(@B:*,@Z)}
+    ==>
+    {lt(mul(@A,@B),@Z)}
+  </simpleRule>
+  <simpleRule name="[A gt 0, B lt 0] ==> [A*B lt 0]">
+    {gt(@A:*,@Z:double("0"))
+     lt(@B:*,@Z)}
+    ==>
+    {lt(mul(@A,@B),@Z)}
+  </simpleRule>
+  <simpleRule name="[A gt 0, B lt 0] ==> [A*B lt 0]">
+    {gt(@A:*,@Z:float("0"))
+     lt(@B:*,@Z)}
+    ==>
+    {lt(mul(@A,@B),@Z)}
+  </simpleRule>
+
+
+  <simpleRule name="[A gt B] => [A gte B]">
+    {gt(@A:*,@B:*)}
+    ==>
+    {gte(@A,@B)}
+  </simpleRule>
+
+  <simpleRule name="[A lt B] => [A lte B]">
+    {lt(@A:*,@B:*)}
+    ==>
+    {lte(@A,@B)}
+  </simpleRule>
+
+
+   <simpleTransform>
+      shl(mul(@X:*,@C1:*),@C2:*) = mul(@X,shl(@C1,@C2))      
+   </simpleTransform>
+
+   <simpleRule>
+      @TOP:lt(@A:*,@A)
+      ==>
+      !{@TOP}!
+   </simpleRule>
+   <simpleRule>
+      @TOP:gt(@A:*,@A)
+      ==>
+      !{@TOP}!
+   </simpleRule>
+   <simpleRule>
+      @TOP:ne(@A:*,@A)
+      ==>
+      !{@TOP}!
+   </simpleRule>
+   <simpleRule>
+      @TOP:eq(@A:*,@A)
+      ==>
+      {@TOP}
+   </simpleRule>
+   <simpleRule>
+      @TOP:gte(@A:*,@A)
+      ==>
+      {@TOP}
+   </simpleRule>
+   <simpleRule>
+      @TOP:lte(@A:*,@A)
+      ==>
+      {@TOP}
+   </simpleRule>
+
+
+   <simpleTransform>
+      shl(shl(@X:*,@C1:*),@C2:*) = shl(@X,add(@C1,@C2))
+   </simpleTransform>
+   <simpleTransform>
+      ushr(ushr(@X:*,@C1:*),@C2:*) = ushr(@X,add(@C1,@C2))
+   </simpleTransform>
+   <simpleTransform>
+      shr(shr(@X:*,@C1:*),@C2:*) = shr(@X,add(@C1,@C2))
+   </simpleTransform>
+
+   <simpleTransform>
+      shl(add(@Y:*,and(ushr(@X:*,@C:*),@CC:*)),@C) = add(and(@X,shl(@CC,@C)),shl(@Y,@C))
+   </simpleTransform>
+   <simpleTransform>
+      shl(add(@Y:*,and(shr(@X:*,@C:*),@CC:*)),@C) = add(and(@X,shl(@CC,@C)),shl(@Y,@C))
+   </simpleTransform>
+
+   <simpleTransform>
+      rho_value(cast(
+         *,
+         @T:*,
+         @INNER:rho_value(cast(*,@T,*)))) 
+      = 
+      @INNER
+   </simpleTransform>
+
+   <simpleTransform>
+      xor(int("0"),@X:*) = @X
+   </simpleTransform>
+   <simpleTransform>
+      xor(@A:*,@B:*) = xor(@B,@A)
+   </simpleTransform>
+   <simpleTransform>
+      xor(xor(@A:*,@B:*),@C:*) = xor(@A,xor(@B,@C))
+   </simpleTransform>
+   <simpleTransform>
+      xor(@A:*,xor(@B:*,@C:*)) = xor(xor(@A,@B),@C)
+   </simpleTransform>
+
+
+
+   <simpleTransform>
+      or(int("0"),@X:*) = @X
+   </simpleTransform>
+   <simpleTransform>
+      or(@A:*,@B:*) = or(@B,@A)
+   </simpleTransform>
+   <simpleTransform>
+      or(or(@A:*,@B:*),@C:*) = or(@A,or(@B,@C))
+   </simpleTransform>
+   <simpleTransform>
+      or(@A:*,or(@B:*,@C:*)) = or(or(@A,@B),@C)
+   </simpleTransform>
+
+   <simpleTransform>
+      and(@Z:int("0"),*) = @Z
+   </simpleTransform>
+   <simpleTransform>
+      and(@A:*,@B:*) = and(@B,@A)
+   </simpleTransform>
+   <simpleTransform>
+      and(and(@A:*,@B:*),@C:*) = and(@A,and(@B,@C))
+   </simpleTransform>
+   <simpleTransform>
+      and(@A:*,and(@B:*,@C:*)) = and(and(@A,@B),@C)
+   </simpleTransform>
+
+   <simpleTransform>
+      xor(and(@A:*,@B:*),or(@A,@B)) = xor(@A,@B)
+   </simpleTransform>
+   <simpleTransform>
+      xor(and(@X:*,@Y:*),and(@X,@Z:*)) = and(xor(@Y,@Z),@X)
+   </simpleTransform>
+   <simpleTransform>
+      or(and(@A:*,@B:*),@A) = @A
+   </simpleTransform>
+
+   <simpleTransform>
+      mul(shl(@X:*,@C1:*),@C2:*) = mul(@X,shl(@C2,@C1))
+   </simpleTransform>
+
+   <simpleTransform>
+      and(@X:*,@X) = @X
+   </simpleTransform>
+   <simpleTransform>
+      or(@X:*,@X) = @X
+   </simpleTransform>
+
+   <simpleTransform>
+      rho_value(div(rho_value(div(@X:*,@A:*)),@B:*)) 
+      = 
+      rho_value(div(@X,mul(@A,@B)))
+   </simpleTransform>
+
+   <simpleTransform>
+      rho_value(div(@X:*,mul(@A:*,@B:*)))
+      =
+      rho_value(div(rho_value(div(@X,@A)),@B)) 
+   </simpleTransform>
+
+   <simpleTransform>
+      and(xor(@X:*,@C1:*),@C2:*) = xor(and(@X,@C1),and(@C1,@C2))
+   </simpleTransform>
+   <simpleTransform>
+      xor(and(@X:*,@C1:*),and(@C1,@C2:*)) = and(xor(@X,@C1),@C2)
+   </simpleTransform>
+
+   <simpleTransform>
+      and(or(@X:*,@C:*),@C) = @C
+   </simpleTransform>
+
+   <simpleTransform>
+      and(or(@X:*,@C1:*),@C2:*) = and(or(@X,and(@C1,@C2)),@C2)
+   </simpleTransform>
+   <simpleTransform>
+      and(or(@X:*,and(@C1:*,@C2:*)),@C2) = and(or(@X,@C1),@C2)
+   </simpleTransform>
+
+   <simpleTransform>
+      sub(@A:*,add(@B:*,@C:*)) = sub(sub(@A,@B),@C)
+   </simpleTransform>
+   <simpleTransform>
+      sub(sub(@A:*,@B:*),@C:*) = sub(@A,add(@B,@C))
+   </simpleTransform>
+
+   <simpleTransform>
+      sub(@A:*,sub(@B:*,@C:*)) = add(sub(@A,@B),@C)
+   </simpleTransform>
+   <simpleTransform>
+      add(sub(@A:*,@B:*),@C:*) = sub(@A,sub(@B,@C))
+   </simpleTransform>
+
+   <simpleTransform>
+      sub(int("0"),ushr(@X:*,int("31"))) = shr(@X,int("31"))
+   </simpleTransform>
+   <simpleTransform>
+      shr(@X:*,int("31")) = sub(int("0"),ushr(@X,int("31")))
+   </simpleTransform>
+
+   <simpleTransform>
+      sub(int("0"),shr(@X:*,int("31"))) = ushr(@X,int("31"))
+   </simpleTransform>
+   <simpleTransform>
+      ushr(@X:*,int("31")) = sub(int("0"),shr(@X,int("31")))
+   </simpleTransform>
+
+   <simpleRule>
+      @TOP:gt(@A:*,int("2147483647"))
+      ==>
+      !{@TOP}!
+   </simpleRule>
+
+   <simpleRule>
+      @TOP:lte(@A:*,int("2147483647"))
+      ==>
+      {@TOP}
+   </simpleRule>
+
+   <simpleRule>
+      @TOP:gte(@A:*,int("-2147483648"))
+      ==>
+      {@TOP}
+   </simpleRule>
+</ruleset>

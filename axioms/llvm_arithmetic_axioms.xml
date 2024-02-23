@@ -1,0 +1,2229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset>
+   <transform name="extractelement(insertelement(VECTOR,VALUE,INDEX),INDEX) == VALUE">
+      <op value="extractelement">
+         <op value="insertelement">
+            <variable id="VECTOR"/>
+            <variable id="VALUE"/>
+            <variable id="INDEX"/>
+         </op>
+         <ref id="INDEX"/>
+      </op>
+
+      <ref id="VALUE"/>
+   </transform>
+
+   <rule name="[I!=J] extractelement(insertelement(VECTOR,_,I),J) == extractelement(VECTOR,J)">
+      <trigger>
+         <exists>
+            <op value="extractelement" id="ORIG">
+               <op value="insertelement">
+                  <variable id="VECTOR"/>
+                  <variable/>
+                  <variable id="I"/>
+               </op>
+               <variable id="J"/>
+            </op>
+         </exists>
+
+         <trues>
+            <nondomain value="negate">
+               <nondomain value="equals">
+                  <ref id="I"/>
+                  <ref id="J"/>
+               </nondomain>
+            </nondomain>
+         </trues>
+      </trigger>
+
+      <response>
+         <creates>
+            <op value="extractelement" id="TRANS">
+               <ref id="VECTOR"/>
+               <ref id="J"/>
+            </op>
+         </creates>
+         <equalities>
+            <ref id="ORIG"/>
+            <ref id="TRANS"/>
+         </equalities>
+      </response>
+   </rule>
+
+
+
+   <transform name="insertelement(insertelement(VECTOR,V1,INDEX),V2,INDEX) == insertelement(VECTOR,V2,INDEX)">
+      <op value="insertelement">
+         <op value="insertelement">
+            <variable id="VECTOR"/>
+            <variable/>
+            <variable id="INDEX"/>
+         </op>
+         <variable id="V2"/>
+         <ref id="INDEX"/>
+      </op>
+
+      <op value="insertelement">
+         <ref id="VECTOR"/>
+         <ref id="V2"/>
+         <ref id="INDEX"/>
+      </op>
+   </transform>
+
+
+
+
+   <!-- select axioms -->   
+
+
+   <transform name="select C A B = select (negate C) B A">
+      <op value="select">
+         <variable id="C"/>
+         <variable id="A"/>
+         <variable id="B"/>
+      </op>
+      <op value="select">
+         <nondomain value="negate">
+            <ref id="C"/>
+         </nondomain>
+         <ref id="B"/>
+         <ref id="A"/>
+      </op>
+   </transform>
+
+
+
+   <transform name="select true, A, B == A">
+      <op value="select">
+         <intconstant width="1" value="1"/>
+         <variable id="A"/>
+         <variable id="B"/>
+      </op>
+      <ref id="A"/>
+   </transform>
+
+
+
+   <transform name="select false A B == B">
+      <op value="select">
+         <intconstant width="1" value="0"/>
+         <variable id="A"/>
+         <variable id="B"/>
+      </op>
+      <ref id="B"/>
+   </transform>
+
+
+   <transform name="select C X X = X">
+      <op value="select">
+         <variable/>
+         <variable id="X"/>
+         <ref id="X"/>
+      </op>
+      <ref id="X"/>
+   </transform>
+
+
+   <transform name="select(A,B,C) == phi(A,B,C)">
+      <!-- one-way transformation -->
+      <op value="select">
+         <variable id="A"/>
+         <variable id="B"/>
+         <variable id="C"/>
+      </op>
+
+      <nondomain value="phi">
+         <ref id="A"/>
+         <ref id="B"/>
+         <ref id="C"/>
+      </nondomain>
+   </transform>
+
+   <!--           remove common LLVM compiler artifact (ne)            -->
+
+   <transform name="icmp[ne](zext[i8](icmp[eq](A,B)),i8(0))  == icmp[eq](A,B)">
+      <icmp id="BEFORE" type="ne">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="eq" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <ref id="RESULT"/>
+   </transform>
+
+   <transform name="icmp[ne](zext[i8](icmp[ne](A,B)),i8(0))  == icmp[ne](A,B)">
+      <icmp type="ne">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="ne" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <ref id="RESULT"/>
+   </transform>
+
+   <transform name="icmp[ne](zext[i8](icmp[ugt](A,B)),i8(0))  == icmp[ugt](A,B)">
+      <icmp type="ne">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="ugt" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <ref id="RESULT"/>
+   </transform>
+
+   <transform name="icmp[ne](zext[i8](icmp[uge](A,B)),i8(0))  == icmp[uge](A,B)">
+      <icmp type="ne">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="uge" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <ref id="RESULT"/>
+   </transform>
+
+   <transform name="icmp[ne](zext[i8](icmp[ult](A,B)),i8(0))  == icmp[ult](A,B)">
+      <icmp type="ne">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="ult" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <ref id="RESULT"/>
+   </transform>
+
+   <transform name="icmp[ne](zext[i8](icmp[ult](A,B)),i8(0))  == icmp[ult](A,B)">
+      <icmp type="ne">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="ult" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <ref id="RESULT"/>
+   </transform>
+
+   <transform name="icmp[ne](zext[i8](icmp[sgt](A,B)),i8(0))  == icmp[sgt](A,B)">
+      <icmp type="ne">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="sgt" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <ref id="RESULT"/>
+   </transform>
+
+   <transform name="icmp[ne](zext[i8](icmp[sge](A,B)),i8(0))  == icmp[sge](A,B)">
+      <icmp type="ne">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="sge" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <ref id="RESULT"/>
+   </transform>
+
+   <transform name="icmp[ne](zext[i8](icmp[slt](A,B)),i8(0))  == icmp[slt](A,B)">
+      <icmp type="ne">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="slt" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <ref id="RESULT"/>
+   </transform>
+
+   <transform name="icmp[ne](zext[i8](icmp[sle](A,B)),i8(0))  == icmp[sle](A,B)">
+      <icmp type="ne">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="sle" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <ref id="RESULT"/>
+   </transform>
+
+
+
+
+
+   <!--        remove compiler artifact (eq)        -->
+
+
+
+   <transform name="icmp[eq](zext[i8](icmp[eq](A,B)),i8(0))  == negate(icmp[eq](A,B))">
+      <icmp type="eq">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="eq" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <nondomain value="negate">
+         <ref id="RESULT"/>
+      </nondomain>
+   </transform>
+
+   <transform name="icmp[eq](zext[i8](icmp[ne](A,B)),i8(0))  == negate(icmp[ne](A,B))">
+      <icmp type="eq">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="ne" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <nondomain value="negate">
+         <ref id="RESULT"/>
+      </nondomain>
+   </transform>
+
+   <transform name="icmp[eq](zext[i8](icmp[ugt](A,B)),i8(0))  == negate(icmp[ugt](A,B))">
+      <icmp type="eq">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="ugt" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <nondomain value="negate">
+         <ref id="RESULT"/>
+      </nondomain>
+   </transform>
+
+   <transform name="icmp[eq](zext[i8](icmp[uge](A,B)),i8(0))  == negate(icmp[uge](A,B))">
+      <icmp type="eq">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="uge" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <nondomain value="negate">
+         <ref id="RESULT"/>
+      </nondomain>
+   </transform>
+
+   <transform name="icmp[eq](zext[i8](icmp[ult](A,B)),i8(0))  == negate(icmp[ult](A,B))">
+      <icmp type="eq">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="ult" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <nondomain value="negate">
+         <ref id="RESULT"/>
+      </nondomain>
+   </transform>
+
+   <transform name="icmp[eq](zext[i8](icmp[ult](A,B)),i8(0))  == negate(icmp[ult](A,B))">
+      <icmp type="eq">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="ult" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <nondomain value="negate">
+         <ref id="RESULT"/>
+      </nondomain>
+   </transform>
+
+   <transform name="icmp[eq](zext[i8](icmp[sgt](A,B)),i8(0))  == negate(icmp[sgt](A,B))">
+      <icmp type="eq">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="sgt" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <nondomain value="negate">
+         <ref id="RESULT"/>
+      </nondomain>
+   </transform>
+
+   <transform name="icmp[eq](zext[i8](icmp[sge](A,B)),i8(0))  == negate(icmp[sge](A,B))">
+      <icmp type="eq">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="sge" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <nondomain value="negate">
+         <ref id="RESULT"/>
+      </nondomain>
+   </transform>
+
+   <transform name="icmp[eq](zext[i8](icmp[slt](A,B)),i8(0))  == negate(icmp[slt](A,B))">
+      <icmp type="eq">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="slt" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <nondomain value="negate">
+         <ref id="RESULT"/>
+      </nondomain>
+   </transform>
+
+
+
+   <transform name="icmp[eq](zext[i8](icmp[sle](A,B)),i8(0))  == negate(icmp[sle](A,B))">
+      <icmp type="eq">
+         <cast type="zext">
+            <type value="i8"/>
+            <icmp type="sle" id="RESULT">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </cast>
+         <intconstant width="8" value="0"/>
+      </icmp>
+      <nondomain value="negate">
+         <ref id="RESULT"/>
+      </nondomain>
+   </transform>
+
+
+
+
+   <transform name="gep(BASE,TYPE,indexes(i32(0))) == BASE">
+      <op value="getelementptr">
+         <variable id="BASE"/>
+         <variable id="TYPE"/>
+         <op value="indexes">
+            <intconstant width="32" value="0"/>
+         </op>
+      </op>
+
+      <ref id="BASE"/>
+   </transform>
+
+   <transform name="gep(BASE,TYPE,indexes(i64(0))) == BASE">
+      <op value="getelementptr">
+         <variable id="BASE"/>
+         <variable id="TYPE"/>
+         <op value="indexes">
+            <intconstant width="64" value="0"/>
+         </op>
+      </op>
+
+      <ref id="BASE"/>
+   </transform>
+
+
+
+   <rule name="icmp[eq] A B --> A=B">
+      <trigger>
+         <trues>
+            <icmp type="eq">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </trues>
+      </trigger>
+
+      <response>
+         <trues>
+            <nondomain value="equals">
+               <ref id="A"/>
+               <ref id="B"/>
+            </nondomain>
+         </trues>
+      </response>
+   </rule>
+
+
+   <rule name="xor A C1 = xor C C2 --> A = xor C (xor C1 C2)">
+      <trigger>
+         <trues>
+            <nondomain value="equals">
+               <binop type="xor">
+                  <variable id="A"/>
+                  <variable id="C1"/>
+               </binop>
+               <binop type="xor">
+                  <variable id="C"/>
+                  <variable id="C2"/>
+               </binop>
+            </nondomain>
+         </trues>
+      </trigger>
+
+      <response>
+         <trues>
+            <nondomain value="equals">
+               <ref id="A"/>
+               <binop type="xor">
+                  <ref id="C"/>
+                  <binop type="xor">
+                     <ref id="C1"/>
+                     <ref id="C2"/>
+                  </binop>
+               </binop>
+            </nondomain>
+         </trues>
+      </response>
+   </rule>
+
+
+
+   <rule name="xor A B = xor A D --> B = D">
+      <trigger>
+         <trues>
+            <nondomain value="equals">
+               <binop type="xor">
+                  <variable id="A"/>
+                  <variable id="B"/>
+               </binop>
+               <binop type="xor">
+                  <ref id="A"/>
+                  <variable id="D"/>
+               </binop>
+            </nondomain>
+         </trues>
+      </trigger>
+
+      <response>
+         <trues>
+            <nondomain value="equals">
+               <ref id="B"/>
+               <ref id="D"/>
+            </nondomain>
+         </trues>
+      </response>
+   </rule>
+
+
+
+
+
+   <transform name="shl (mul X C1) C2 == mul X (shl C1 C2)">
+      <binop type="shl">
+         <binop type="mul">
+            <variable id="X"/>
+            <variable id="C1"/>
+         </binop>
+         <variable id="C2"/>
+      </binop>
+
+      <binop type="mul">
+         <ref id="X"/>
+         <binop type="shl">
+            <ref id="C1"/>
+            <ref id="C2"/>
+         </binop>
+      </binop>
+   </transform>
+
+
+   <transform name="select C i32(1) i32(0) = zext C">
+      <op value="select">
+         <variable id="C"/>
+         <intconstant value="1" width="32"/>
+         <intconstant value="0" width="32"/>
+      </op>
+      <cast type="zext">
+         <type value="i32"/>
+         <ref id="C"/>
+      </cast>
+   </transform>
+   <transform name="select C i64(1) i64(0) = zext C">
+      <op value="select">
+         <variable id="C"/>
+         <intconstant value="1" width="64"/>
+         <intconstant value="0" width="64"/>
+      </op>
+      <cast type="zext">
+         <type value="i64"/>
+         <ref id="C"/>
+      </cast>
+   </transform>
+
+
+
+
+      
+   <transform name="select C i32(0) i32(1) = zext !C">
+      <op value="select">
+         <variable id="C"/>
+         <intconstant value="0" width="32"/>
+         <intconstant value="1" width="32"/>
+      </op>
+      <cast type="zext">
+         <type value="i32"/>
+         <nondomain value="negate">
+            <ref id="C"/>
+         </nondomain>
+      </cast>
+   </transform>
+   <transform name="select C i64(0) i64(1) = zext !C">
+      <op value="select">
+         <variable id="C"/>
+         <intconstant value="0" width="64"/>
+         <intconstant value="1" width="64"/>
+      </op>
+      <cast type="zext">
+         <type value="i64"/>
+         <nondomain value="negate">
+            <ref id="C"/>
+         </nondomain>
+      </cast>
+   </transform>
+
+
+
+
+
+   <transform name="fcmp UEQ X X = 1">
+      <fcmp type="ueq">
+         <variable id="X"/>
+         <ref id="X"/>
+      </fcmp>
+      <intconstant value="1" width="1"/>
+   </transform>
+   <transform name="fcmp UGE X X = 1">
+      <fcmp type="uge">
+         <variable id="X"/>
+         <ref id="X"/>
+      </fcmp>
+      <intconstant value="1" width="1"/>
+   </transform>
+   <transform name="fcmp ULE X X = 1">
+      <fcmp type="ule">
+         <variable id="X"/>
+         <ref id="X"/>
+      </fcmp>
+      <intconstant value="1" width="1"/>
+   </transform>
+
+   <transform name="fcmp OGT X X = 0">
+      <fcmp type="ogt">
+         <variable id="X"/>
+         <ref id="X"/>
+      </fcmp>
+      <intconstant value="0" width="1"/>
+   </transform>
+   <transform name="fcmp OLT X X = 0">
+      <fcmp type="olt">
+         <variable id="X"/>
+         <ref id="X"/>
+      </fcmp>
+      <intconstant value="0" width="1"/>
+   </transform>
+   <transform name="fcmp ONE X X = 0">
+      <fcmp type="one">
+         <variable id="X"/>
+         <ref id="X"/>
+      </fcmp>
+      <intconstant value="0" width="1"/>
+   </transform>
+
+
+   <transform name="shl(trunc(shl(X,C1)),C2) == trunc(shl(shl(X,C1),C2))">
+      <binop type="shl">
+         <cast type="trunc">
+            <variable id="T"/>
+            <binop type="shl">
+               <variable id="X"/>
+               <variable id="C1"/>
+            </binop>
+         </cast>
+         <variable id="C2"/>
+      </binop>
+
+      <cast type="trunc">
+         <ref id="T"/>
+         <binop type="shl">
+            <binop type="shl">
+               <ref id="X"/>
+               <ref id="C1"/>
+            </binop>
+            <ref id="C2"/>
+         </binop>
+      </cast>
+   </transform>
+   <transform name="shl(trunc(ashr(X,C1)),C2) == trunc(shl(ashr(X,C1),C2))">
+      <binop type="shl">
+         <cast type="trunc">
+            <variable id="T"/>
+            <binop type="ashr">
+               <variable id="X"/>
+               <variable id="C1"/>
+            </binop>
+         </cast>
+         <variable id="C2"/>
+      </binop>
+
+      <cast type="trunc">
+         <ref id="T"/>
+         <binop type="shl">
+            <binop type="ashr">
+               <ref id="X"/>
+               <ref id="C1"/>
+            </binop>
+            <ref id="C2"/>
+         </binop>
+      </cast>
+   </transform>
+   <transform name="shl(trunc(lshr(X,C1)),C2) == trunc(shl(lshr(X,C1),C2))">
+      <binop type="shl">
+         <cast type="trunc">
+            <variable id="T"/>
+            <binop type="lshr">
+               <variable id="X"/>
+               <variable id="C1"/>
+            </binop>
+         </cast>
+         <variable id="C2"/>
+      </binop>
+
+      <cast type="trunc">
+         <ref id="T"/>
+         <binop type="shl">
+            <binop type="lshr">
+               <ref id="X"/>
+               <ref id="C1"/>
+            </binop>
+            <ref id="C2"/>
+         </binop>
+      </cast>
+   </transform>
+
+
+
+   <transform name="shl(shl(X,C1),C2) == shl(X,C1+C2)">
+      <binop type="shl">
+         <binop type="shl">
+            <variable id="X"/>
+            <variable id="C1"/>
+         </binop>
+         <variable id="C2"/>
+      </binop>
+
+      <binop type="shl">
+         <ref id="X"/>
+         <binop type="add">
+            <ref id="C1"/>
+            <ref id="C2"/>
+         </binop>
+      </binop>
+   </transform>
+   <transform name="lshr(lshr(X,C1),C2) == lshr(X,C1+C2)">
+      <binop type="lshr">
+         <binop type="lshr">
+            <variable id="X"/>
+            <variable id="C1"/>
+         </binop>
+         <variable id="C2"/>
+      </binop>
+
+      <binop type="lshr">
+         <ref id="X"/>
+         <binop type="add">
+            <ref id="C1"/>
+            <ref id="C2"/>
+         </binop>
+      </binop>
+   </transform>
+   <transform name="ashr(ashr(X,C1),C2) == ashr(X,C1+C2)">
+      <binop type="ashr">
+         <binop type="ashr">
+            <variable id="X"/>
+            <variable id="C1"/>
+         </binop>
+         <variable id="C2"/>
+      </binop>
+
+      <binop type="ashr">
+         <ref id="X"/>
+         <binop type="add">
+            <ref id="C1"/>
+            <ref id="C2"/>
+         </binop>
+      </binop>
+   </transform>
+
+   <transform name="(Y + ((X >>u C) &amp; CC)) &lt;&lt; C   =   (X &amp; (CC &lt;&lt; C)) + (Y &lt;&lt; C)">
+      <binop type="shl">
+         <binop type="add">
+            <variable id="Y"/>
+            <binop type="and">
+               <binop type="lshr">
+                  <variable id="X"/>
+                  <variable id="C"/>
+               </binop>
+               <variable id="CC"/>
+            </binop>
+         </binop>
+         <ref id="C"/>
+      </binop>
+
+      <binop type="add">
+         <binop type="and">
+            <ref id="X"/>
+            <binop type="shl">
+               <ref id="CC"/>
+               <ref id="C"/>
+            </binop>
+         </binop>
+         <binop type="shl">
+            <ref id="Y"/>
+            <ref id="C"/>
+         </binop>
+      </binop>
+   </transform>
+   <transform name="(Y + ((X >>s C) &amp; CC)) &lt;&lt; C   =   (X &amp; (CC &lt;&lt; C)) + (Y &lt;&lt; C)">
+      <binop type="shl">
+         <binop type="add">
+            <variable id="Y"/>
+            <binop type="and">
+               <binop type="ashr">
+                  <variable id="X"/>
+                  <variable id="C"/>
+               </binop>
+               <variable id="CC"/>
+            </binop>
+         </binop>
+         <ref id="C"/>
+      </binop>
+
+      <binop type="add">
+         <binop type="and">
+            <ref id="X"/>
+            <binop type="shl">
+               <ref id="CC"/>
+               <ref id="C"/>
+            </binop>
+         </binop>
+         <binop type="shl">
+            <ref id="Y"/>
+            <ref id="C"/>
+         </binop>
+      </binop>
+   </transform>
+
+
+
+
+   <transform name="sext[T1] (zext[T2] X) = zext[T1] X">
+      <cast type="sext">
+         <variable id="T1"/>
+         <cast type="zext">
+            <variable id="T2"/>
+            <variable id="X"/>
+         </cast>
+      </cast>
+
+      <cast type="zext">
+         <ref id="T1"/>
+         <ref id="X"/>
+      </cast>
+   </transform>
+   <transform name="trunc[T1] (trunc[T2] X) = trunc[T1] X">
+      <cast type="trunc">
+         <variable id="T1"/>
+         <cast type="trunc">
+            <variable id="T2"/>
+            <variable id="X"/>
+         </cast>
+      </cast>
+
+      <cast type="trunc">
+         <ref id="T1"/>
+         <ref id="X"/>
+      </cast>
+   </transform>
+   <transform name="zext[T1] (sext[T2] X) = sext[T1] X">
+      <cast type="zext">
+         <variable id="T1"/>
+         <cast type="sext">
+            <variable id="T2"/>
+            <variable id="X"/>
+         </cast>
+      </cast>
+
+      <cast type="sext">
+         <ref id="T1"/>
+         <ref id="X"/>
+      </cast>
+   </transform>
+   <transform name="sext[T1] (sext[T2] X) = sext[T1] X">
+      <cast type="sext">
+         <variable id="T1"/>
+         <cast type="sext">
+            <variable id="T2"/>
+            <variable id="X"/>
+         </cast>
+      </cast>
+
+      <cast type="sext">
+         <ref id="T1"/>
+         <ref id="X"/>
+      </cast>
+   </transform>
+   <transform name="fptrunc[T1] (fptrunc[T2] X) = fptrunc[T1] X">
+      <cast type="fptrunc">
+         <variable id="T1"/>
+         <cast type="fptrunc">
+            <variable id="T2"/>
+            <variable id="X"/>
+         </cast>
+      </cast>
+
+      <cast type="fptrunc">
+         <ref id="T1"/>
+         <ref id="X"/>
+      </cast>
+   </transform>
+   <transform name="trunc[T1] (ptr2int[T2] X) = ptr2int[T1] X">
+      <cast type="trunc">
+         <variable id="T1"/>
+         <cast type="ptrtoint">
+            <variable id="T2"/>
+            <variable id="X"/>
+         </cast>
+      </cast>
+
+      <cast type="ptrtoint">
+         <ref id="T1"/>
+         <ref id="X"/>
+      </cast>
+   </transform>
+   <transform name="bitcast[T1] (bitcast[T2] X) = bitcast[T1] X">
+      <cast type="bitcast">
+         <variable id="T1"/>
+         <cast type="bitcast">
+            <variable id="T2"/>
+            <variable id="X"/>
+         </cast>
+      </cast>
+
+      <cast type="bitcast">
+         <ref id="T1"/>
+         <ref id="X"/>
+      </cast>
+   </transform>
+   <transform name="ui2fp[T1] (zext[T2] X) = ui2fp[T1] X">
+      <cast type="uitofp">
+         <variable id="T1"/>
+         <cast type="zext">
+            <variable id="T2"/>
+            <variable id="X"/>
+         </cast>
+      </cast>
+
+      <cast type="uitofp">
+         <ref id="T1"/>
+         <ref id="X"/>
+      </cast>
+   </transform>
+   <transform name="int2ptr[T1] (zext[T2] X) = int2ptr[T1] X">
+      <cast type="inttoptr">
+         <variable id="T1"/>
+         <cast type="zext">
+            <variable id="T2"/>
+            <variable id="X"/>
+         </cast>
+      </cast>
+
+      <cast type="inttoptr">
+         <ref id="T1"/>
+         <ref id="X"/>
+      </cast>
+   </transform>
+   <transform name="si2fp[T1] (sext[T2] X) = si2fp[T1] X">
+      <cast type="sitofp">
+         <variable id="T1"/>
+         <cast type="sext">
+            <variable id="T2"/>
+            <variable id="X"/>
+         </cast>
+      </cast>
+
+      <cast type="sitofp">
+         <ref id="T1"/>
+         <ref id="X"/>
+      </cast>
+   </transform>
+   <transform name="fp2ui[T1] (fpext[T2] X) = fp2ui[T1] X">
+      <cast type="fptoui">
+         <variable id="T1"/>
+         <cast type="fpext">
+            <variable id="T2"/>
+            <variable id="X"/>
+         </cast>
+      </cast>
+
+      <cast type="fptoui">
+         <ref id="T1"/>
+         <ref id="X"/>
+      </cast>
+   </transform>
+   <transform name="fp2si[T1] (fpext[T2] X) = fp2si[T1] X">
+      <cast type="fptosi">
+         <variable id="T1"/>
+         <cast type="fpext">
+            <variable id="T2"/>
+            <variable id="X"/>
+         </cast>
+      </cast>
+
+      <cast type="fptosi">
+         <ref id="T1"/>
+         <ref id="X"/>
+      </cast>
+   </transform>
+   <transform name="fpext[T1] (fpext[T2] X) = fpext[T1] X">
+      <cast type="fpext">
+         <variable id="T1"/>
+         <cast type="fpext">
+            <variable id="T2"/>
+            <variable id="X"/>
+         </cast>
+      </cast>
+
+      <cast type="fpext">
+         <ref id="T1"/>
+         <ref id="X"/>
+      </cast>
+   </transform>
+
+
+ 
+
+   <transform name="select B true C = or B C">
+      <op value="select">
+         <variable id="B"/>
+         <intconstant value="1" width="1"/>
+         <variable id="C"/>
+      </op>
+
+      <binop type="or">
+         <ref id="B"/>
+         <ref id="C"/>
+      </binop>
+   </transform>
+
+
+      
+      
+
+   <transform name="select A B A = and A B">
+      <op value="select">
+         <variable id="A"/>
+         <variable id="B"/>
+         <ref id="A"/>
+      </op>
+
+      <binop type="and">
+         <ref id="A"/>
+         <ref id="B"/>
+      </binop>
+   </transform>
+   <transform name="select A A B = or A B">
+      <op value="select">
+         <variable id="A"/>
+         <ref id="A"/>
+         <variable id="B"/>
+      </op>
+
+      <binop type="or">
+         <ref id="A"/>
+         <ref id="B"/>
+      </binop>
+   </transform>
+
+
+      
+      
+   
+   <transform name="select (icmp[eq] X Y) X Y = Y">
+      <op value="select">
+         <icmp type="eq">
+            <variable id="X"/>
+            <variable id="Y"/>
+         </icmp>
+         <ref id="X"/>
+         <ref id="Y"/>
+      </op>
+
+      <ref id="Y"/>
+   </transform>
+   <transform name="select (icmp[ne] X Y) X Y = X">
+      <op value="select">
+         <icmp type="ne">
+            <variable id="X"/>
+            <variable id="Y"/>
+         </icmp>
+         <ref id="X"/>
+         <ref id="Y"/>
+      </op>
+
+      <ref id="X"/>
+   </transform>
+
+
+
+
+   <transform name="select (icmp[slt] X i32(0)) i32(-1) i32(0) = ashr X 31">
+      <op value="select">
+         <icmp type="slt">
+            <variable id="X"/>
+            <intconstant id="ZERO" value="0" width="32"/>
+         </icmp>
+         <intconstant value="-1" width="32"/>
+         <ref id="ZERO"/>
+      </op>
+
+      <binop type="ashr">
+         <ref id="X"/>
+         <intconstant value="31" width="32"/>
+      </binop>
+   </transform>
+
+
+
+
+   <transform name="xor X true = not X">
+      <binop type="xor">
+         <variable id="X"/>
+         <intconstant value="1" width="1"/>
+      </binop>
+      <nondomain value="negate">
+         <ref id="X"/>
+      </nondomain>
+   </transform>
+
+
+   
+
+   <transform name="(A xor B) xor A = B">
+      <binop type="xor">
+         <binop type="xor">
+            <variable id="A"/>
+            <variable id="B"/>
+         </binop>
+         <ref id="A"/>
+      </binop>
+      <ref id="B"/>
+   </transform>
+
+   
+   <transform name="(A &amp; B) xor (A | B) = A xor B">
+      <binop type="xor">
+         <binop type="and">
+            <variable id="A"/>
+            <variable id="B"/>
+         </binop>
+         <binop type="or">
+            <ref id="A"/>
+            <ref id="B"/>
+         </binop>
+      </binop>
+
+      <binop type="xor">
+         <ref id="A"/>
+         <ref id="B"/>
+      </binop>
+   </transform>
+
+   
+   <transform name="(X &amp; Y) xor (X &amp; Z) = (Y xor Z) &amp; X">
+      <binop type="xor">
+         <binop type="and">
+            <variable id="X"/>
+            <variable id="Y"/>
+         </binop>
+         <binop type="and">
+            <ref id="X"/>
+            <variable id="Z"/>
+         </binop>
+      </binop>
+
+      <binop type="and">
+         <binop type="xor">
+            <ref id="Y"/>
+            <ref id="Z"/>
+         </binop>
+         <ref id="X"/>
+      </binop>
+   </transform>
+
+
+
+   <transform name="(A &amp; B) | A = A">
+      <binop type="or">
+         <binop type="and">
+            <variable id="A"/>
+            <variable/>
+         </binop>
+         <ref id="A"/>
+      </binop>
+      <ref id="A"/>
+   </transform>
+
+
+   
+
+   <transform name="X-((X sdiv Y)*Y) = X srem Y">
+      <binop type="sub">
+         <variable id="X"/>
+         <binop type="mul">
+            <binop type="sdiv">
+               <ref id="X"/>
+               <variable id="Y"/>
+            </binop>
+            <ref id="Y"/>
+         </binop>
+      </binop>
+
+      <binop type="srem">
+         <ref id="X"/>
+         <ref id="Y"/>
+      </binop>
+   </transform>
+
+   <transform name="X-((X udiv Y)*Y) = X urem Y">
+      <binop type="sub">
+         <variable id="X"/>
+         <binop type="mul">
+            <binop type="udiv">
+               <ref id="X"/>
+               <variable id="Y"/>
+            </binop>
+            <ref id="Y"/>
+         </binop>
+      </binop>
+
+      <binop type="urem">
+         <ref id="X"/>
+         <ref id="Y"/>
+      </binop>
+   </transform>
+
+   
+
+   <transform name="(X7&lt;&lt;C1)*C2 = X*(C2&lt;&lt;C1)">
+      <binop type="mul">
+         <binop type="shl">
+            <variable id="X"/>
+            <variable id="C1"/>
+         </binop>
+         <variable id="C2"/>
+      </binop>
+
+      <binop type="mul">
+         <ref id="X"/>
+         <binop type="shl">
+            <ref id="C2"/>
+            <ref id="C1"/>
+         </binop>
+      </binop>
+   </transform>
+
+
+   
+   <transform name="(fcmp uno X C) | (fcmp uno Y C) = (fcmp uno X Y)">
+      <binop type="or">
+         <fcmp type="uno">
+            <variable id="X"/>
+            <variable id="C"/>
+         </fcmp>
+         <fcmp type="uno">
+            <variable id="Y"/>
+            <ref id="C"/>
+         </fcmp>
+      </binop>
+
+      <fcmp type="uno">
+         <ref id="X"/>
+         <ref id="Y"/>
+      </fcmp>
+   </transform>
+
+
+   <transform name="(fcmp ord X C) &amp; (fcmp ord Y C) = (fcmp ord X Y)">
+      <binop type="and">
+         <fcmp type="ord">
+            <variable id="X"/>
+            <variable id="C"/>
+         </fcmp>
+         <fcmp type="ord">
+            <variable id="Y"/>
+            <ref id="C"/>
+         </fcmp>
+      </binop>
+      <fcmp type="ord">
+         <ref id="X"/>
+         <ref id="Y"/>
+      </fcmp>
+   </transform>
+
+
+   <!--   and distribute through cast    -->
+
+
+   <transform name="and (cast[trunc] T A) (cast[trunc] T B) = cast[trunc] T (and A B)">
+      <binop type="and">
+         <cast type="trunc">
+            <variable id="T"/>
+            <variable id="A"/>
+         </cast>
+         <cast type="trunc">
+            <ref id="T"/>
+            <variable id="B"/>
+         </cast>
+      </binop>
+
+      <cast type="trunc">
+         <ref id="T"/>
+         <binop type="and">
+            <ref id="A"/>
+            <ref id="B"/>
+         </binop>
+      </cast>
+   </transform>
+
+   <transform name="and (cast[sext] T A) (cast[sext] T B) = cast[sext] T (and A B)">
+      <binop type="and">
+         <cast type="sext">
+            <variable id="T"/>
+            <variable id="A"/>
+         </cast>
+         <cast type="sext">
+            <ref id="T"/>
+            <variable id="B"/>
+         </cast>
+      </binop>
+
+      <cast type="sext">
+         <ref id="T"/>
+         <binop type="and">
+            <ref id="A"/>
+            <ref id="B"/>
+         </binop>
+      </cast>
+   </transform>
+
+   <transform name="and (cast[zext] T A) (cast[zext] T B) = cast[zext] T (and A B)">
+      <binop type="and">
+         <cast type="zext">
+            <variable id="T"/>
+            <variable id="A"/>
+         </cast>
+         <cast type="zext">
+            <ref id="T"/>
+            <variable id="B"/>
+         </cast>
+      </binop>
+
+      <cast type="zext">
+         <ref id="T"/>
+         <binop type="and">
+            <ref id="A"/>
+            <ref id="B"/>
+         </binop>
+      </cast>
+   </transform>
+
+
+
+
+   <!--   or distribute through cast    -->
+
+
+   <transform name="or (cast[trunc] T A) (cast[trunc] T B) = cast[trunc] T (or A B)">
+      <binop type="or">
+         <cast type="trunc">
+            <variable id="T"/>
+            <variable id="A"/>
+         </cast>
+         <cast type="trunc">
+            <ref id="T"/>
+            <variable id="B"/>
+         </cast>
+      </binop>
+
+      <cast type="trunc">
+         <ref id="T"/>
+         <binop type="or">
+            <ref id="A"/>
+            <ref id="B"/>
+         </binop>
+      </cast>
+   </transform>
+
+   <transform name="or (cast[sext] T A) (cast[sext] T B) = cast[sext] T (or A B)">
+      <binop type="or">
+         <cast type="sext">
+            <variable id="T"/>
+            <variable id="A"/>
+         </cast>
+         <cast type="sext">
+            <ref id="T"/>
+            <variable id="B"/>
+         </cast>
+      </binop>
+
+      <cast type="sext">
+         <ref id="T"/>
+         <binop type="or">
+            <ref id="A"/>
+            <ref id="B"/>
+         </binop>
+      </cast>
+   </transform>
+
+   <transform name="or (cast[zext] T A) (cast[zext] T B) = cast[zext] T (or A B)">
+      <binop type="or">
+         <cast type="zext">
+            <variable id="T"/>
+            <variable id="A"/>
+         </cast>
+         <cast type="zext">
+            <ref id="T"/>
+            <variable id="B"/>
+         </cast>
+      </binop>
+
+      <cast type="zext">
+         <ref id="T"/>
+         <binop type="or">
+            <ref id="A"/>
+            <ref id="B"/>
+         </binop>
+      </cast>
+   </transform>
+
+
+
+   <!--   xor distribute through cast    -->
+
+
+   <transform name="xor (cast[trunc] T A) (cast[trunc] T B) = cast[trunc] T (xor A B)">
+      <binop type="xor">
+         <cast type="trunc">
+            <variable id="T"/>
+            <variable id="A"/>
+         </cast>
+         <cast type="trunc">
+            <ref id="T"/>
+            <variable id="B"/>
+         </cast>
+      </binop>
+
+      <cast type="trunc">
+         <ref id="T"/>
+         <binop type="xor">
+            <ref id="A"/>
+            <ref id="B"/>
+         </binop>
+      </cast>
+   </transform>
+
+   <transform name="xor (cast[sext] T A) (cast[sext] T B) = cast[sext] T (xor A B)">
+      <binop type="xor">
+         <cast type="sext">
+            <variable id="T"/>
+            <variable id="A"/>
+         </cast>
+         <cast type="sext">
+            <ref id="T"/>
+            <variable id="B"/>
+         </cast>
+      </binop>
+
+      <cast type="sext">
+         <ref id="T"/>
+         <binop type="xor">
+            <ref id="A"/>
+            <ref id="B"/>
+         </binop>
+      </cast>
+   </transform>
+
+   <transform name="xor (cast[zext] T A) (cast[zext] T B) = cast[zext] T (xor A B)">
+      <binop type="xor">
+         <cast type="zext">
+            <variable id="T"/>
+            <variable id="A"/>
+         </cast>
+         <cast type="zext">
+            <ref id="T"/>
+            <variable id="B"/>
+         </cast>
+      </binop>
+
+      <cast type="zext">
+         <ref id="T"/>
+         <binop type="xor">
+            <ref id="A"/>
+            <ref id="B"/>
+         </binop>
+      </cast>
+   </transform>
+
+
+
+
+   <transform name="and X X = X">
+      <binop type="and">
+         <variable id="X"/>
+         <ref id="X"/>
+      </binop>
+      <ref id="X"/>      
+   </transform>
+
+
+   <transform name="or X X = X">
+      <binop type="or">
+         <variable id="X"/>
+         <ref id="X"/>
+      </binop>
+      <ref id="X"/>      
+   </transform>
+
+
+   <transform name="(X udiv A) udiv B = X udiv (A*B)">
+      <binop type="udiv">
+         <binop type="udiv">
+            <variable id="X"/>
+            <variable id="A"/>
+         </binop>
+         <variable id="B"/>
+      </binop>
+      
+      <binop type="udiv">
+         <ref id="X"/>
+         <binop type="mul">
+            <ref id="A"/>
+            <ref id="B"/>
+         </binop>
+      </binop>
+   </transform>
+
+   <transform name="(X sdiv A) sdiv B = X sdiv (A*B)">
+      <binop type="sdiv">
+         <binop type="sdiv">
+            <variable id="X"/>
+            <variable id="A"/>
+         </binop>
+         <variable id="B"/>
+      </binop>
+      
+      <binop type="sdiv">
+         <ref id="X"/>
+         <binop type="mul">
+            <ref id="A"/>
+            <ref id="B"/>
+         </binop>
+      </binop>
+   </transform>
+
+
+   <transform name="(X xor C1) &amp; C2 = (X &amp; C1) xor (C1 &amp; C2)">
+      <binop type="and">
+         <binop type="xor">
+            <variable id="X"/>
+            <variable id="C1"/>
+         </binop>
+         <variable id="C2"/>
+      </binop>
+
+      <binop type="xor">
+         <binop type="and">
+            <ref id="X"/>
+            <ref id="C1"/>
+         </binop>
+         <binop type="and">
+            <ref id="C1"/>
+            <ref id="C2"/>
+         </binop>
+      </binop>
+   </transform>
+
+
+   <transform name="(X | C) &amp; C = C">
+      <binop type="and">
+         <binop type="or">
+            <variable id="X"/>
+            <variable id="C"/>
+         </binop>
+         <ref id="C"/>
+      </binop>
+
+      <ref id="C"/>
+   </transform>
+
+
+   <transform name="(X | C1) &amp; C2 = (X | (C1&amp;C2)) &amp; C2">
+      <binop type="and">
+         <binop type="or">
+            <variable id="X"/>
+            <variable id="C1"/>
+         </binop>
+         <variable id="C2"/>
+      </binop>
+
+      <binop type="and">
+         <binop type="or">
+            <ref id="X"/>
+            <binop type="and">
+               <ref id="C1"/>
+               <ref id="C2"/>
+            </binop>
+         </binop>
+         <ref id="C2"/>
+      </binop>
+   </transform>
+
+
+
+
+   <transform name="A-(B+C) = (A-B)-C">
+      <binop type="sub">
+         <variable id="A"/>
+         <binop type="add">
+            <variable id="B"/>
+            <variable id="C"/>
+         </binop>
+      </binop>
+
+      <binop type="sub">
+         <binop type="sub">
+            <ref id="A"/>
+            <ref id="B"/>
+         </binop>
+         <ref id="C"/>
+      </binop>
+   </transform>
+
+
+   <transform name="A-(B-C) = (A-B)+C">
+      <binop type="sub">
+         <variable id="A"/>
+         <binop type="sub">
+            <variable id="B"/>
+            <variable id="C"/>
+         </binop>
+      </binop>
+
+      <binop type="add">
+         <binop type="sub">
+            <ref id="A"/>
+            <ref id="B"/>
+         </binop>
+         <ref id="C"/>
+      </binop>
+   </transform>
+
+
+   <transform name="(A | B) &amp; A = A">
+      <binop type="and">
+         <binop type="or">
+            <variable id="A"/>
+            <variable/>
+         </binop>
+         <ref id="A"/>
+      </binop>
+      <ref id="A"/>
+   </transform>
+
+
+   <transform name="sub i32(0) (lshr X i32(31)) = ashr X i32(31)">
+      <binop type="sub">
+         <intconstant value="0" width="32"/>
+         <binop type="lshr">
+            <variable id="X"/>
+            <intconstant value="31" width="32"/>
+         </binop>
+      </binop>
+
+      <binop type="ashr">
+         <ref id="X"/>
+         <intconstant value="31" width="32"/>
+      </binop>
+   </transform>
+   <transform name="sub i32(0) (ashr X i32(31)) = lshr X i32(31)">
+      <binop type="sub">
+         <intconstant value="0" width="32"/>
+         <binop type="ashr">
+            <variable id="X"/>
+            <intconstant value="31" width="32"/>
+         </binop>
+      </binop>
+
+      <binop type="lshr">
+         <ref id="X"/>
+         <intconstant value="31" width="32"/>
+      </binop>
+   </transform>
+
+
+
+
+   <transform name="icmp eq (sub A B) i32(0) = icmp eq A B">
+      <icmp type="eq">
+         <binop type="sub">
+            <variable id="A"/>
+            <variable id="B"/>
+         </binop>
+         <intconstant value="0" width="32"/>
+      </icmp>
+
+      <icmp type="eq">
+         <ref id="A"/>
+         <ref id="B"/>
+      </icmp>
+   </transform>
+   <transform name="icmp ne (sub A B) i32(0) = icmp ne A B">
+      <icmp type="ne">
+         <binop type="sub">
+            <variable id="A"/>
+            <variable id="B"/>
+         </binop>
+         <intconstant value="0" width="32"/>
+      </icmp>
+
+      <icmp type="ne">
+         <ref id="A"/>
+         <ref id="B"/>
+      </icmp>
+   </transform>
+
+
+
+
+
+   <transform name="icmp ult A i32(0) = i1(0)">
+      <icmp type="ult">
+         <variable id="A"/>
+         <intconstant width="32" value="0"/>
+      </icmp>
+      <intconstant value="0" width="1"/>
+   </transform>
+   <transform name="icmp slt A i32(-2147483648) = i1(0)">
+      <icmp type="slt">
+         <variable id="A"/>
+         <intconstant width="32" value="-2147483648"/>
+      </icmp>
+      <intconstant value="0" width="1"/>
+   </transform>
+
+
+   <transform name="icmp ugt A i32(-1) = i1(0)">
+      <icmp type="ugt">
+         <variable id="A"/>
+         <intconstant width="32" value="-1"/>
+      </icmp>
+      <intconstant value="0" width="1"/>
+   </transform>
+   <transform name="icmp sgt A i32(2147483647) = i1(0)">
+      <icmp type="sgt">
+         <variable id="A"/>
+         <intconstant width="32" value="2147483647"/>
+      </icmp>
+      <intconstant value="0" width="1"/>
+   </transform>
+
+   
+   <transform name="icmp ule A i32(-1) = i1(1)">
+      <icmp type="ule">
+         <variable id="A"/>
+         <intconstant width="32" value="-1"/>
+      </icmp>
+      <intconstant value="1" width="1"/>
+   </transform>
+   <transform name="icmp sle A i32(2147483647) = i1(1)">
+      <icmp type="sle">
+         <variable id="A"/>
+         <intconstant width="32" value="2147483647"/>
+      </icmp>
+      <intconstant value="1" width="1"/>
+   </transform>
+
+
+   <transform name="icmp uge A i32(0) = i1(1)">
+      <icmp type="uge">
+         <variable id="A"/>
+         <intconstant width="32" value="0"/>
+      </icmp>
+      <intconstant value="1" width="1"/>
+   </transform>
+   <transform name="icmp sge A i32(-2147483648) = i1(1)">
+      <icmp type="sge">
+         <variable id="A"/>
+         <intconstant width="32" value="-2147483648"/>
+      </icmp>
+      <intconstant value="1" width="1"/>
+   </transform>
+
+
+
+
+
+
+
+   <transform name="icmp[ult] A A = false">
+      <icmp type="ult">
+         <variable id="A"/>
+         <ref id="A"/>
+      </icmp>
+      <intconstant value="0" width="1"/>
+   </transform>
+   <transform name="icmp[slt] A A = false">
+      <icmp type="slt">
+         <variable id="A"/>
+         <ref id="A"/>
+      </icmp>
+      <intconstant value="0" width="1"/>
+   </transform>
+
+
+   <transform name="icmp[ule] A A = true">
+      <icmp type="ule">
+         <variable id="A"/>
+         <ref id="A"/>
+      </icmp>
+      <intconstant value="1" width="1"/>
+   </transform>
+   <transform name="icmp[sle] A A = true">
+      <icmp type="sle">
+         <variable id="A"/>
+         <ref id="A"/>
+      </icmp>
+      <intconstant value="1" width="1"/>
+   </transform>
+
+
+   <transform name="icmp[ugt] A A = false">
+      <icmp type="ugt">
+         <variable id="A"/>
+         <ref id="A"/>
+      </icmp>
+      <intconstant value="0" width="1"/>
+   </transform>
+   <transform name="icmp[sgt] A A = false">
+      <icmp type="sgt">
+         <variable id="A"/>
+         <ref id="A"/>
+      </icmp>
+      <intconstant value="0" width="1"/>
+   </transform>
+
+
+   <transform name="icmp[uge] A A = true">
+      <icmp type="uge">
+         <variable id="A"/>
+         <ref id="A"/>
+      </icmp>
+      <intconstant value="1" width="1"/>
+   </transform>
+   <transform name="icmp[sge] A A = true">
+      <icmp type="sge">
+         <variable id="A"/>
+         <ref id="A"/>
+      </icmp>
+      <intconstant value="1" width="1"/>
+   </transform>
+
+
+   <transform name="icmp[eq] A i1(1) = A">
+      <icmp type="eq">
+         <variable id="A"/>
+         <intconstant value="1" width="1"/>
+      </icmp>
+
+      <ref id="A"/>
+   </transform>
+   <transform name="icmp[eq] A i1(0) = negate(A)">
+      <icmp type="eq">
+         <variable id="A"/>
+         <intconstant value="0" width="1"/>
+      </icmp>
+
+      <nondomain value="negate">
+         <ref id="A"/>
+      </nondomain>
+   </transform>
+
+
+   <transform name="icmp[ne] A i1(1) = negate(A)">
+      <icmp type="eq">
+         <variable id="A"/>
+         <intconstant value="1" width="1"/>
+      </icmp>
+
+      <nondomain value="negate">
+         <ref id="A"/>
+      </nondomain>
+   </transform>
+   <transform name="icmp[eq] A i1(0) = A">
+      <icmp type="eq">
+         <variable id="A"/>
+         <intconstant value="0" width="1"/>
+      </icmp>
+
+      <ref id="A"/>
+   </transform>
+
+
+   <transform name="icmp[ult] A i1(1) = negate(A)">
+      <icmp type="ult">
+         <variable id="A"/>
+         <intconstant value="1" width="1"/>
+      </icmp>
+      <nondomain value="negate">
+         <ref id="A"/>
+      </nondomain>
+   </transform>
+   <transform name="icmp[ult] A i1(0) = false">
+      <icmp type="ult">
+         <variable id="A"/>
+         <intconstant value="0" width="1"/>
+      </icmp>
+      <intconstant value="0" width="1"/>
+   </transform>
+
+
+
+   <transform name="icmp[slt] A i1(-1) = false">
+      <icmp type="slt">
+         <variable id="A"/>
+         <intconstant value="1" width="1"/>
+      </icmp>
+      <intconstant value="0" width="1"/>
+   </transform>
+   <transform name="icmp[slt] A i1(0) = A">
+      <icmp type="slt">
+         <variable id="A"/>
+         <intconstant value="0" width="1"/>
+      </icmp>
+      <ref id="A"/>
+   </transform>
+
+
+   <transform name="icmp[ule] A i1(1) = true">
+      <icmp type="ule">
+         <variable id="A"/>
+         <intconstant value="1" width="1"/>
+      </icmp>
+      <intconstant value="1" width="1"/>
+   </transform>
+   <transform name="icmp[ule] A i1(0) = negate(A)">
+      <icmp type="ule">
+         <variable id="A"/>
+         <intconstant value="0" width="1"/>
+      </icmp>
+      <nondomain value="negate">
+         <ref id="A"/>
+      </nondomain>
+   </transform>
+
+
+   <transform name="icmp[sle] A i1(-1) = A">
+      <icmp type="sle">
+         <variable id="A"/>
+         <intconstant value="1" width="1"/>
+      </icmp>
+      <ref id="A"/>
+   </transform>
+   <transform name="icmp[sle] A i1(0) = true">
+      <icmp type="sle">
+         <variable id="A"/>
+         <intconstant value="0" width="1"/>
+      </icmp>
+      <intconstant value="1" width="1"/>
+   </transform>
+
+
+
+
+   <transform name="icmp[eq] A A = true">
+      <icmp type="eq">
+         <variable id="A"/>
+         <ref id="A"/>
+      </icmp>
+      <intconstant value="1" width="1"/>
+   </transform>
+
+   <transform name="icmp[ne] A A = false">
+      <icmp type="ne">
+         <variable id="A"/>
+         <ref id="A"/>
+      </icmp>
+      <intconstant value="0" width="1"/>
+   </transform>
+
+
+
+
+   <!-- inequality reversing -->
+
+   <transform name="A&lt;B == B>A (s)">
+      <icmp type="slt">
+         <variable id="A"/>
+         <variable id="B"/>
+      </icmp>
+
+      <icmp type="sgt">
+         <ref id="B"/>
+         <ref id="A"/>
+      </icmp>
+   </transform>
+   <transform name="A&lt;B ==> B>A (u)">
+      <icmp type="ult">
+         <variable id="A"/>
+         <variable id="B"/>
+      </icmp>
+
+      <icmp type="ugt">
+         <ref id="B"/>
+         <ref id="A"/>
+      </icmp>
+   </transform>
+
+
+   <transform name="A>B == B&lt;A (s)">
+      <icmp type="sgt">
+         <variable id="A"/>
+         <variable id="B"/>
+      </icmp>
+
+      <icmp type="slt">
+         <ref id="B"/>
+         <ref id="A"/>
+      </icmp>
+   </transform>
+   <transform name="A>B == B&lt;A (u)">
+      <icmp type="ugt">
+         <variable id="A"/>
+         <variable id="B"/>
+      </icmp>
+
+      <icmp type="ult">
+         <ref id="B"/>
+         <ref id="A"/>
+      </icmp>
+   </transform>
+
+
+
+   <transform name="A&lt;=B == B>=A (s)">
+      <icmp type="sle">
+         <variable id="A"/>
+         <variable id="B"/>
+      </icmp>
+
+      <icmp type="sge">
+         <ref id="B"/>
+         <ref id="A"/>
+      </icmp>
+   </transform>
+   <transform name="A&lt;=B == B>=A (u)">
+      <icmp type="ule">
+         <variable id="A"/>
+         <variable id="B"/>
+      </icmp>
+
+      <icmp type="uge">
+         <ref id="B"/>
+         <ref id="A"/>
+      </icmp>
+   </transform>
+
+
+   <transform name="A>=B == B&lt;=A (s)">
+      <icmp type="sge">
+         <variable id="A"/>
+         <variable id="B"/>
+      </icmp>
+
+      <icmp type="sle">
+         <ref id="B"/>
+         <ref id="A"/>
+      </icmp>
+   </transform>
+   <transform name="A>=B == B&lt;=A (u)">
+      <icmp type="uge">
+         <variable id="A"/>
+         <variable id="B"/>
+      </icmp>
+
+      <icmp type="ule">
+         <ref id="B"/>
+         <ref id="A"/>
+      </icmp>
+   </transform>
+
+
+
+
+   <rule name="[A>B] ==> [A>=B] (s)">
+      <trigger>
+         <trues>
+            <icmp type="sgt">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </trues>
+      </trigger>
+
+      <response>
+         <trues>
+            <icmp type="sge">
+               <ref id="A"/>
+               <ref id="B"/>
+            </icmp>
+         </trues>
+      </response>
+   </rule>
+   <rule name="[A>B] ==> [A>=B] (u)">
+      <trigger>
+         <trues>
+            <icmp type="ugt">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </trues>
+      </trigger>
+
+      <response>
+         <trues>
+            <icmp type="uge">
+               <ref id="A"/>
+               <ref id="B"/>
+            </icmp>
+         </trues>
+      </response>
+   </rule>
+
+
+
+   <rule name="[A&lt;B] ==> [A&lt;=B] (s)">
+      <trigger>
+         <trues>
+            <icmp type="slt">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </trues>
+      </trigger>
+
+      <response>
+         <trues>
+            <icmp type="sle">
+               <ref id="A"/>
+               <ref id="B"/>
+            </icmp>
+         </trues>
+      </response>
+   </rule>
+   <rule name="[A&lt;B] ==> [A&lt;=B] (u)">
+      <trigger>
+         <trues>
+            <icmp type="ult">
+               <variable id="A"/>
+               <variable id="B"/>
+            </icmp>
+         </trues>
+      </trigger>
+
+      <response>
+         <trues>
+            <icmp type="ule">
+               <ref id="A"/>
+               <ref id="B"/>
+            </icmp>
+         </trues>
+      </response>
+   </rule>
+
+
+   <transform name="fcmp true A B == i1(1)">
+      <fcmp id="THING" type="true">
+        <variable/>
+        <variable/>
+      </fcmp>
+      <intconstant value="1" width="1"/>
+   </transform>
+
+
+
+   <transform name="fcmp false A B == i1(0)">
+      <fcmp id="THING" type="false">
+         <variable/>
+         <variable/>
+      </fcmp>
+      <intconstant value="1" width="1"/>
+   </transform>
+</ruleset>

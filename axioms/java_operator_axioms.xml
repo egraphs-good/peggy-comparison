@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset>
+  <simpleTransform name="getfield(setfield(T,F,V),T,F) = V">
+    rho_value(getfield(rho_sigma(setfield(*,@T:*,@F:*,@V:*)),@T,@F)) = @V
+  </simpleTransform>
+
+  <simpleRule name="[F1!=F2] getfield(setfield(SIGMA,Q,F2,V),T,F1) == getfield(SIGMA,T,F1)">
+    @V1:rho_value(getfield(rho_sigma(setfield(@SIGMA:*,@T:*,@F1:*,*)),@T,@F2:*))
+    !{%equals(@F1,@F2)}!
+    ==>
+    @V1 = rho_value(getfield(@SIGMA,@T,@F2))
+  </simpleRule>
+
+  <simpleTransform name="setfield(setfield(SIGMA,T,F,V1),T,F,V2) = setfield(SIGMA,T,F,V2)">
+    rho_sigma(setfield(rho_sigma(setfield(@SIGMA:*,@T:*,@F:*,@V1:*)),@T,@F,@V2:*)) =
+    rho_sigma(setfield(@SIGMA,@T,@F,@V2))
+  </simpleTransform>
+
+  <simpleTransform name="getstaticfield(setstaticfield(SIGMA,F,V),F)= V">
+    rho_value(getstaticfield(rho_sigma(setstaticfield(@SIGMA:*,@F:*,@V:*)),@F)) = @V
+  </simpleTransform>
+
+  <simpleRule name="[F1!=F2] getstaticfield(setstaticfield(SIGMA,F2,V),F1) == getstaticfield(SIGMA,F1)">
+    @V1:rho_value(getstaticfield(rho_sigma(setstaticfield(@SIGMA:*,@F1:*,*)),@F2:*))
+    !{%equals(@F1,@F2)}!
+    ==>
+    @V1 = rho_value(getstaticfield(@SIGMA,@F2))
+  </simpleRule>
+
+  <simpleTransform name="setstaticfield(setstaticfield(SIGMA,F,V1),F,V2) = setstaticfield(SIGMA,F,V2)">
+    rho_sigma(setstaticfield(rho_sigma(setstaticfield(@SIGMA:*,@F:*,*)),@F,@V2:*)) = 
+    rho_sigma(setstaticfield(@SIGMA,@F,@V2))
+  </simpleTransform>
+
+  <simpleTransform name="getarray(setarray(A,I,V),A,I) = V">
+    rho_value(getarray(rho_sigma(setarray(@SIGMA:*,@A:*,@I:*,@V:*)),@A,@I)) = @V
+  </simpleTransform>
+
+  <simpleRule name="[I!=J] getarray(setarray(SIGMA,A,J,V),A,I) == getarray(SIGMA,A,I)">
+    @V1:rho_value(getarray(rho_sigma(setarray(@SIGMA:*,@A:*,@I:*,*)),@A,@J:*))
+    !{%equals(@I,@J)}!
+    ==>
+    @V1 = rho_value(getarray(@SIGMA,@A,@J))
+  </simpleRule>
+
+  <simpleTransform name="setarray(setarray(A,I,V1),A,I,V2) = setarray(A,I,V2)">
+    rho_sigma(setarray(rho_sigma(setarray(@SIGMA:*,@A:*,@I:*,*)),@A,@I,@V2:*)) = 
+    rho_sigma(setarray(@SIGMA,@A,@I,@V2))
+  </simpleTransform>
+</ruleset>

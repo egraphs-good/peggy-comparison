@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset>
+  <sigmaInvariant>
+    <function name="log" signature="double(double)"/>
+    <function name="exp" signature="double(double)"/>
+    <function name="sin" signature="double(double)"/>
+    <function name="cos" signature="double(double)"/>
+    <function name="tan" signature="double(double)"/>
+    <function name="sqrt" signature="double(double)"/>
+  </sigmaInvariant>
+</ruleset>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset>
+  <simpleRule name="sigma invariant function call">
+    @R:rho_sigma(call(@S:*,@F:*,*,*))
+    {annotation("sigmaInvariant", @F)}
+    ==>
+    @R = @S
+  </simpleRule>
+  <simpleRule name="sigma invariant function tailcall">
+    @R:rho_sigma(tailcall(@S:*,@F:*,*,*))
+    {annotation("sigmaInvariant", @F)}
+    ==>
+    @R = @S
+  </simpleRule>
+  <simpleRule name="sigma invariant function invoke">
+    @R:rho_sigma(invoke(@S:*,@F:*,*,*))
+    {annotation("sigmaInvariant", @F)}
+    ==>
+    @R = @S
+  </simpleRule>
+
+
+  <simpleRule name="nonstack distributes through nonstackCall (sigma)">
+    @TOP:nonstack(rho_sigma(@C:call(@SIGMA:*,@FUNC:*,@CC:*,@PARAMS:*)))
+    {annotation("nonstackCall",@C)}
+    ==>
+    @TOP = rho_sigma(call(nonstack(@SIGMA),@FUNC,@CC,@PARAMS))
+  </simpleRule>
+  <simpleRule name="nonstack distributes through nonstackCall (value)">
+    @TOP:rho_value(@C:call(@SIGMA:*,@FUNC:*,@CC:*,@PARAMS:*))
+    {annotation("nonstackCall",@C)}
+    ==>
+    @TOP = rho_value(call(nonstack(@SIGMA),@FUNC,@CC,@PARAMS))
+  </simpleRule>
+
+
+  <simpleRule name="nonstack distributes through nonstack tailcall (sigma)">
+    @TOP:nonstack(rho_sigma(@C:tailcall(@SIGMA:*,@FUNC:*,@CC:*,@PARAMS:*)))
+    {annotation("nonstackCall",@C)}
+    ==>
+    @TOP = rho_sigma(tailcall(nonstack(@SIGMA),@FUNC,@CC,@PARAMS))
+  </simpleRule>
+  <simpleRule name="nonstack distributes through nonstack tailcall (value)">
+    @TOP:rho_value(@C:tailcall(@SIGMA:*,@FUNC:*,@CC:*,@PARAMS:*))
+    {annotation("nonstackCall",@C)}
+    ==>
+    @TOP = rho_value(tailcall(nonstack(@SIGMA),@FUNC,@CC,@PARAMS))
+  </simpleRule>
+
+
+  <simpleRule name="nonstack distributes through nonstack invoke (sigma)">
+    @TOP:nonstack(rho_sigma(@C:invoke(@SIGMA:*,@FUNC:*,@CC:*,@PARAMS:*)))
+    {annotation("nonstackCall",@C)}
+    ==>
+    @TOP = rho_sigma(invoke(nonstack(@SIGMA),@FUNC,@CC,@PARAMS))
+  </simpleRule>
+  <simpleRule name="nonstack distributes through nonstack invoke (value)">
+    @TOP:rho_value(@C:invoke(@SIGMA:*,@FUNC:*,@CC:*,@PARAMS:*))
+    {annotation("nonstackCall",@C)}
+    ==>
+    @TOP = rho_value(invoke(nonstack(@SIGMA),@FUNC,@CC,@PARAMS))
+  </simpleRule>
+
+
+  <simpleTransform name="nonstack(phi(A,B,C)) = phi(A,nonstack(B),nonstack(C))">
+    nonstack(%phi(@A:*,@B:*,@C:*)) = %phi(@A,nonstack(@B),nonstack(@C))
+  </simpleTransform>
+
+
+  <simpleTransform name="nonstack skips over malloc (sigma)">
+    nonstack(rho_sigma(malloc(@SIGMA:*,@TYPE:*,@NUMELTS:*,@ALIGN:*))) = 
+    rho_sigma(malloc(nonstack(@SIGMA),@TYPE,@NUMELTS,@ALIGN))
+  </simpleTransform>
+  <simpleTransform name="nonstack skips over malloc (value)">
+    rho_value(malloc(@SIGMA:*,@TYPE:*,@NUMELTS:*,@ALIGN:*)) = 
+    rho_value(malloc(nonstack(@SIGMA),@TYPE,@NUMELTS,@ALIGN))
+  </simpleTransform>
+
+
+
+  <simpleTransform name="nonstack is idempotent">
+    nonstack(@N:nonstack(*)) = @N
+  </simpleTransform>
+
+  <simpleTransform name="nonstack skips over free">
+    nonstack(free(@SIGMA:*,@M:*)) = free(nonstack(@SIGMA),@M)
+  </simpleTransform>
+
+  <simpleTransform name="nonstack skips over unwind">
+    nonstack(rho_sigma(unwind(@SIGMA:*))) = rho_sigma(unwind(nonstack(@SIGMA)))
+  </simpleTransform>
+
+  <simpleTransform name="nonstack destroys vaarg">
+    nonstack(rho_sigma(vaarg(@SIGMA:*,*,*))) = nonstack(@SIGMA)
+  </simpleTransform>
+
+  <simpleTransform name="nonstack destroys call to intrinsic va_start">
+    nonstack(rho_sigma(call(@SIGMA:*,function("llvm.va_start","void(i8*)"),*,*))) =
+    nonstack(@SIGMA)
+  </simpleTransform>
+  <simpleTransform name="nonstack destroys call to intrinsic va_end">
+    nonstack(rho_sigma(call(@SIGMA:*,function("llvm.va_end","void(i8*)"),*,*))) =
+    nonstack(@SIGMA)
+  </simpleTransform>
+  <simpleTransform name="nonstack destroys call to intrinsic va_copy">
+    nonstack(rho_sigma(call(@SIGMA:*,function("llvm.va_copy","void(i8*,i8*)"),*,*))) = 
+    nonstack(@SIGMA)
+  </simpleTransform>
+  
+  <simpleTransform name="nonstack destroys alloca">
+    nonstack(rho_sigma(alloca(@S:*,*,*,*))) = nonstack(@S)
+  </simpleTransform>
+</ruleset>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset>
+  <simpleRule name="nonstackCall(phi(A,B,C)) = nonstackCall(B) = nonstackCall(C)">
+    @A1:annotation("nonstackCall", %phi(@A:*,@B:*,@C:*))
+    ==>
+    @A1 = annotation("nonstackCall", @B)
+    @A1 = annotation("nonstackCall", @C)
+  </simpleRule>
+
+  <simpleTransform name="(store P (load P)) = no-op">
+    store(@S:*,@P:*,rho_value(load(@S,@P,@N:*)),@N) = @S
+  </simpleTransform>
+
+  <simpleRule name="pass(theta(true,*)) = 0">
+    @P:%pass-1(%theta-1(@A:*,*))
+    {@A}
+    ==>
+    @P = %zero
+  </simpleRule>
+
+  <simpleRule name="pass(true) = 0">
+    @P:%pass-1(@A:*)
+    {@A}
+    ==>
+    @P = %zero
+  </simpleRule>
+
+
+  <simpleTransform name="load after store of same pointer = stored value">
+    rho_value(load(store(*,@PTR:*,@V:*,@A:*),@PTR,@A)) = @V
+  </simpleTransform>
+
+  <simpleTransform name="load after volatile store of same pointer = stored value">
+    rho_value(load(volatile_store(*,@PTR:*,@V:*,@A:*),@PTR,@A)) = @V
+  </simpleTransform>
+
+
+  <simpleTransform name="store after store of same pointer => kill bottom store">
+    store(store(@SIGMA:*,@PTR:*,*,*),@PTR,@V:*,@A:*) = 
+    store(@SIGMA,@PTR,@V,@A)
+  </simpleTransform>
+
+  <simpleTransform name="volatile store after store of same pointer => kill bottom store">
+    volatile_store(store(@SIGMA:*,@PTR:*,*,*),@PTR,@V:*,@A:*) = 
+    volatile_store(@SIGMA,@PTR,@V,@A)
+  </simpleTransform>
+
+
+  <simpleTransform name="load after store of same pointer, diff align = stored value">
+    rho_value(load(store(*,@PTR:*,@V:*,*),@PTR,numeral("0"))) = @V
+  </simpleTransform>
+  <simpleTransform name="load after store of same pointer, diff align = stored value">
+    rho_value(load(store(*,@PTR:*,@V:*,numeral("0")),@PTR,*)) = @V
+  </simpleTransform>
+
+
+  <simpleRule name="load(S,P,*) = load(S,P,0)">
+    @L1:load(@S:*,@P:*,*)
+    @L2:load(@S,@P,numeral("0"))
+    ==>
+    rho_value(@L1) = rho_value(@L2)
+  </simpleRule>
+
+
+
+  <simpleTransform name="load after volatile store of same pointer, diff align = stored value">
+    rho_value(load(volatile_store(*,@PTR:*,@V:*,*),@PTR,numeral("0"))) = @V
+  </simpleTransform>
+  <simpleTransform name="load after volatile store of same pointer, diff align = stored value">
+    rho_value(load(volatile_store(*,@PTR:*,@V:*,numeral("0")),@PTR,*)) = @V
+  </simpleTransform>
+
+
+  <simpleTransform name="load is sigma-invariant">
+    rho_sigma(load(@S:*,*,*)) = @S
+  </simpleTransform>
+</ruleset>

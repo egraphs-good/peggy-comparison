@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset>
+  <simpleTransform name="GEP(A,indexes(i32(0))) = A">
+    getelementptr(@A:*,@T:*,indexes(int("32","0"))) = @A
+  </simpleTransform>
+  <simpleTransform name="GEP(A,indexes(i64(0))) = A">
+    getelementptr(@A:*,@T:*,indexes(int("64","0"))) = @A
+  </simpleTransform>
+
+<!-- 
+   rules made obsolete by Wildcard rule in nonstackanalysis
+
+  <rule name="GEP(GEP(A,T,INDEXES(B)),T,INDEXES(C)) => create +(B,C)">
+    <trigger>
+      <exists>
+	<simple>getelementptr(getelementptr(@A:*,@T:*,indexes(@B:*)),@T,indexes(@C:*))</simple>
+      </exists>
+    </trigger>
+
+    <response>
+      <creates>
+	<simple>annotation("sum", @B, @C, add(@B,@C))</simple>
+      </creates>
+    </response>
+  </rule>
+
+  <simpleRule name="G:GEP(GEP(A,INDEXES(B)),INDEXES(C))  and sum(B,C,i32(0)) ==> G=A">
+    @G:getelementptr(getelementptr(@A:*,@T:*,indexes(@B:*)),@T,indexes(@C:*))
+    annotation("sum", @B, @C, int("32","0"))
+    ==>
+    @G=@A
+  </simpleRule>
+  <simpleRule name="G:GEP(GEP(A,INDEXES(B)),INDEXES(C))  and sum(B,C,i64(0)) ==> G=A">
+    @G:getelementptr(getelementptr(@A:*,@T:*,indexes(@B:*)),@T,indexes(@C:*))
+    annotation("sum", @B, @C, int("64","0"))
+    ==>
+    @G=@A
+  </simpleRule>
+-->
+
+  <simpleRule name="load of pointer DNA pointer (context = store)">
+    store(*,@R:rho_value(load(*,@P:*,*)),*,*)
+    ==>
+    {annotation("doesNotAlias", @R, @P)}
+  </simpleRule>
+  <simpleRule name="load of pointer DNA pointer (context = load)">
+    load(*,@R:rho_value(load(*,@P:*,*)),*)
+    ==>
+    {annotation("doesNotAlias", @R, @P)}
+  </simpleRule>
+  <simpleRule name="load of pointer DNA pointer (context = gep)">
+    getelementptr(@R:rho_value(load(*,@P:*,*)),*,*)
+    ==>
+    {annotation("doesNotAlias", @R, @P)}
+  </simpleRule>
+  <simpleRule name="load of pointer DNA pointer (context = bitcast)">
+    bitcast(*,@R:rho_value(load(*,@P:*,*)))
+    ==>
+    {annotation("doesNotAlias", @R, @P)}
+  </simpleRule>
+
+
+  <simpleRule name="call(*,P:params) with allNonstack(P,False) is a nonstackCall">
+    @C:call(*,*,*,@P:*)
+    annotation("allNonstack", @P, @A:*)
+    !{@A}!
+    ==>
+    {annotation("nonstackCall", @C)}
+  </simpleRule>
+  <simpleRule name="tailcall(*,P:params) with allNonstack(P,False) is a nonstackCall">
+    @C:tailcall(*,*,*,@P:*)
+    annotation("allNonstack", @P, @A:*)
+    !{@A}!
+    ==>
+    {annotation("nonstackCall", @C)}
+  </simpleRule>
+  <simpleRule name="invoke(*,P:params) with allNonstack(P,False) is a nonstackCall">
+    @C:invoke(*,*,*,@P:*)
+    annotation("allNonstack", @P, @A:*)
+    !{@A}!
+    ==>
+    {annotation("nonstackCall", @C)}
+  </simpleRule>
+
+
+  <simpleRule name="non-aliasing stores can swap"> 
+    @S:store(store(@SIGMA:*,@PTR1:*,@V1:*,@A1:*),@PTR2:*,@V2:*,@A2:*) 
+    {annotation("doesNotAlias", @PTR1, @PTR2)}
+    ==>
+    @S = store(store(@SIGMA,@PTR2,@V2,@A2),@PTR1,@V1,@A1)
+  </simpleRule>
+  <simpleRule name="non-aliasing stores can swap">
+    @S:store(store(@SIGMA:*,@PTR1:*,@V1:*,@A1:*),@PTR2:*,@V2:*,@A2:*)  
+    {annotation("doesNotAlias", @PTR2, @PTR1)}                                               
+    ==> 
+    @S = store(store(@SIGMA,@PTR2,@V2,@A2),@PTR1,@V1,@A1)                                                         
+  </simpleRule>
+
+
+<!--
+   rule obsolete by wildcard rule in nonstackanalysis
+
+  <rule name="Indexes create icmp_eq's (1)">
+    <trigger>
+      <exists>
+        <simple>indexes(@A1:*)</simple>
+        <simple>indexes(@B1:*)</simple>
+      </exists>
+    </trigger>
+    <response>
+      <creates>
+        <simple>icmp_eq(@A1,@B1)</simple>
+      </creates>
+    </response>
+  </rule>
+
+
+  <rule name="Indexes create icmp_eq's (2)">
+    <trigger>
+      <exists>
+        <simple>indexes(@A1:*,@A2:*)</simple>
+        <simple>indexes(@B1:*,@B2:*)</simple>
+      </exists>
+    </trigger>
+    <response>
+      <creates>
+        <simple>icmp_eq(@A1,@B1)</simple>
+        <simple>icmp_eq(@A2,@B2)</simple>
+      </creates>
+    </response>
+  </rule>
+
+
+  <rule name="Indexes create icmp_eq's (1,2)">
+    <trigger>
+      <exists>
+        <simple>indexes(@A1:*)</simple>
+        <simple>indexes(@B1:*,@B2:*)</simple>
+      </exists>
+    </trigger>
+    <response>
+      <creates>
+        <simple>icmp_eq(@A1,@B1)</simple>
+      </creates>
+    </response>
+  </rule>
+
+
+  <rule name="Indexes create icmp_eq's (2,3)">
+    <trigger>
+      <exists>
+        <simple>indexes(@A1:*,@A2:*)</simple>
+        <simple>indexes(@B1:*,@B2:*,@B3:*)</simple>
+      </exists>
+    </trigger>
+    <response>
+      <creates>
+        <simple>icmp_eq(@A1,@B1)</simple>
+        <simple>icmp_eq(@A2,@B2)</simple>
+      </creates>
+    </response>
+  </rule>
+
+
+  <rule name="Indexes create icmp_eq's (3)">
+    <trigger>
+      <exists>
+        <simple>indexes(@A1:*,@A2:*,@A3:*)</simple>
+        <simple>indexes(@B1:*,@B2:*,@B3:*)</simple>
+      </exists>
+    </trigger>
+    <response>
+      <creates>
+        <simple>icmp_eq(@A1,@B1)</simple>
+        <simple>icmp_eq(@A2,@B2)</simple>
+        <simple>icmp_eq(@A3,@B3)</simple>
+      </creates>
+    </response>
+  </rule>
+-->
+
+
+<!--
+   rule obsolete by wildcard rule in nonstackanalysis
+
+  <simpleRule name="gep of different offsets do not alias">
+    @G1:getelementptr(@A:*,*,indexes(@B:*,@C:*))
+    @G2:getelementptr(@A,*,indexes(@B,@D:*))
+    !{icmp_eq(@C,@D)}!
+    ==>
+    {annotation("doesNotAlias", @G1, @G2)}
+  </simpleRule>
+-->
+
+<!--
+   rule obsolete by wildcard rule in nonstackanalysis
+
+  <simpleRule name="gep of different offsets (through bitcast) do not alias">
+    @G1:getelementptr(bitcast(*,@A:*),*,indexes(@B:*,@C:*))
+    @G2:getelementptr(@A,*,indexes(@B,@D:*))
+    !{icmp_eq(@C,@D)}!
+    ==>
+    {annotation("doesNotAlias", @G1, @G2)}
+  </simpleRule>
+  <simpleRule name="gep of different offsets (through bitcast) do not alias">
+    @G1:getelementptr(bitcast(*,@A:*),*,indexes(@B:*,@C:*))
+    @G2:getelementptr(@A,*,indexes(@B,@D:*))
+    !{icmp_eq(@D,@C)}!
+    ==>
+    {annotation("doesNotAlias", @G1, @G2)}
+  </simpleRule>
+-->
+
+
+<!--
+   rule obsolete by wildcard rule in nonstackanalysis
+
+  <simpleRule name="gep of different offsets do not alias">
+    @G1:getelementptr(@A:*,*,indexes(@C:*))
+    @G2:getelementptr(@A,*,indexes(@D:*))
+    !{icmp_eq(@D,@C)}!
+    ==>
+    {annotation("doesNotAlias", @G1, @G2)}
+  </simpleRule>
+-->
+
+  <simpleRule name="non-aliasing load can skip llvm.memcpy.i32">
+    @C:call(@S:*,function("llvm.memcpy.i32", "void(i8*,i8*,i32,i32)"),*,params(@P1:*,*,*,*))
+    @R:rho_value(load(rho_sigma(@C),@PTR:*,@A:*))
+    {annotation("doesNotAlias", @P1, @PTR)}
+    ==>
+    @R = rho_value(load(@S,@PTR,@A))
+  </simpleRule>
+  <simpleRule name="non-aliasing load can skip llvm.memcpy.i32">
+    @C:call(@S:*,function("llvm.memcpy.i32", "void(i8*,i8*,i32,i32)"),*,params(@P1:*,*,*,*))
+    @R:rho_value(load(rho_sigma(@C),@PTR:*,@A:*))
+    {annotation("doesNotAlias", @PTR, @P1)}
+    ==>
+    @R = rho_value(load(@S,@PTR,@A))
+  </simpleRule>
+
+
+
+  <simpleRule name="nonstack skips over store to non-stackPointer">
+    @TOP:nonstack(store(@SIGMA:*,@PTR:*,@V:*,@ALIGN:*)) 
+    !{annotation("stackPointer",@PTR)}!
+    ==>
+    @TOP = store(nonstack(@SIGMA),@PTR,@V,@ALIGN)
+  </simpleRule>
+  <simpleRule name="nonstack skips over volatile store to non-stackPointer">
+    @TOP:nonstack(volatile_store(@SIGMA:*,@PTR:*,@V:*,@ALIGN:*)) 
+    !{annotation("stackPointer",@PTR)}!
+    ==>
+    @TOP = volatile_store(nonstack(@SIGMA),@PTR,@V,@ALIGN)
+  </simpleRule>
+
+  <simpleRule name="nonstack destroys store to stackPointer">
+    @TOP:nonstack(store(@SIGMA:*,@PTR:*,*,*))
+    {annotation("stackPointer",@PTR)}
+    ==>
+    @TOP = nonstack(@SIGMA)
+  </simpleRule>
+
+
+  <simpleRule name="stackPointer(phi(A,B,C)) = stackPointer(B) = stackPointer(C)">
+    @A1:annotation("stackPointer", %phi(@A:*,@B:*,@C:*))
+    ==>
+    @A1 = annotation("stackPointer", @B)
+    @A1 = annotation("stackPointer", @C)
+  </simpleRule>
+  
+  <simpleRule name="stackPointer factors out of phi (true)">
+    @P:%phi(*,@A:*,@B:*)
+    {annotation("stackPointer", @A)
+    annotation("stackPointer", @B)}
+    ==>
+    {annotation("stackPointer", @P)}
+  </simpleRule>
+  <simpleRule name="stackPointer factors out of phi (false)">
+    @P:%phi(*,@A:*,@B:*)
+    !{annotation("stackPointer", @A)
+    annotation("stackPointer", @B)}!
+    ==>
+    !{annotation("stackPointer", @P)}!
+  </simpleRule>
+
+
+
+  <simpleRule name="stackPointer factors through eval">
+    @E:%eval-1(@A:*,*)
+    @A1:annotation("stackPointer", @A)
+    ==>
+    @A1 = annotation("stackPointer", @E)
+  </simpleRule>
+
+  <simpleRule name="stackPointer distributes through eval">
+    @A1:annotation("stackPointer", %eval-1(@A:*,*))
+    ==>
+    @A1 = annotation("stackPointer", @A)
+  </simpleRule>
+
+  <simpleRule name="stackPointer distributes through theta">
+    @A1:annotation("stackPointer", %theta-1(@A:*,@B:*))
+    ==>
+    @A1 = annotation("stackPointer", @A)
+    @A1 = annotation("stackPointer", @B)
+  </simpleRule>
+
+  <simpleRule name="stackPointer factors through theta (true)">
+    @T:%theta-1(@A:*,@B:*)
+    {annotation("stackPointer", @A)
+    annotation("stackPointer", @B)}
+    ==>
+    {annotation("stackPointer", @T)}
+  </simpleRule>
+  <simpleRule name="stackPointer factors through theta (false)">
+    @T:%theta-1(@A:*,@B:*)
+    !{annotation("stackPointer", @A)
+    annotation("stackPointer", @B)}!
+    ==>
+    !{annotation("stackPointer", @T)}!
+  </simpleRule>
+
+
+  <simpleRule name="loading stackPointer may skip nonstackCall">
+    @TOP:rho_value(load(rho_sigma(@C:call(@SIGMA:*,*,*,*)),@PTR:*,@ALIGN:*))
+    {annotation("nonstackCall",@C)
+    annotation("stackPointer",@PTR)}
+    ==>
+    @TOP = rho_value(load(@SIGMA,@PTR,@ALIGN))
+  </simpleRule>
+
+  <simpleRule name="loading stackPointer may skip nonstack tailcall">
+    @TOP:rho_value(load(rho_sigma(@C:tailcall(@SIGMA:*,*,*,*)),@PTR:*,@ALIGN:*))
+    {annotation("nonstackCall",@C)
+    annotation("stackPointer",@PTR)}
+    ==>
+    @TOP = rho_value(load(@SIGMA,@PTR,@ALIGN))
+  </simpleRule>
+
+  <simpleRule name="loading stackPointer may skip nonstack invoke">
+    @TOP:rho_value(load(rho_sigma(@C:invoke(@SIGMA:*,*,*,*)),@PTR:*,@ALIGN:*))
+    {annotation("nonstackCall",@C)
+    annotation("stackPointer",@PTR)}
+    ==>
+    @TOP = rho_value(load(@SIGMA,@PTR,@ALIGN))
+  </simpleRule>
+
+  <simpleRule name="alloca is a stackPointer">
+    @TOP:rho_value(alloca(*,*,*,*)) ==>
+    {annotation("stackPointer",@TOP)}
+  </simpleRule>
+
+  <simpleRule name="GEP preserves stackPointer-ness (true)">
+    @GEP:getelementptr(@PTR:*,*,*)
+    {annotation("stackPointer",@PTR)}
+    ==>
+    {annotation("stackPointer",@GEP)}
+  </simpleRule>
+  <simpleRule name="GEP preserves stackPointer-ness (false)">
+    @GEP:getelementptr(@PTR:*,*,*)
+    !{annotation("stackPointer",@PTR)}!
+    ==>
+    !{annotation("stackPointer",@GEP)}!
+  </simpleRule>
+
+  <simpleRule name="malloc is not a stackPointer">
+    @TOP:rho_value(malloc(*,*,*,*)) 
+    ==>
+    !{annotation("stackPointer",@TOP)}!
+  </simpleRule>
+
+  <simpleRule name="stackPointer and non-stackPointer do not alias">
+    {annotation("stackPointer", @A:*)}
+    !{annotation("stackPointer", @B:*)}!
+    ==>
+    {annotation("doesNotAlias", @A, @B)}
+  </simpleRule>
+
+
+
+  <simpleRule name="if doesNotAlias(A,B), then icmp[eq](A,B) is false">
+    @I:icmp_eq(@A:*,@B:*)
+    {annotation("doesNotAlias",@A,@B)}
+    ==>
+    @I = int("1","0")
+  </simpleRule>
+  <simpleRule name="if doesNotAlias(A,B), then icmp[ne](A,B) is true">
+    @I:icmp_ne(@A:*,@B:*)
+    {annotation("doesNotAlias",@A,@B)}
+    ==>
+    @I = int("1","1")
+  </simpleRule>
+
+
+  <simpleRule name="doesNotAlias(P1,P2) => doesNotAlias(GEP(P1,*,*),P2)">
+    {annotation("doesNotAlias",@A:*,@B:*)}
+    @GEP:getelementptr(@A,*,*)
+    ==>
+    {annotation("doesNotAlias",@GEP,@B)}
+  </simpleRule>
+  <simpleRule name="doesNotAlias(P1,P2) => doesNotAlias(GEP(P2,*,*),P1)">
+    {annotation("doesNotAlias",@A:*,@B:*)}
+    @GEP:getelementptr(@B,*,*)
+    ==>
+    {annotation("doesNotAlias",@GEP,@A)}
+  </simpleRule>
+
+  
+  <simpleRule name="doesNotAlias(P1,P2) => doesNotAlias(bitcast(*,P1),P2)">
+    @BC:bitcast(*,@A:*)
+    {annotation("doesNotAlias",@A,@B:*)}
+    ==>
+    {annotation("doesNotAlias",@BC,@B)}
+  </simpleRule>
+  <simpleRule name="doesNotAlias(P1,P2) => doesNotAlias(bitcast(*,P2),P1)">
+    @BC:bitcast(*,@B:*)
+    {annotation("doesNotAlias",@A:*,@B)}
+    ==>
+    {annotation("doesNotAlias",@BC,@A)}
+  </simpleRule>
+
+  <simpleRule name="load may skip over non-aliasing alloca">
+    @L:rho_value(load(rho_sigma(@A:alloca(@SIGMA:*,*,*,*)),@PTR1:*,@ALIGN:*))
+    {annotation("doesNotAlias", @PTR1, rho_value(@A))}
+    ==>
+    @L = rho_value(load(@SIGMA,@PTR1,@ALIGN))
+  </simpleRule>
+  <simpleRule name="load may skip over non-aliasing alloca">
+    @L:rho_value(load(rho_sigma(@A:alloca(@SIGMA:*,*,*,*)),@PTR1:*,@ALIGN:*))
+    {annotation("doesNotAlias", rho_value(@A), @PTR1)}
+    ==>
+    @L = rho_value(load(@SIGMA,@PTR1,@ALIGN))
+  </simpleRule>
+
+
+
+
+  <simpleRule name="load may skip over a non-aliasing store">
+    @TOP:rho_value(load(store(@SIGMA:*,@PTR1:*,*,*),@PTR2:*,@ALIGN:*))
+    {annotation("doesNotAlias",@PTR1,@PTR2)}
+    ==>
+    @TOP = rho_value(load(@SIGMA,@PTR2,@ALIGN))
+  </simpleRule>
+  <simpleRule name="load may skip over a non-aliasing store">
+    @TOP:rho_value(load(store(@SIGMA:*,@PTR1:*,*,*),@PTR2:*,@ALIGN:*))
+    {annotation("doesNotAlias",@PTR2,@PTR1)}
+    ==>
+    @TOP = rho_value(load(@SIGMA,@PTR2,@ALIGN))
+  </simpleRule>
+
+
+  <simpleRule name="load may skip over a non-aliasing volatile store">
+    @TOP:rho_value(load(volatile_store(@SIGMA:*,@PTR1:*,*,*),@PTR2:*,@ALIGN:*))
+    {annotation("doesNotAlias",@PTR1,@PTR2)}
+    ==>
+    @TOP = rho_value(load(@SIGMA,@PTR2,@ALIGN))
+  </simpleRule>
+  <simpleRule name="load may skip over a non-aliasing volatile store">
+    @TOP:rho_value(load(volatile_store(@SIGMA:*,@PTR1:*,*,*),@PTR2:*,@ALIGN:*))
+    {annotation("doesNotAlias",@PTR2,@PTR1)}
+    ==>
+    @TOP = rho_value(load(@SIGMA,@PTR2,@ALIGN))
+  </simpleRule>
+</ruleset>

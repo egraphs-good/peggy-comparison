@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset>
+  <simpleTransform name="removeINJR distributes through phi">
+    annotation("removeINJR", %phi(@A:*,@B:*,@C:*)) = 
+    %phi(@A, annotation("removeINJR", @B), annotation("removeINJR", @C))
+  </simpleTransform>
+
+  <simpleTransform name="removeINJL distributes through phi">
+    annotation("removeINJL", %phi(@A:*,@B:*,@C:*)) = 
+    %phi(@A, annotation("removeINJL", @B), annotation("removeINJL", @C))
+  </simpleTransform>
+
+  <simpleTransform name="checkException distributes through phi">
+    annotation("checkException", %phi(@A:*,@B:*,@C:*)) = 
+    %phi(@A, annotation("checkException", @B), annotation("checkException", @C))
+  </simpleTransform>
+
+  <simpleTransform name="rho_value('inlineTuple'(V,S)) = 'removeINJR'(V)">
+    rho_value(annotation("inlineTuple", @V:*, @S:*)) = 
+    annotation("removeINJR", @V)
+  </simpleTransform>
+
+  <simpleTransform name="'removeINJR'(injr(V)) = V">
+    annotation("removeINJR", injr(@V:*)) = @V
+  </simpleTransform>
+
+  <simpleTransform name="rho_sigma('inlineTuple'(V,S)) = S">
+    rho_sigma(annotation("inlineTuple", @V:*,@S:*)) = @S
+  </simpleTransform>
+
+  <simpleTransform name="rho_exception('inlineTuple'(V,S)) = 'removeINJL'(V)">
+    rho_exception(annotation("inlineTuple", @V:*, @S:*)) = 
+    annotation("removeInjl", @V)
+  </simpleTransform>
+
+  <simpleTransform name="'removeINJL'(injl(V)) = V">
+    annotation("removeINJL", injl(@V:*)) = @V
+  </simpleTransform>
+
+  <simpleTransform name="is_exception('inlineTuple'(V,S)) = 'checkException'(V)">
+    is_exception(annotation("inlineTuple", @V:*, @S:*)) = 
+    annotation("checkException", @V)
+  </simpleTransform>
+
+  <simpleRule name="'checkException'(injl(V)) = True">
+    @C:annotation("checkException", injl(*))
+    ==>
+    {@C}
+  </simpleRule>
+
+  <simpleRule name="'checkException'(injr(V)) = False">
+    @C:annotation("checkException", injr(*))
+    ==>
+    !{@C}!
+  </simpleRule>
+</ruleset>

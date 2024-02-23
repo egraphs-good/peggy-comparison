@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset>
+   <operatorCost value="params" cost="0"/>
+   <operatorCost value="paramattrmap" cost="0"/>
+   <operatorCost value="indexes" cost="0"/>
+   <operatorCost value="void" cost="0"/>
+   <operatorCost value="rho_value" cost="0"/>
+   <operatorCost value="injl" cost="0"/>
+   <operatorCost value="injr" cost="0"/>
+   <operatorCost value="rho_sigma" cost="0"/>
+   <operatorCost value="rho_exception" cost="0"/>
+   <operatorCost value="returnstructure" cost="0"/>
+   <operatorCost value="is_exception" cost="0"/>
+   <operatorCost value="nonstack" cost="0"/>
+
+   <operatorCost value="cast(trunc)" cost="5"/>
+   <operatorCost value="cast(zext)" cost="5"/>
+   <operatorCost value="cast(sext)" cost="5"/>
+   <operatorCost value="cast(fptoui)" cost="15"/>
+   <operatorCost value="cast(fptosi)" cost="15"/>
+   <operatorCost value="cast(uitofp)" cost="15"/>
+   <operatorCost value="cast(sitofp)" cost="15"/>
+   <operatorCost value="cast(fptrunc)" cost="15"/>
+   <operatorCost value="cast(fpext)" cost="15"/>
+   <operatorCost value="cast(ptrtoint)" cost="5"/>
+   <operatorCost value="cast(inttoptr)" cost="5"/>
+   <operatorCost value="cast(bitcast)" cost="0"/>
+
+   <operatorCost value="binop(shl)" cost="2"/>
+   <operatorCost value="binop(lshr)" cost="2"/>
+   <operatorCost value="binop(ashr)" cost="2"/>
+
+   <operatorCost value="binop(and)" cost="5"/>
+   <operatorCost value="binop(or)" cost="5"/>
+   <operatorCost value="binop(xor)" cost="2"/>
+
+   <operatorCost value="binop(add)" cost="4"/>
+   <operatorCost value="binop(sub)" cost="4"/>
+   <operatorCost value="binop(mul)" cost="10"/>
+
+   <operatorCost value="icmp(sle)" cost="5"/>
+   <operatorCost value="icmp(ule)" cost="5"/>
+   <operatorCost value="icmp(sgt)" cost="5"/>
+   <operatorCost value="icmp(ugt)" cost="5"/>
+   <operatorCost value="icmp(sge)" cost="5"/>
+   <operatorCost value="icmp(uge)" cost="5"/>
+   <operatorCost value="icmp(slt)" cost="5"/>
+   <operatorCost value="icmp(slt)" cost="5"/>
+   <operatorCost value="icmp(ne)" cost="5"/>
+   <operatorCost value="icmp(eq)" cost="5"/>
+
+   <operatorCost value="fcmp(false)" cost="20"/>
+   <operatorCost value="fcmp(oeq)" cost="20"/>
+   <operatorCost value="fcmp(ogt)" cost="20"/>
+   <operatorCost value="fcmp(oge)" cost="20"/>
+   <operatorCost value="fcmp(olt)" cost="20"/>
+   <operatorCost value="fcmp(ole)" cost="20"/>
+   <operatorCost value="fcmp(one)" cost="20"/>
+   <operatorCost value="fcmp(ord)" cost="20"/>
+   <operatorCost value="fcmp(uno)" cost="20"/>
+   <operatorCost value="fcmp(ueq)" cost="20"/>
+   <operatorCost value="fcmp(ugt)" cost="20"/>
+   <operatorCost value="fcmp(uge)" cost="20"/>
+   <operatorCost value="fcmp(ult)" cost="20"/>
+   <operatorCost value="fcmp(ule)" cost="20"/>
+   <operatorCost value="fcmp(une)" cost="20"/>
+   <operatorCost value="fcmp(true)" cost="20"/>
+
+   <operatorCost value="binop(srem)" cost="30"/>
+   <operatorCost value="binop(urem)" cost="30"/>
+   <operatorCost value="binop(sdiv)" cost="30"/>
+   <operatorCost value="binop(udiv)" cost="30"/>
+
+   <operatorCost value="binop(frem)" cost="80"/>   
+   <operatorCost value="binop(fdiv)" cost="80"/>   
+
+   <operatorCost value="invoke" cost="2000"/>
+   <operatorCost value="call" cost="2000"/>
+   <operatorCost value="tailcall" cost="1000"/>
+   
+   <operatorCost value="shufflevector" cost="300"/>
+   <operatorCost value="insertelement" cost="100"/>
+   <operatorCost value="extractelement" cost="100"/>
+   <operatorCost value="getelementptr" cost="1000"/>
+   <operatorCost value="select" cost="20"/>   
+   <operatorCost value="getresult" cost="10"/>
+   <operatorCost value="malloc" cost="2000"/>
+   <operatorCost value="alloca" cost="1000"/>
+   <operatorCost value="free" cost="1000"/>
+   <operatorCost value="load" cost="500"/>
+   <operatorCost value="volatile_load" cost="500"/>
+   <operatorCost value="store" cost="500"/>
+   <operatorCost value="volatile_store" cost="500"/>
+   <operatorCost value="unwind" cost="100"/>
+   <operatorCost value="vaarg" cost="100"/>
+</ruleset>

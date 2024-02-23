@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset>
+  <disableAxiom value="BOOLEAN_AXIOMS"/>
+  <disableAxiom value="EQUALITY_AXIOMS"/>
+  <disableAxiom value="PHI_AXIOMS"/>
+
+  <disableAxiom value="EVAL0_THETA_AXIOMS"/>
+  <disableAxiom value="EVAL_INVARIANT_AXIOMS"/>
+  <disableAxiom value="EVAL_SUCC_SHIFT_AXIOMS"/>
+  <disableAxiom value="SHIFT_THETA_AXIOMS"/>
+  <disableAxiom value="SHIFT_INVARIANT_AXIOMS"/>
+  <disableAxiom value="JOIN_THETA_AXIOMS"/>
+  <disableAxiom value="DISTRIBUTE_SHIFT_AXIOMS"/>
+  <disableAxiom value="DISTRIBUTE_EVAL_AXIOMS"/>
+
+  <disableAxiom value="DISTRIBUTE_THROUGH_EVAL_AXIOMS"/>
+  <disableAxiom value="DISTRIBUTE_THROUGH_THETA_AXIOMS"/>
+  <disableAxiom value="DISTRIBUTE_THETA_THROUGH_EVAL1_AXIOMS"/>
+  <disableAxiom value="DISTRIBUTE_THETA_THROUGH_EVAL2_AXIOMS"/>
+  <disableAxiom value="DISTRIBUTE_SHIFT_THROUGH_EVAL_AXIOMS"/>
+  <disableAxiom value="DISTRIBUTE_PASS_THROUGH_EVAL_AXIOMS"/>
+  <disableAxiom value="DISTRIBUTE_EVAL_THROUGH_EVAL_AXIOMS"/>
+</ruleset>

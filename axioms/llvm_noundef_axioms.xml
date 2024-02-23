@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+   This file has axioms that are only true under some fairly sane
+   assumptions. Namely:
+
+   1) that you will never attempt to load from a
+   malloc'ed or alloca'ed address that has not been stored to yet.
+
+   2) never read or write free'd memory
+-->
+
+<ruleset>
+   <simpleRule name="loading right after alloca must be different pointer">
+      @TOP:load(rho_sigma(@A:alloca(@SIGMA:*,*,*,*)),@PTR:*,@ALIGN2:*)
+      ==>
+      @TOP = load(@SIGMA,@PTR,@ALIGN2)
+      {annotation("doesNotAlias",@PTR,@RV:rho_value(@A))}
+   </simpleRule>
+
+   <simpleRule name="loading right after malloc must be different pointer">
+      @TOP:load(rho_sigma(@M:malloc(@SIGMA:*,*,*,*)),@PTR:*,@ALIGN2:*)
+      ==>
+      @TOP = load(@SIGMA,@PTR,@ALIGN2)
+      {annotation("doesNotAlias",@PTR,@RV:rho_value(@M))}
+   </simpleRule>
+
+   <simpleRule name="storing right after free must be different pointer">
+      store(free(*,@PTR1:*),@PTR2:*,*,*)
+      ==>
+      {annotation("doesNotAlias",@PTR1,@PTR2)}
+   </simpleRule>
+
+   <simpleRule name="non-aliasing store after free can swap">
+      @BEFORE:store(free(@SIGMA:*,@PTR1:*),@PTR2:*,@VAL:*,@ALIGN:*)
+      {annotation("doesNotAlias",@PTR1,@PTR2)}
+      ==>
+      @BEFORE = free(store(@SIGMA,@PTR2,@VAL,@ALIGN),@PTR1)
+   </simpleRule>
+   <simpleRule name="non-aliasing store after free can swap">
+      @BEFORE:store(free(@SIGMA:*,@PTR1:*),@PTR2:*,@VAL:*,@ALIGN:*)
+      {annotation("doesNotAlias",@PTR2,@PTR1)}
+      ==>
+      @BEFORE = free(store(@SIGMA,@PTR2,@VAL,@ALIGN),@PTR1)
+   </simpleRule>
+
+
+   <simpleRule name="load after free must be different pointer">
+      @BEFORE:load(free(@SIGMA:*,@PTR1:*),@PTR2:*,@ALIGN:*)
+      ==>
+      @BEFORE = load(@SIGMA,@PTR2,@ALIGN)
+      {annotation("doesNotAlias",@PTR1,@PTR2)}
+   </simpleRule>
+</ruleset>
