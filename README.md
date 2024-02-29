@@ -2,15 +2,40 @@ This is the documentation for the Peggy equality saturation engine and
 compiler. Below you will find some answers to simple questions about
 how to install and use Peggy.
 
+# 0. Install Java 6.
 
-1. Installation.
+
+## Windows
+- Install from [Oracle Java archives](https://www.oracle.com/java/technologies/javase-java-archive-javase6-downloads.html)
+(requires signup).
+
+## Linux
+?
+
+## Mac
+Use a container.
+```
+docker pull ubuntu:14.04.2
+```
+
+Create a container:
+```
+docker run -d -v /local/path/to/peggy_1.0:/container/path/to/peggy_1.0 -w /container/path/to/peggy_1.0 --name peggy -i -t ubuntu:14.04.2 /bin/bash
+```
+
+Within the container:
+```
+apt-get install openjdk-6-jdk
+```
+
+# 1. Installation.
 
 No installation is necessary. If you have the peggy_1.0.jar file, then
 you have a working copy of Peggy and all of the libraries it depends
 upon (from the lib/ folder).
 
 
-2. Compilation.
+# 2. Compilation.
 
 If you wish to compile Peggy from source, you will find all the source
 code in the src/ folder. We use the Eclipse 3.1+ IDE to build Peggy.
@@ -24,7 +49,7 @@ project's build path. Then you can refresh the project and it should
 compile correctly.
 
 
-3. Setup.
+# 3. Setup.
 
 The only setup required for Peggy is specifying the paths to a few
 external tools that it relies on. The optimizers need to know the path
@@ -41,7 +66,7 @@ which folder these files are created in with the option
 '-tmpFolder <folder>'. The default is /tmp/.
 
 
-4. Usage.
+# 4. Usage.
 
 We have provided bash scripts to run the appropriate command-line
 class for each optimizer/translation validator for Java/LLVM. For any
@@ -49,9 +74,11 @@ one of these scripts, you may call it without parameters to see a
 description of the command-line parameters it accepts.
 
 
-5. Quick start: Optimizing.
+# 5. Quick start: Optimizing.
 
 Here's a basic example of how to optimize a Java class with Peggy.
+First, make a basic java file `Foo.java` and compile it using
+`javac Foo.java` to get the class `Foo.class`.
 Suppose we want to optimize a class "Foo.class", which is in the
 current folder.
 
