@@ -59,7 +59,9 @@ want to use. You can specify this on the command line with the
 specified explicitly, the path is assumed to be
 $COLLIDER_ROOT/scripts/minisat/Minisat (for minisat),
 $COLLIDER_ROOT/scripts/pueblo/Pueblo (for Pueblo), or
-/usr/bin/glpsol (for GLPK).
+/usr/bin/glpsol (for GLPK). If not using minisat, you must specify which
+solver to use by passing `minisat`, `pueblo`, or `glpk` to the `-pb` option
+on the command line.
 
 The optimizers also generate some temporary files, and you may specify
 which folder these files are created in with the option 
