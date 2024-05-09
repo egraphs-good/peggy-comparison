@@ -8,7 +8,6 @@ public class InfiniteLoop {
         for (int i = 5; i == 5; ) {
             j++;
         }
-        j = 2;
         return j;
     }
 }
