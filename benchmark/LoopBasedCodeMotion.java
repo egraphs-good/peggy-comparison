@@ -4,7 +4,7 @@ public class LoopBasedCodeMotion {
         while (x < 3) {
             x += 1;
         }
-        return x * 5;
+        return x * 500;
     }
 
     public int expected() {
