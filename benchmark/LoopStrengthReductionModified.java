@@ -3,7 +3,7 @@ public class LoopStrengthReductionModified {
         int i = 0;
         int d = 0;
         while (d < 300) {
-            System.out.println(i * 5);
+            System.out.println(i * 500);
             i = i + 1;
             if (d == 150) {
                 i = i + 3;
