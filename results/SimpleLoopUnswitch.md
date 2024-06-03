@@ -14,6 +14,7 @@ public class SimpleLoopUnswitch {
         return j;
     }
 
+    // This causes the encoding of output CFG to never terminate
     // public int expected(int n) {
     //     int j = 0;
     //     if (n < 0) {
@@ -31,6 +32,7 @@ public class SimpleLoopUnswitch {
     //     return j;
     // }
 }
+
 ```
 ## Run 
 
@@ -48,7 +50,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 2 after 4 milliseconds
+      * Engine reached iteration bound of 2 after 3 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -60,10 +62,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: void <init>()> SUCCESSFUL
-      * Optimization took 668
-      * PEG2PEGTIME 538
-      * PBTIME 408
-      * ENGINETIME 4
+      * Optimization took 434
+      * PEG2PEGTIME 355
+      * PBTIME 274
+      * ENGINETIME 3
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <SimpleLoopUnswitch: void <init>()>
@@ -71,7 +73,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 2 after 1 milliseconds
+      * Engine reached iteration bound of 2 after 0 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -83,10 +85,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: int original(int)> SUCCESSFUL
-      * Optimization took 578
-      * PEG2PEGTIME 495
-      * PBTIME 448
-      * ENGINETIME 1
+      * Optimization took 448
+      * PEG2PEGTIME 400
+      * PBTIME 370
+      * ENGINETIME 0
       * Optimization ratio 31435/31435 = 1.0
       * PEG-based Optimization ratio 31435/31435 = 1.0
    - Done processing method <SimpleLoopUnswitch: int original(int)>
@@ -98,11 +100,11 @@ Peggy output
 + Fixing bytecode of method <SimpleLoopUnswitch: void <init>()>
 + Fixing bytecode of method <SimpleLoopUnswitch: int original(int)>
 + Writing class back to optimized/SimpleLoopUnswitch.class
-+ Total optimization time = 1708 milliseconds
++ Total optimization time = 1176 milliseconds
 ```
 
 ```java
-20:19:16.043 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
+19:27:12.045 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
 import java.io.PrintStream;
 
 public class SimpleLoopUnswitch
@@ -112,20 +114,20 @@ public class SimpleLoopUnswitch
     this = 0;
     int i = 0;
     if (paramInt < 0) {
-      while (this < paramInt)
+      while (i < paramInt)
       {
-        this += 1;
-        System.out.println(this);
-        i = 2 + 1;
+        this = 2 + 1;
+        System.out.println(i);
+        i += 1;
       }
     }
-    while (this < paramInt)
+    while (i < paramInt)
     {
       this += 1;
-      System.out.println(this);
+      System.out.println(i);
       i += 1;
     }
-    return i;
+    return this;
   }
 }
 
@@ -151,7 +153,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 4 after 4 milliseconds
+      * Engine reached iteration bound of 4 after 3 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -163,10 +165,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: void <init>()> SUCCESSFUL
-      * Optimization took 608
-      * PEG2PEGTIME 477
-      * PBTIME 341
-      * ENGINETIME 4
+      * Optimization took 438
+      * PEG2PEGTIME 354
+      * PBTIME 274
+      * ENGINETIME 3
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <SimpleLoopUnswitch: void <init>()>
@@ -186,9 +188,9 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: int original(int)> SUCCESSFUL
-      * Optimization took 576
-      * PEG2PEGTIME 505
-      * PBTIME 455
+      * Optimization took 442
+      * PEG2PEGTIME 395
+      * PBTIME 372
       * ENGINETIME 1
       * Optimization ratio 31435/31435 = 1.0
       * PEG-based Optimization ratio 31435/31435 = 1.0
@@ -201,11 +203,11 @@ Peggy output
 + Fixing bytecode of method <SimpleLoopUnswitch: void <init>()>
 + Fixing bytecode of method <SimpleLoopUnswitch: int original(int)>
 + Writing class back to optimized/SimpleLoopUnswitch.class
-+ Total optimization time = 1666 milliseconds
++ Total optimization time = 1237 milliseconds
 ```
 
 ```java
-20:19:20.437 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
+19:27:15.041 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
 import java.io.PrintStream;
 
 public class SimpleLoopUnswitch
@@ -217,15 +219,15 @@ public class SimpleLoopUnswitch
     if (paramInt < 0) {
       while (this < paramInt)
       {
-        this += 1;
         System.out.println(this);
+        this += 1;
         i = 2 + 1;
       }
     }
     while (this < paramInt)
     {
-      this += 1;
       System.out.println(this);
+      this += 1;
       i += 1;
     }
     return i;
@@ -254,7 +256,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 8 after 6 milliseconds
+      * Engine reached iteration bound of 8 after 4 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -266,10 +268,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: void <init>()> SUCCESSFUL
-      * Optimization took 553
-      * PEG2PEGTIME 429
-      * PBTIME 306
-      * ENGINETIME 6
+      * Optimization took 516
+      * PEG2PEGTIME 365
+      * PBTIME 279
+      * ENGINETIME 4
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <SimpleLoopUnswitch: void <init>()>
@@ -289,9 +291,9 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: int original(int)> SUCCESSFUL
-      * Optimization took 563
-      * PEG2PEGTIME 490
-      * PBTIME 446
+      * Optimization took 447
+      * PEG2PEGTIME 396
+      * PBTIME 369
       * ENGINETIME 2
       * Optimization ratio 31435/31435 = 1.0
       * PEG-based Optimization ratio 31435/31435 = 1.0
@@ -304,36 +306,36 @@ Peggy output
 + Fixing bytecode of method <SimpleLoopUnswitch: void <init>()>
 + Fixing bytecode of method <SimpleLoopUnswitch: int original(int)>
 + Writing class back to optimized/SimpleLoopUnswitch.class
-+ Total optimization time = 1583 milliseconds
++ Total optimization time = 1259 milliseconds
 ```
 
 ```java
-20:19:24.786 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
+19:27:18.044 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
 import java.io.PrintStream;
 
 public class SimpleLoopUnswitch
 {
   public int original(int paramInt)
   {
+    this = 0;
     int i = 0;
-    int j = 0;
     if (paramInt < 0)
     {
-      while (i < paramInt)
+      while (this < paramInt)
       {
-        this = i;
-        i += 1;
-        j = 2 + 1;
-        System.out.println(this);
+        int j = this;
+        this += 1;
+        i = 2 + 1;
+        System.out.println(j);
       }
-      return j;
+      return i;
     }
     for (;;)
     {
-      if (i < paramInt)
+      if (this < paramInt)
       {
-        i += 1;
-        System.out.println(i);
+        this += 1;
+        System.out.println(this);
       }
     }
   }
@@ -373,10 +375,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: void <init>()> SUCCESSFUL
-      * Optimization took 589
-      * PEG2PEGTIME 449
-      * PBTIME 317
-      * ENGINETIME 7
+      * Optimization took 459
+      * PEG2PEGTIME 379
+      * PBTIME 291
+      * ENGINETIME 5
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <SimpleLoopUnswitch: void <init>()>
@@ -384,7 +386,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 16 after 15 milliseconds
+      * Engine reached iteration bound of 16 after 8 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -396,10 +398,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: int original(int)> SUCCESSFUL
-      * Optimization took 685
-      * PEG2PEGTIME 616
-      * PBTIME 562
-      * ENGINETIME 15
+      * Optimization took 534
+      * PEG2PEGTIME 489
+      * PBTIME 454
+      * ENGINETIME 8
       * Optimization ratio 31435/31435 = 1.0
       * PEG-based Optimization ratio 31435/31435 = 1.0
    - Done processing method <SimpleLoopUnswitch: int original(int)>
@@ -411,34 +413,35 @@ Peggy output
 + Fixing bytecode of method <SimpleLoopUnswitch: void <init>()>
 + Fixing bytecode of method <SimpleLoopUnswitch: int original(int)>
 + Writing class back to optimized/SimpleLoopUnswitch.class
-+ Total optimization time = 1730 milliseconds
++ Total optimization time = 1305 milliseconds
 ```
 
 ```java
-20:19:29.212 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
+19:27:21.183 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
 import java.io.PrintStream;
 
 public class SimpleLoopUnswitch
 {
   public int original(int paramInt)
   {
-    this = 0;
+    int j = 0;
     int i = 0;
     if (paramInt < 0) {
       while (i < paramInt)
       {
-        System.out.println(i);
-        this = 2 + 1;
-        i = 1 + i;
+        this = i;
+        j = 2 + 1;
+        i += 1;
+        System.out.println(this);
       }
     }
     while (i < paramInt)
     {
+      j += 1;
       System.out.println(i);
-      this += 1;
-      i = 1 + i;
+      i += 1;
     }
-    return this;
+    return j;
   }
 }
 
@@ -476,10 +479,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: void <init>()> SUCCESSFUL
-      * Optimization took 564
-      * PEG2PEGTIME 441
-      * PBTIME 306
-      * ENGINETIME 9
+      * Optimization took 499
+      * PEG2PEGTIME 420
+      * PBTIME 339
+      * ENGINETIME 5
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <SimpleLoopUnswitch: void <init>()>
@@ -487,7 +490,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 32 after 36 milliseconds
+      * Engine reached iteration bound of 32 after 22 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -499,10 +502,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: int original(int)> SUCCESSFUL
-      * Optimization took 899
-      * PEG2PEGTIME 831
-      * PBTIME 755
-      * ENGINETIME 36
+      * Optimization took 691
+      * PEG2PEGTIME 647
+      * PBTIME 594
+      * ENGINETIME 22
       * Optimization ratio 31435/31435 = 1.0
       * PEG-based Optimization ratio 31435/31435 = 1.0
    - Done processing method <SimpleLoopUnswitch: int original(int)>
@@ -514,36 +517,35 @@ Peggy output
 + Fixing bytecode of method <SimpleLoopUnswitch: void <init>()>
 + Fixing bytecode of method <SimpleLoopUnswitch: int original(int)>
 + Writing class back to optimized/SimpleLoopUnswitch.class
-+ Total optimization time = 1907 milliseconds
++ Total optimization time = 1479 milliseconds
 ```
 
 ```java
-20:19:33.800 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
+19:27:24.373 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
 import java.io.PrintStream;
 
 public class SimpleLoopUnswitch
 {
   public int original(int paramInt)
   {
+    this = 0;
     int i = 0;
-    int j = 0;
     if (paramInt < 0)
     {
-      while (paramInt > j)
+      while (paramInt > this)
       {
-        this = j;
-        i = 2 + 1;
-        j += 1;
+        this = 1 + this;
         System.out.println(this);
+        i = 1 + 2;
       }
       return i;
     }
     for (;;)
     {
-      if (paramInt > j)
+      if (paramInt > this)
       {
-        j += 1;
-        System.out.println(j);
+        System.out.println(this);
+        this = 1 + this;
       }
     }
   }
@@ -583,10 +585,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: void <init>()> SUCCESSFUL
-      * Optimization took 565
-      * PEG2PEGTIME 438
-      * PBTIME 304
-      * ENGINETIME 7
+      * Optimization took 488
+      * PEG2PEGTIME 410
+      * PBTIME 329
+      * ENGINETIME 4
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <SimpleLoopUnswitch: void <init>()>
@@ -594,7 +596,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 64 after 65 milliseconds
+      * Engine reached iteration bound of 64 after 39 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -606,10 +608,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: int original(int)> SUCCESSFUL
-      * Optimization took 1353
-      * PEG2PEGTIME 1286
-      * PBTIME 1190
-      * ENGINETIME 65
+      * Optimization took 993
+      * PEG2PEGTIME 951
+      * PBTIME 890
+      * ENGINETIME 40
       * Optimization ratio 31435/31435 = 1.0
       * PEG-based Optimization ratio 31435/31435 = 1.0
    - Done processing method <SimpleLoopUnswitch: int original(int)>
@@ -621,11 +623,11 @@ Peggy output
 + Fixing bytecode of method <SimpleLoopUnswitch: void <init>()>
 + Fixing bytecode of method <SimpleLoopUnswitch: int original(int)>
 + Writing class back to optimized/SimpleLoopUnswitch.class
-+ Total optimization time = 2368 milliseconds
++ Total optimization time = 1773 milliseconds
 ```
 
 ```java
-20:19:38.906 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
+19:27:27.972 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
 import java.io.PrintStream;
 
 public class SimpleLoopUnswitch
@@ -636,17 +638,17 @@ public class SimpleLoopUnswitch
     this = 0;
     if (paramInt < 0)
     {
-      while (paramInt > i)
+      while (i < paramInt)
       {
-        System.out.println(i);
         i += 1;
-        this = 2 + 1;
+        System.out.println(i);
+        this = 1 + 2;
       }
       return this;
     }
     for (;;)
     {
-      if (paramInt > i)
+      if (i < paramInt)
       {
         System.out.println(i);
         i += 1;
@@ -689,10 +691,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: void <init>()> SUCCESSFUL
-      * Optimization took 569
-      * PEG2PEGTIME 443
-      * PBTIME 305
-      * ENGINETIME 7
+      * Optimization took 456
+      * PEG2PEGTIME 377
+      * PBTIME 290
+      * ENGINETIME 5
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <SimpleLoopUnswitch: void <init>()>
@@ -700,7 +702,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 128 after 133 milliseconds
+      * Engine reached iteration bound of 128 after 76 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -712,10 +714,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: int original(int)> SUCCESSFUL
-      * Optimization took 2012
-      * PEG2PEGTIME 1946
-      * PBTIME 1782
-      * ENGINETIME 133
+      * Optimization took 1341
+      * PEG2PEGTIME 1298
+      * PBTIME 1196
+      * ENGINETIME 76
       * Optimization ratio 31435/31435 = 1.0
       * PEG-based Optimization ratio 31435/31435 = 1.0
    - Done processing method <SimpleLoopUnswitch: int original(int)>
@@ -727,38 +729,34 @@ Peggy output
 + Fixing bytecode of method <SimpleLoopUnswitch: void <init>()>
 + Fixing bytecode of method <SimpleLoopUnswitch: int original(int)>
 + Writing class back to optimized/SimpleLoopUnswitch.class
-+ Total optimization time = 3037 milliseconds
++ Total optimization time = 2104 milliseconds
 ```
 
 ```java
-20:19:44.645 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
+19:27:31.937 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
 import java.io.PrintStream;
 
 public class SimpleLoopUnswitch
 {
   public int original(int paramInt)
   {
-    int j = 0;
     int i = 0;
-    if (paramInt < 0)
-    {
-      while (i < paramInt)
-      {
-        this = i;
-        j = 2 + 1;
-        i = 1 + i;
-        System.out.println(this);
-      }
-      return j;
-    }
-    for (;;)
-    {
-      if (i < paramInt)
+    this = 0;
+    if (paramInt < 0) {
+      while (paramInt > i)
       {
         i = 1 + i;
         System.out.println(i);
+        this = 2 + 1;
       }
     }
+    while (paramInt > i)
+    {
+      i = 1 + i;
+      System.out.println(i);
+      this += 1;
+    }
+    return this;
   }
 }
 
@@ -796,10 +794,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: void <init>()> SUCCESSFUL
-      * Optimization took 563
-      * PEG2PEGTIME 440
-      * PBTIME 304
-      * ENGINETIME 7
+      * Optimization took 458
+      * PEG2PEGTIME 377
+      * PBTIME 278
+      * ENGINETIME 5
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <SimpleLoopUnswitch: void <init>()>
@@ -807,7 +805,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 256 after 227 milliseconds
+      * Engine reached iteration bound of 256 after 138 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -819,10 +817,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: int original(int)> SUCCESSFUL
-      * Optimization took 3169
-      * PEG2PEGTIME 3090
-      * PBTIME 2829
-      * ENGINETIME 227
+      * Optimization took 2054
+      * PEG2PEGTIME 2011
+      * PBTIME 1849
+      * ENGINETIME 138
       * Optimization ratio 31435/31435 = 1.0
       * PEG-based Optimization ratio 31435/31435 = 1.0
    - Done processing method <SimpleLoopUnswitch: int original(int)>
@@ -834,11 +832,11 @@ Peggy output
 + Fixing bytecode of method <SimpleLoopUnswitch: void <init>()>
 + Fixing bytecode of method <SimpleLoopUnswitch: int original(int)>
 + Writing class back to optimized/SimpleLoopUnswitch.class
-+ Total optimization time = 4174 milliseconds
++ Total optimization time = 2859 milliseconds
 ```
 
 ```java
-20:19:51.648 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
+19:27:36.519 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
 import java.io.PrintStream;
 
 public class SimpleLoopUnswitch
@@ -903,10 +901,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: void <init>()> SUCCESSFUL
-      * Optimization took 599
-      * PEG2PEGTIME 463
-      * PBTIME 315
-      * ENGINETIME 7
+      * Optimization took 474
+      * PEG2PEGTIME 376
+      * PBTIME 280
+      * ENGINETIME 5
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <SimpleLoopUnswitch: void <init>()>
@@ -914,7 +912,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 512 after 456 milliseconds
+      * Engine reached iteration bound of 512 after 302 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -926,10 +924,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <SimpleLoopUnswitch: int original(int)> SUCCESSFUL
-      * Optimization took 7184
-      * PEG2PEGTIME 7111
-      * PBTIME 6621
-      * ENGINETIME 456
+      * Optimization took 4849
+      * PEG2PEGTIME 4796
+      * PBTIME 4465
+      * ENGINETIME 302
       * Optimization ratio 31435/31435 = 1.0
       * PEG-based Optimization ratio 31435/31435 = 1.0
    - Done processing method <SimpleLoopUnswitch: int original(int)>
@@ -941,34 +939,247 @@ Peggy output
 + Fixing bytecode of method <SimpleLoopUnswitch: void <init>()>
 + Fixing bytecode of method <SimpleLoopUnswitch: int original(int)>
 + Writing class back to optimized/SimpleLoopUnswitch.class
-+ Total optimization time = 8283 milliseconds
++ Total optimization time = 5624 milliseconds
 ```
 
 ```java
-20:20:03.036 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
+19:27:44.046 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
 import java.io.PrintStream;
 
 public class SimpleLoopUnswitch
 {
   public int original(int paramInt)
   {
-    this = 0;
     int i = 0;
+    this = 0;
     if (paramInt < 0) {
       while (paramInt > i)
       {
-        System.out.println(i);
-        this = 2 + 1;
+        int j = i;
         i = 1 + i;
+        this = 1 + 2;
+        System.out.println(j);
       }
     }
     while (paramInt > i)
     {
-      this += 1;
-      System.out.println(i);
       i = 1 + i;
+      this = 1 + this;
+      System.out.println(i);
     }
     return this;
+  }
+}
+
+/* Location:
+ * Qualified Name:     SimpleLoopUnswitch
+ * Java Class Version: 1.2 (46.0)
+ * JD-Core Version:    0.7.1
+ */
+```
+## Run 
+
+axioms: axioms/java_arithmetic_axioms.xml:axioms/java_operator_axioms.xml:axioms/java_operator_costs.xml:axioms/java_util_axioms.xml, optimization_level: O2, tmp_folder: tmp, pb: glpk, eto: 1024
+
+Peggy output
+```
++ Successfully added axiom file: axioms/java_operator_axioms.xml
++ Successfully added axiom file: axioms/java_util_axioms.xml
++ Successfully added axiom file: axioms/java_operator_costs.xml
++ Successfully added axiom file: axioms/java_arithmetic_axioms.xml
++ Loading class file SimpleLoopUnswitch
++ Optimizing class SimpleLoopUnswitch
+   - Processing method <SimpleLoopUnswitch: void <init>()>
+      * Building original PEG
+      * Setting up engine
+      * Running engine
+      * Engine saturated in 10 iterations
+      * Building optimal PEG
+      * Begin GLPK solving
+         @ Writing formulation
+         @ Running solver
+         @ GLPK solver returned nonempty result
+      * Building reversion graph
+      * Building revert CFG
+      * Building output CFG
+      * Encoding output CFG
+      * Optimization completed
+      * Optimization of method <SimpleLoopUnswitch: void <init>()> SUCCESSFUL
+      * Optimization took 428
+      * PEG2PEGTIME 351
+      * PBTIME 271
+      * ENGINETIME 4
+      * Optimization ratio 2000/2000 = 1.0
+      * PEG-based Optimization ratio 2000/2000 = 1.0
+   - Done processing method <SimpleLoopUnswitch: void <init>()>
+   - Processing method <SimpleLoopUnswitch: int original(int)>
+      * Building original PEG
+      * Setting up engine
+      * Running engine
+      * Engine reached iteration bound of 1024 after 460 milliseconds
+      * Building optimal PEG
+      * Begin GLPK solving
+         @ Writing formulation
+         @ Running solver
+         @ GLPK solver returned nonempty result
+      * Building reversion graph
+      * Building revert CFG
+      * Building output CFG
+      * Encoding output CFG
+      * Optimization completed
+      * Optimization of method <SimpleLoopUnswitch: int original(int)> SUCCESSFUL
+      * Optimization took 11302
+      * PEG2PEGTIME 11260
+      * PBTIME 10771
+      * ENGINETIME 461
+      * Optimization ratio 31435/31435 = 1.0
+      * PEG-based Optimization ratio 31435/31435 = 1.0
+   - Done processing method <SimpleLoopUnswitch: int original(int)>
++ Done optimizing SimpleLoopUnswitch
++ Final results:
+   - Skipped methods = 0
+   - Buggy methods = 0
+   - Total methods = 2
++ Fixing bytecode of method <SimpleLoopUnswitch: void <init>()>
++ Fixing bytecode of method <SimpleLoopUnswitch: int original(int)>
++ Writing class back to optimized/SimpleLoopUnswitch.class
++ Total optimization time = 12009 milliseconds
+```
+
+```java
+19:27:57.807 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
+import java.io.PrintStream;
+
+public class SimpleLoopUnswitch
+{
+  public int original(int paramInt)
+  {
+    int i = 0;
+    this = 0;
+    if (paramInt < 0)
+    {
+      while (i < paramInt)
+      {
+        i = 1 + i;
+        System.out.println(i);
+        this = 1 + 2;
+      }
+      return this;
+    }
+    for (;;)
+    {
+      if (i < paramInt)
+      {
+        i = 1 + i;
+        System.out.println(i);
+      }
+    }
+  }
+}
+
+/* Location:
+ * Qualified Name:     SimpleLoopUnswitch
+ * Java Class Version: 1.2 (46.0)
+ * JD-Core Version:    0.7.1
+ */
+```
+## Run 
+
+axioms: axioms/java_arithmetic_axioms.xml:axioms/java_operator_axioms.xml:axioms/java_operator_costs.xml:axioms/java_util_axioms.xml, optimization_level: O2, tmp_folder: tmp, pb: glpk, eto: 2048
+
+Peggy output
+```
++ Successfully added axiom file: axioms/java_operator_axioms.xml
++ Successfully added axiom file: axioms/java_util_axioms.xml
++ Successfully added axiom file: axioms/java_operator_costs.xml
++ Successfully added axiom file: axioms/java_arithmetic_axioms.xml
++ Loading class file SimpleLoopUnswitch
++ Optimizing class SimpleLoopUnswitch
+   - Processing method <SimpleLoopUnswitch: void <init>()>
+      * Building original PEG
+      * Setting up engine
+      * Running engine
+      * Engine saturated in 10 iterations
+      * Building optimal PEG
+      * Begin GLPK solving
+         @ Writing formulation
+         @ Running solver
+         @ GLPK solver returned nonempty result
+      * Building reversion graph
+      * Building revert CFG
+      * Building output CFG
+      * Encoding output CFG
+      * Optimization completed
+      * Optimization of method <SimpleLoopUnswitch: void <init>()> SUCCESSFUL
+      * Optimization took 445
+      * PEG2PEGTIME 368
+      * PBTIME 279
+      * ENGINETIME 6
+      * Optimization ratio 2000/2000 = 1.0
+      * PEG-based Optimization ratio 2000/2000 = 1.0
+   - Done processing method <SimpleLoopUnswitch: void <init>()>
+   - Processing method <SimpleLoopUnswitch: int original(int)>
+      * Building original PEG
+      * Setting up engine
+      * Running engine
+      * Engine reached iteration bound of 2048 after 2204 milliseconds
+      * Building optimal PEG
+      * Begin GLPK solving
+         @ Writing formulation
+         @ Running solver
+         @ GLPK solver returned nonempty result
+      * Building reversion graph
+      * Building revert CFG
+      * Building output CFG
+      * Encoding output CFG
+      * Optimization completed
+      * Optimization of method <SimpleLoopUnswitch: int original(int)> SUCCESSFUL
+      * Optimization took 29100
+      * PEG2PEGTIME 29052
+      * PBTIME 26823
+      * ENGINETIME 2204
+      * Optimization ratio 31435/31435 = 1.0
+      * PEG-based Optimization ratio 31435/31435 = 1.0
+   - Done processing method <SimpleLoopUnswitch: int original(int)>
++ Done optimizing SimpleLoopUnswitch
++ Final results:
+   - Skipped methods = 0
+   - Buggy methods = 0
+   - Total methods = 2
++ Fixing bytecode of method <SimpleLoopUnswitch: void <init>()>
++ Fixing bytecode of method <SimpleLoopUnswitch: int original(int)>
++ Writing class back to optimized/SimpleLoopUnswitch.class
++ Total optimization time = 29842 milliseconds
+```
+
+```java
+19:28:29.635 INFO  jd.cli.Main - Decompiling optimized/SimpleLoopUnswitch.class
+import java.io.PrintStream;
+
+public class SimpleLoopUnswitch
+{
+  public int original(int paramInt)
+  {
+    int i = 0;
+    this = 0;
+    if (paramInt < 0)
+    {
+      while (this < paramInt)
+      {
+        i = 2 + 1;
+        System.out.println(this);
+        this += 1;
+      }
+      return i;
+    }
+    for (;;)
+    {
+      if (this < paramInt)
+      {
+        System.out.println(this);
+        this += 1;
+      }
+    }
   }
 }
 

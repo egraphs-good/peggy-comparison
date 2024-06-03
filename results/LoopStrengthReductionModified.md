@@ -45,7 +45,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 2 after 3 milliseconds
+      * Engine reached iteration bound of 2 after 2 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -57,10 +57,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void <init>()> SUCCESSFUL
-      * Optimization took 584
-      * PEG2PEGTIME 458
-      * PBTIME 325
-      * ENGINETIME 3
+      * Optimization took 434
+      * PEG2PEGTIME 356
+      * PBTIME 272
+      * ENGINETIME 2
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <LoopStrengthReductionModified: void <init>()>
@@ -68,7 +68,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 2 after 1 milliseconds
+      * Engine reached iteration bound of 2 after 0 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -80,10 +80,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void original()> SUCCESSFUL
-      * Optimization took 587
-      * PEG2PEGTIME 519
-      * PBTIME 476
-      * ENGINETIME 1
+      * Optimization took 503
+      * PEG2PEGTIME 452
+      * PBTIME 424
+      * ENGINETIME 0
       * Optimization ratio 31720/31720 = 1.0
       * PEG-based Optimization ratio 31720/31720 = 1.0
    - Done processing method <LoopStrengthReductionModified: void original()>
@@ -103,10 +103,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void expected()> SUCCESSFUL
-      * Optimization took 510
-      * PEG2PEGTIME 488
-      * PBTIME 472
-      * ENGINETIME 0
+      * Optimization took 389
+      * PEG2PEGTIME 375
+      * PBTIME 363
+      * ENGINETIME 1
       * Optimization ratio 31920/31920 = 1.0
       * PEG-based Optimization ratio 31920/31920 = 1.0
    - Done processing method <LoopStrengthReductionModified: void expected()>
@@ -119,11 +119,11 @@ Peggy output
 + Fixing bytecode of method <LoopStrengthReductionModified: void original()>
 + Fixing bytecode of method <LoopStrengthReductionModified: void expected()>
 + Writing class back to optimized/LoopStrengthReductionModified.class
-+ Total optimization time = 2203 milliseconds
++ Total optimization time = 1644 milliseconds
 ```
 
 ```java
-23:13:00.572 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
+20:32:54.652 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
 import java.io.PrintStream;
 
 public class LoopStrengthReductionModified
@@ -131,41 +131,41 @@ public class LoopStrengthReductionModified
   public static void original()
   {
     int j = 0;
-    int k = 0;
-    if (j < 300)
+    int i = 0;
+    if (i < 300)
     {
-      int i = k + 1;
-      if (j == 150) {
-        i += 3;
+      int k = j + 1;
+      if (i == 150) {
+        k += 3;
       }
       for (;;)
       {
-        j += 1;
-        k = i;
-        System.out.println(k * 500);
+        j = k;
+        i += 1;
+        System.out.println(j * 500);
         break;
-        i = i;
+        k = k;
       }
     }
   }
   
   public static void expected()
   {
-    int k = 0;
     int j = 0;
-    if (k < 300)
+    int i = 0;
+    if (j < 300)
     {
-      int i = j + 5;
-      if (k % 2 == 0) {
-        i += 15;
+      int k = i + 5;
+      if (j % 2 == 0) {
+        k += 15;
       }
       for (;;)
       {
-        k += 1;
-        System.out.println(j);
-        j = i;
+        j += 1;
+        i = k;
+        System.out.println(i);
         break;
-        i = i;
+        k = k;
       }
     }
   }
@@ -193,7 +193,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 4 after 5 milliseconds
+      * Engine reached iteration bound of 4 after 3 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -205,10 +205,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void <init>()> SUCCESSFUL
-      * Optimization took 548
-      * PEG2PEGTIME 429
-      * PBTIME 305
-      * ENGINETIME 6
+      * Optimization took 492
+      * PEG2PEGTIME 403
+      * PBTIME 272
+      * ENGINETIME 3
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <LoopStrengthReductionModified: void <init>()>
@@ -216,7 +216,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 4 after 1 milliseconds
+      * Engine reached iteration bound of 4 after 0 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -228,9 +228,9 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void original()> SUCCESSFUL
-      * Optimization took 548
-      * PEG2PEGTIME 493
-      * PBTIME 458
+      * Optimization took 449
+      * PEG2PEGTIME 415
+      * PBTIME 386
       * ENGINETIME 1
       * Optimization ratio 31720/31720 = 1.0
       * PEG-based Optimization ratio 31720/31720 = 1.0
@@ -251,9 +251,9 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void expected()> SUCCESSFUL
-      * Optimization took 497
-      * PEG2PEGTIME 475
-      * PBTIME 457
+      * Optimization took 419
+      * PEG2PEGTIME 405
+      * PBTIME 393
       * ENGINETIME 0
       * Optimization ratio 31920/31920 = 1.0
       * PEG-based Optimization ratio 31920/31920 = 1.0
@@ -267,11 +267,11 @@ Peggy output
 + Fixing bytecode of method <LoopStrengthReductionModified: void original()>
 + Fixing bytecode of method <LoopStrengthReductionModified: void expected()>
 + Writing class back to optimized/LoopStrengthReductionModified.class
-+ Total optimization time = 2080 milliseconds
++ Total optimization time = 1689 milliseconds
 ```
 
 ```java
-23:13:05.372 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
+20:32:58.194 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
 import java.io.PrintStream;
 
 public class LoopStrengthReductionModified
@@ -280,17 +280,17 @@ public class LoopStrengthReductionModified
   {
     int j = 0;
     int i = 0;
-    if (j < 300)
+    if (i < 300)
     {
-      int k = i + 1;
-      if (j == 150) {
+      int k = j + 1;
+      if (i == 150) {
         k += 3;
       }
       for (;;)
       {
-        j += 1;
-        System.out.println(i * 500);
-        i = k;
+        j = k;
+        i += 1;
+        System.out.println(j * 500);
         break;
         k = k;
       }
@@ -299,21 +299,21 @@ public class LoopStrengthReductionModified
   
   public static void expected()
   {
-    int k = 0;
     int j = 0;
+    int i = 0;
     if (j < 300)
     {
-      int i = k + 5;
+      int k = i + 5;
       if (j % 2 == 0) {
-        i += 15;
+        k += 15;
       }
       for (;;)
       {
-        k = i;
         j += 1;
-        System.out.println(k);
+        i = k;
+        System.out.println(i);
         break;
-        i = i;
+        k = k;
       }
     }
   }
@@ -341,7 +341,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 8 after 7 milliseconds
+      * Engine reached iteration bound of 8 after 3 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -353,10 +353,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void <init>()> SUCCESSFUL
-      * Optimization took 548
-      * PEG2PEGTIME 426
-      * PBTIME 300
-      * ENGINETIME 7
+      * Optimization took 439
+      * PEG2PEGTIME 355
+      * PBTIME 272
+      * ENGINETIME 3
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <LoopStrengthReductionModified: void <init>()>
@@ -364,7 +364,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 8 after 10 milliseconds
+      * Engine reached iteration bound of 8 after 7 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -376,10 +376,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void original()> SUCCESSFUL
-      * Optimization took 602
-      * PEG2PEGTIME 547
-      * PBTIME 502
-      * ENGINETIME 10
+      * Optimization took 500
+      * PEG2PEGTIME 462
+      * PBTIME 427
+      * ENGINETIME 7
       * Optimization ratio 31720/31720 = 1.0
       * PEG-based Optimization ratio 31720/31720 = 1.0
    - Done processing method <LoopStrengthReductionModified: void original()>
@@ -387,7 +387,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 8 after 2 milliseconds
+      * Engine reached iteration bound of 8 after 4 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -399,10 +399,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void expected()> SUCCESSFUL
-      * Optimization took 526
-      * PEG2PEGTIME 504
-      * PBTIME 486
-      * ENGINETIME 2
+      * Optimization took 471
+      * PEG2PEGTIME 452
+      * PBTIME 435
+      * ENGINETIME 4
       * Optimization ratio 31920/31920 = 1.0
       * PEG-based Optimization ratio 31920/31920 = 1.0
    - Done processing method <LoopStrengthReductionModified: void expected()>
@@ -415,30 +415,30 @@ Peggy output
 + Fixing bytecode of method <LoopStrengthReductionModified: void original()>
 + Fixing bytecode of method <LoopStrengthReductionModified: void expected()>
 + Writing class back to optimized/LoopStrengthReductionModified.class
-+ Total optimization time = 2160 milliseconds
++ Total optimization time = 1762 milliseconds
 ```
 
 ```java
-23:13:10.238 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
+20:33:01.806 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
 import java.io.PrintStream;
 
 public class LoopStrengthReductionModified
 {
   public static void original()
   {
-    int j = 0;
     int i = 0;
+    int j = 0;
     if (j < 300)
     {
-      int k = i + 1;
+      int k = 1 + i;
       if (j == 150) {
         k += 3;
       }
       for (;;)
       {
         System.out.println(i * 500);
-        j += 1;
         i = k;
+        j += 1;
         break;
         k = k;
       }
@@ -449,7 +449,7 @@ public class LoopStrengthReductionModified
   {
     int j = 0;
     int k = 0;
-    if (j < 300)
+    if (300 > j)
     {
       int i = k + 5;
       if (j % 2 == 0) {
@@ -457,8 +457,8 @@ public class LoopStrengthReductionModified
       }
       for (;;)
       {
+        j = 1 + j;
         System.out.println(k);
-        j += 1;
         k = i;
         break;
         i = i;
@@ -501,10 +501,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void <init>()> SUCCESSFUL
-      * Optimization took 669
-      * PEG2PEGTIME 542
-      * PBTIME 415
-      * ENGINETIME 6
+      * Optimization took 446
+      * PEG2PEGTIME 364
+      * PBTIME 281
+      * ENGINETIME 4
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <LoopStrengthReductionModified: void <init>()>
@@ -512,7 +512,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 16 after 13 milliseconds
+      * Engine reached iteration bound of 16 after 10 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -524,10 +524,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void original()> SUCCESSFUL
-      * Optimization took 703
-      * PEG2PEGTIME 649
-      * PBTIME 600
-      * ENGINETIME 13
+      * Optimization took 570
+      * PEG2PEGTIME 529
+      * PBTIME 487
+      * ENGINETIME 10
       * Optimization ratio 31720/31720 = 1.0
       * PEG-based Optimization ratio 31720/31720 = 1.0
    - Done processing method <LoopStrengthReductionModified: void original()>
@@ -535,7 +535,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 16 after 7 milliseconds
+      * Engine reached iteration bound of 16 after 4 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -547,10 +547,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void expected()> SUCCESSFUL
-      * Optimization took 643
-      * PEG2PEGTIME 618
-      * PBTIME 587
-      * ENGINETIME 7
+      * Optimization took 469
+      * PEG2PEGTIME 454
+      * PBTIME 431
+      * ENGINETIME 4
       * Optimization ratio 31920/31920 = 1.0
       * PEG-based Optimization ratio 31920/31920 = 1.0
    - Done processing method <LoopStrengthReductionModified: void expected()>
@@ -563,11 +563,11 @@ Peggy output
 + Fixing bytecode of method <LoopStrengthReductionModified: void original()>
 + Fixing bytecode of method <LoopStrengthReductionModified: void expected()>
 + Writing class back to optimized/LoopStrengthReductionModified.class
-+ Total optimization time = 2578 milliseconds
++ Total optimization time = 1811 milliseconds
 ```
 
 ```java
-23:13:15.793 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
+20:33:05.422 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
 import java.io.PrintStream;
 
 public class LoopStrengthReductionModified
@@ -576,9 +576,9 @@ public class LoopStrengthReductionModified
   {
     int j = 0;
     int i = 0;
-    if (j < 300)
+    if (300 > j)
     {
-      int k = 1 + i;
+      int k = i + 1;
       if (j == 150) {
         k += 3;
       }
@@ -596,20 +596,20 @@ public class LoopStrengthReductionModified
   public static void expected()
   {
     int j = 0;
-    int i = 0;
+    int k = 0;
     if (j < 300)
     {
-      int k = i + 5;
+      int i = k + 5;
       if (j % 2 == 0) {
-        k += 15;
+        i += 15;
       }
       for (;;)
       {
         j = 1 + j;
-        System.out.println(i);
-        i = k;
+        System.out.println(k);
+        k = i;
         break;
-        k = k;
+        i = i;
       }
     }
   }
@@ -649,10 +649,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void <init>()> SUCCESSFUL
-      * Optimization took 561
-      * PEG2PEGTIME 438
-      * PBTIME 303
-      * ENGINETIME 7
+      * Optimization took 436
+      * PEG2PEGTIME 357
+      * PBTIME 281
+      * ENGINETIME 4
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <LoopStrengthReductionModified: void <init>()>
@@ -660,7 +660,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 32 after 26 milliseconds
+      * Engine reached iteration bound of 32 after 16 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -672,10 +672,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void original()> SUCCESSFUL
-      * Optimization took 1032
-      * PEG2PEGTIME 974
-      * PBTIME 910
-      * ENGINETIME 26
+      * Optimization took 681
+      * PEG2PEGTIME 636
+      * PBTIME 598
+      * ENGINETIME 16
       * Optimization ratio 31720/31720 = 1.0
       * PEG-based Optimization ratio 31720/31720 = 1.0
    - Done processing method <LoopStrengthReductionModified: void original()>
@@ -683,7 +683,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 32 after 13 milliseconds
+      * Engine reached iteration bound of 32 after 8 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -695,10 +695,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void expected()> SUCCESSFUL
-      * Optimization took 819
-      * PEG2PEGTIME 797
-      * PBTIME 765
-      * ENGINETIME 13
+      * Optimization took 645
+      * PEG2PEGTIME 624
+      * PBTIME 582
+      * ENGINETIME 8
       * Optimization ratio 31920/31920 = 1.0
       * PEG-based Optimization ratio 31920/31920 = 1.0
    - Done processing method <LoopStrengthReductionModified: void expected()>
@@ -711,11 +711,11 @@ Peggy output
 + Fixing bytecode of method <LoopStrengthReductionModified: void original()>
 + Fixing bytecode of method <LoopStrengthReductionModified: void expected()>
 + Writing class back to optimized/LoopStrengthReductionModified.class
-+ Total optimization time = 2894 milliseconds
++ Total optimization time = 2073 milliseconds
 ```
 
 ```java
-23:13:21.451 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
+20:33:09.245 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
 import java.io.PrintStream;
 
 public class LoopStrengthReductionModified
@@ -726,7 +726,7 @@ public class LoopStrengthReductionModified
     int j = 0;
     if (300 > j)
     {
-      int i = k + 1;
+      int i = 1 + k;
       if (j == 150) {
         i += 3;
       }
@@ -734,7 +734,7 @@ public class LoopStrengthReductionModified
       {
         k = i;
         j += 1;
-        System.out.println(k * 500);
+        System.out.println(500 * k);
         break;
         i = i;
       }
@@ -743,19 +743,19 @@ public class LoopStrengthReductionModified
   
   public static void expected()
   {
-    int i = 0;
     int j = 0;
-    if (j < 300)
+    int i = 0;
+    if (300 > i)
     {
-      int k = 5 + i;
-      if (j % 2 == 0) {
+      int k = 5 + j;
+      if (i % 2 == 0) {
         k += 15;
       }
       for (;;)
       {
-        i = k;
-        j += 1;
-        System.out.println(i);
+        j = k;
+        i = 1 + i;
+        System.out.println(j);
         break;
         k = k;
       }
@@ -797,10 +797,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void <init>()> SUCCESSFUL
-      * Optimization took 571
-      * PEG2PEGTIME 451
-      * PBTIME 304
-      * ENGINETIME 7
+      * Optimization took 427
+      * PEG2PEGTIME 350
+      * PBTIME 269
+      * ENGINETIME 5
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <LoopStrengthReductionModified: void <init>()>
@@ -808,7 +808,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 64 after 73 milliseconds
+      * Engine reached iteration bound of 64 after 45 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -820,10 +820,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void original()> SUCCESSFUL
-      * Optimization took 1443
-      * PEG2PEGTIME 1390
-      * PBTIME 1275
-      * ENGINETIME 73
+      * Optimization took 1005
+      * PEG2PEGTIME 970
+      * PBTIME 901
+      * ENGINETIME 45
       * Optimization ratio 31720/31720 = 1.0
       * PEG-based Optimization ratio 31720/31720 = 1.0
    - Done processing method <LoopStrengthReductionModified: void original()>
@@ -831,7 +831,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 64 after 43 milliseconds
+      * Engine reached iteration bound of 64 after 27 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -843,10 +843,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void expected()> SUCCESSFUL
-      * Optimization took 1322
-      * PEG2PEGTIME 1300
-      * PBTIME 1241
-      * ENGINETIME 43
+      * Optimization took 957
+      * PEG2PEGTIME 943
+      * PBTIME 906
+      * ENGINETIME 27
       * Optimization ratio 31920/31920 = 1.0
       * PEG-based Optimization ratio 31920/31920 = 1.0
    - Done processing method <LoopStrengthReductionModified: void expected()>
@@ -859,27 +859,27 @@ Peggy output
 + Fixing bytecode of method <LoopStrengthReductionModified: void original()>
 + Fixing bytecode of method <LoopStrengthReductionModified: void expected()>
 + Writing class back to optimized/LoopStrengthReductionModified.class
-+ Total optimization time = 3851 milliseconds
++ Total optimization time = 2747 milliseconds
 ```
 
 ```java
-23:13:27.986 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
+20:33:13.847 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
 import java.io.PrintStream;
 
 public class LoopStrengthReductionModified
 {
   public static void original()
   {
+    int k = 0;
     int i = 0;
-    int j = 0;
-    if (j < 300)
+    if (300 > k)
     {
-      if (j == 150) {}
-      for (int k = 4 + i;; k = i + 1)
+      if (k == 150) {}
+      for (int j = i + 4;; j = i + 1)
       {
-        i = k;
-        j = 1 + j;
-        System.out.println(500 * i);
+        k += 1;
+        System.out.println(i * 500);
+        i = j;
         break;
       }
     }
@@ -887,16 +887,16 @@ public class LoopStrengthReductionModified
   
   public static void expected()
   {
-    int j = 0;
     int k = 0;
-    if (300 > j)
+    int i = 0;
+    if (k < 300)
     {
-      if (j % 2 == 0) {}
-      for (int i = 20 + k;; i = 5 + k)
+      if (k % 2 == 0) {}
+      for (int j = i + 20;; j = 5 + i)
       {
-        j += 1;
-        System.out.println(k);
-        k = i;
+        System.out.println(i);
+        k += 1;
+        i = j;
         break;
       }
     }
@@ -937,10 +937,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void <init>()> SUCCESSFUL
-      * Optimization took 567
-      * PEG2PEGTIME 440
-      * PBTIME 301
-      * ENGINETIME 7
+      * Optimization took 428
+      * PEG2PEGTIME 349
+      * PBTIME 272
+      * ENGINETIME 4
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <LoopStrengthReductionModified: void <init>()>
@@ -948,7 +948,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 128 after 149 milliseconds
+      * Engine reached iteration bound of 128 after 109 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -960,10 +960,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void original()> SUCCESSFUL
-      * Optimization took 2359
-      * PEG2PEGTIME 2300
-      * PBTIME 2112
-      * ENGINETIME 149
+      * Optimization took 1554
+      * PEG2PEGTIME 1518
+      * PBTIME 1386
+      * ENGINETIME 109
       * Optimization ratio 31720/31720 = 1.0
       * PEG-based Optimization ratio 31720/31720 = 1.0
    - Done processing method <LoopStrengthReductionModified: void original()>
@@ -971,7 +971,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 128 after 88 milliseconds
+      * Engine reached iteration bound of 128 after 44 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -983,10 +983,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void expected()> SUCCESSFUL
-      * Optimization took 2028
-      * PEG2PEGTIME 2003
-      * PBTIME 1894
-      * ENGINETIME 89
+      * Optimization took 1340
+      * PEG2PEGTIME 1323
+      * PBTIME 1266
+      * ENGINETIME 44
       * Optimization ratio 31920/31920 = 1.0
       * PEG-based Optimization ratio 31920/31920 = 1.0
    - Done processing method <LoopStrengthReductionModified: void expected()>
@@ -999,11 +999,11 @@ Peggy output
 + Fixing bytecode of method <LoopStrengthReductionModified: void original()>
 + Fixing bytecode of method <LoopStrengthReductionModified: void expected()>
 + Writing class back to optimized/LoopStrengthReductionModified.class
-+ Total optimization time = 5442 milliseconds
++ Total optimization time = 3635 milliseconds
 ```
 
 ```java
-23:13:36.131 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
+20:33:19.319 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
 import java.io.PrintStream;
 
 public class LoopStrengthReductionModified
@@ -1011,32 +1011,37 @@ public class LoopStrengthReductionModified
   public static void original()
   {
     int j = 0;
-    int i = 0;
-    if (j < 300)
+    int k = 0;
+    if (k < 300)
     {
-      if (j == 150) {}
-      for (int k = 4 + i;; k = i + 1)
+      int i = j + 1;
+      if (k == 150) {
+        i += 3;
+      }
+      for (;;)
       {
-        System.out.println(500 * i);
-        j = 1 + j;
-        i = k;
+        System.out.println(j * 500);
+        j = i;
+        k += 1;
         break;
+        i = i;
       }
     }
   }
   
   public static void expected()
   {
-    int j = 0;
+    int k = 0;
     int i = 0;
-    if (j < 300)
+    if (300 > i)
     {
-      if (j % 2 == 0) {}
-      for (int k = 20 + i;; k = i + 5)
+      int j = 5 + k;
+      if (i % 2 == 0) {}
+      for (j = 15 + j;; j = j)
       {
-        j = 1 + j;
-        System.out.println(i);
-        i = k;
+        k = j;
+        System.out.println(k);
+        i += 1;
         break;
       }
     }
@@ -1077,10 +1082,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void <init>()> SUCCESSFUL
-      * Optimization took 582
-      * PEG2PEGTIME 456
-      * PBTIME 321
-      * ENGINETIME 8
+      * Optimization took 445
+      * PEG2PEGTIME 368
+      * PBTIME 284
+      * ENGINETIME 5
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <LoopStrengthReductionModified: void <init>()>
@@ -1088,7 +1093,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 256 after 365 milliseconds
+      * Engine reached iteration bound of 256 after 244 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -1100,10 +1105,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void original()> SUCCESSFUL
-      * Optimization took 4322
-      * PEG2PEGTIME 4263
-      * PBTIME 3857
-      * ENGINETIME 365
+      * Optimization took 2701
+      * PEG2PEGTIME 2665
+      * PBTIME 2398
+      * ENGINETIME 244
       * Optimization ratio 31720/31720 = 1.0
       * PEG-based Optimization ratio 31720/31720 = 1.0
    - Done processing method <LoopStrengthReductionModified: void original()>
@@ -1111,7 +1116,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 256 after 198 milliseconds
+      * Engine reached iteration bound of 256 after 148 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -1123,10 +1128,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void expected()> SUCCESSFUL
-      * Optimization took 3518
-      * PEG2PEGTIME 3499
-      * PBTIME 3280
-      * ENGINETIME 198
+      * Optimization took 2773
+      * PEG2PEGTIME 2744
+      * PBTIME 2576
+      * ENGINETIME 149
       * Optimization ratio 31920/31920 = 1.0
       * PEG-based Optimization ratio 31920/31920 = 1.0
    - Done processing method <LoopStrengthReductionModified: void expected()>
@@ -1139,27 +1144,27 @@ Peggy output
 + Fixing bytecode of method <LoopStrengthReductionModified: void original()>
 + Fixing bytecode of method <LoopStrengthReductionModified: void expected()>
 + Writing class back to optimized/LoopStrengthReductionModified.class
-+ Total optimization time = 8959 milliseconds
++ Total optimization time = 6287 milliseconds
 ```
 
 ```java
-23:13:47.974 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
+20:33:27.583 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
 import java.io.PrintStream;
 
 public class LoopStrengthReductionModified
 {
   public static void original()
   {
-    int k = 0;
+    int i = 0;
     int j = 0;
-    if (300 > j)
+    if (j < 300)
     {
       if (j == 150) {}
-      for (int i = 4 + k;; i = 1 + k)
+      for (int k = 4 + i;; k = 1 + i)
       {
-        System.out.println(k * 500);
-        k = i;
-        j = 1 + j;
+        System.out.println(500 * i);
+        i = k;
+        j += 1;
         break;
       }
     }
@@ -1167,16 +1172,16 @@ public class LoopStrengthReductionModified
   
   public static void expected()
   {
-    int j = 0;
     int i = 0;
-    if (300 > i)
+    int j = 0;
+    if (j < 300)
     {
-      if (i % 2 == 0) {}
-      for (int k = j + 20;; k = 5 + j)
+      if (j % 2 == 0) {}
+      for (int k = i + 20;; k = 5 + i)
       {
-        System.out.println(j);
-        j = k;
-        i += 1;
+        i = k;
+        j = 1 + j;
+        System.out.println(i);
         break;
       }
     }
@@ -1217,10 +1222,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void <init>()> SUCCESSFUL
-      * Optimization took 560
-      * PEG2PEGTIME 437
-      * PBTIME 304
-      * ENGINETIME 8
+      * Optimization took 539
+      * PEG2PEGTIME 455
+      * PBTIME 374
+      * ENGINETIME 5
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <LoopStrengthReductionModified: void <init>()>
@@ -1228,7 +1233,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 512 after 597 milliseconds
+      * Engine reached iteration bound of 512 after 507 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -1240,10 +1245,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void original()> SUCCESSFUL
-      * Optimization took 7928
-      * PEG2PEGTIME 7868
-      * PBTIME 7231
-      * ENGINETIME 598
+      * Optimization took 8032
+      * PEG2PEGTIME 7983
+      * PBTIME 7443
+      * ENGINETIME 508
       * Optimization ratio 31720/31720 = 1.0
       * PEG-based Optimization ratio 31720/31720 = 1.0
    - Done processing method <LoopStrengthReductionModified: void original()>
@@ -1251,7 +1256,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 512 after 309 milliseconds
+      * Engine reached iteration bound of 512 after 221 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -1263,10 +1268,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void expected()> SUCCESSFUL
-      * Optimization took 8547
-      * PEG2PEGTIME 8506
-      * PBTIME 8173
-      * ENGINETIME 310
+      * Optimization took 4844
+      * PEG2PEGTIME 4826
+      * PBTIME 4583
+      * ENGINETIME 222
       * Optimization ratio 31920/31920 = 1.0
       * PEG-based Optimization ratio 31920/31920 = 1.0
    - Done processing method <LoopStrengthReductionModified: void expected()>
@@ -1279,27 +1284,27 @@ Peggy output
 + Fixing bytecode of method <LoopStrengthReductionModified: void original()>
 + Fixing bytecode of method <LoopStrengthReductionModified: void expected()>
 + Writing class back to optimized/LoopStrengthReductionModified.class
-+ Total optimization time = 17529 milliseconds
++ Total optimization time = 13763 milliseconds
 ```
 
 ```java
-23:14:08.230 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
+20:33:43.343 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
 import java.io.PrintStream;
 
 public class LoopStrengthReductionModified
 {
   public static void original()
   {
-    int i = 0;
     int k = 0;
+    int i = 0;
     if (k < 300)
     {
       if (k == 150) {}
-      for (int j = 4 + i;; j = i + 1)
+      for (int j = 4 + i;; j = 1 + i)
       {
+        k += 1;
         i = j;
         System.out.println(i * 500);
-        k = 1 + k;
         break;
       }
     }
@@ -1307,16 +1312,16 @@ public class LoopStrengthReductionModified
   
   public static void expected()
   {
-    int j = 0;
     int i = 0;
+    int j = 0;
     if (j < 300)
     {
       if (j % 2 == 0) {}
-      for (int k = 20 + i;; k = i + 5)
+      for (int k = 20 + i;; k = 5 + i)
       {
-        System.out.println(i);
-        j += 1;
         i = k;
+        j += 1;
+        System.out.println(i);
         break;
       }
     }
@@ -1357,10 +1362,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void <init>()> SUCCESSFUL
-      * Optimization took 552
-      * PEG2PEGTIME 431
-      * PBTIME 304
-      * ENGINETIME 7
+      * Optimization took 460
+      * PEG2PEGTIME 379
+      * PBTIME 269
+      * ENGINETIME 9
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <LoopStrengthReductionModified: void <init>()>
@@ -1368,7 +1373,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 1024 after 1177 milliseconds
+      * Engine reached iteration bound of 1024 after 845 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -1380,10 +1385,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void original()> SUCCESSFUL
-      * Optimization took 22935
-      * PEG2PEGTIME 22876
-      * PBTIME 21664
-      * ENGINETIME 1178
+      * Optimization took 18034
+      * PEG2PEGTIME 17979
+      * PBTIME 17111
+      * ENGINETIME 845
       * Optimization ratio 31720/31720 = 1.0
       * PEG-based Optimization ratio 31720/31720 = 1.0
    - Done processing method <LoopStrengthReductionModified: void original()>
@@ -1391,7 +1396,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 1024 after 2313 milliseconds
+      * Engine reached iteration bound of 1024 after 1804 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -1403,10 +1408,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void expected()> SUCCESSFUL
-      * Optimization took 34817
-      * PEG2PEGTIME 34763
-      * PBTIME 32426
-      * ENGINETIME 2313
+      * Optimization took 23646
+      * PEG2PEGTIME 23624
+      * PBTIME 21796
+      * ENGINETIME 1804
       * Optimization ratio 31920/31920 = 1.0
       * PEG-based Optimization ratio 31920/31920 = 1.0
    - Done processing method <LoopStrengthReductionModified: void expected()>
@@ -1419,28 +1424,27 @@ Peggy output
 + Fixing bytecode of method <LoopStrengthReductionModified: void original()>
 + Fixing bytecode of method <LoopStrengthReductionModified: void expected()>
 + Writing class back to optimized/LoopStrengthReductionModified.class
-+ Total optimization time = 58827 milliseconds
++ Total optimization time = 42515 milliseconds
 ```
 
 ```java
-23:15:09.787 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
+20:34:28.278 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
 import java.io.PrintStream;
 
 public class LoopStrengthReductionModified
 {
   public static void original()
   {
-    int k = 0;
+    int i = 0;
     int j = 0;
-    if (k < 300)
+    if (i < 300)
     {
-      int i = 1 + j;
-      if (k == 150) {}
-      for (i = 3 + i;; i = i)
+      if (i == 150) {}
+      for (int k = 4 + j;; k = j + 1)
       {
-        k += 1;
-        j = i;
+        i = 1 + i;
         System.out.println(j * 500);
+        j = k;
         break;
       }
     }
@@ -1448,16 +1452,17 @@ public class LoopStrengthReductionModified
   
   public static void expected()
   {
-    int i = 0;
     int j = 0;
-    if (j < 300)
+    int i = 0;
+    if (300 > i)
     {
-      if (j % 2 == 0) {}
-      for (int k = i + 20;; k = i + 5)
+      int k = j + 5;
+      if (i % 2 == 0) {}
+      for (k = 15 + k;; k = k)
       {
-        i = k;
-        System.out.println(i);
-        j += 1;
+        j = k;
+        i = 1 + i;
+        System.out.println(j);
         break;
       }
     }
@@ -1498,10 +1503,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void <init>()> SUCCESSFUL
-      * Optimization took 626
-      * PEG2PEGTIME 492
-      * PBTIME 349
-      * ENGINETIME 9
+      * Optimization took 460
+      * PEG2PEGTIME 372
+      * PBTIME 278
+      * ENGINETIME 5
       * Optimization ratio 2000/2000 = 1.0
       * PEG-based Optimization ratio 2000/2000 = 1.0
    - Done processing method <LoopStrengthReductionModified: void <init>()>
@@ -1509,7 +1514,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 2048 after 4931 milliseconds
+      * Engine reached iteration bound of 2048 after 3455 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -1521,10 +1526,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void original()> SUCCESSFUL
-      * Optimization took 62391
-      * PEG2PEGTIME 62320
-      * PBTIME 57349
-      * ENGINETIME 4932
+      * Optimization took 37952
+      * PEG2PEGTIME 37910
+      * PBTIME 34425
+      * ENGINETIME 3456
       * Optimization ratio 31720/31720 = 1.0
       * PEG-based Optimization ratio 31720/31720 = 1.0
    - Done processing method <LoopStrengthReductionModified: void original()>
@@ -1532,7 +1537,7 @@ Peggy output
       * Building original PEG
       * Setting up engine
       * Running engine
-      * Engine reached iteration bound of 2048 after 8078 milliseconds
+      * Engine reached iteration bound of 2048 after 5069 milliseconds
       * Building optimal PEG
       * Begin GLPK solving
          @ Writing formulation
@@ -1544,10 +1549,10 @@ Peggy output
       * Encoding output CFG
       * Optimization completed
       * Optimization of method <LoopStrengthReductionModified: void expected()> SUCCESSFUL
-      * Optimization took 130103
-      * PEG2PEGTIME 130058
-      * PBTIME 121954
-      * ENGINETIME 8080
+      * Optimization took 2341053
+      * PEG2PEGTIME 2341027
+      * PBTIME 2335944
+      * ENGINETIME 5071
       * Optimization ratio 31920/31920 = 1.0
       * PEG-based Optimization ratio 31920/31920 = 1.0
    - Done processing method <LoopStrengthReductionModified: void expected()>
@@ -1560,45 +1565,49 @@ Peggy output
 + Fixing bytecode of method <LoopStrengthReductionModified: void original()>
 + Fixing bytecode of method <LoopStrengthReductionModified: void expected()>
 + Writing class back to optimized/LoopStrengthReductionModified.class
-+ Total optimization time = 193693 milliseconds
++ Total optimization time = 2379891 milliseconds
 ```
 
 ```java
-23:18:26.333 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
+21:14:10.791 INFO  jd.cli.Main - Decompiling optimized/LoopStrengthReductionModified.class
 import java.io.PrintStream;
 
 public class LoopStrengthReductionModified
 {
   public static void original()
   {
-    int i = 0;
     int j = 0;
-    if (j < 300)
+    int k = 0;
+    if (300 > k)
     {
-      if (j == 150) {}
-      for (int k = 4 + i;; k = 1 + i)
+      int i = 1 + j;
+      if (k == 150) {
+        i += 3;
+      }
+      for (;;)
       {
-        i = k;
-        j = 1 + j;
-        System.out.println(500 * i);
+        j = i;
+        System.out.println(500 * j);
+        k += 1;
         break;
+        i = i;
       }
     }
   }
   
   public static void expected()
   {
-    int j = 0;
     int i = 0;
-    if (j < 300)
+    int k = 0;
+    if (k < 300)
     {
-      int k = i + 5;
-      if (j % 2 == 0) {}
-      for (k = 15 + k;; k = k)
+      int j = i + 5;
+      if (k % 2 == 0) {}
+      for (j = 15 + j;; j = j)
       {
         System.out.println(i);
-        j = 1 + j;
-        i = k;
+        i = j;
+        k += 1;
         break;
       }
     }

@@ -4,10 +4,11 @@ Explores parameters to determine how brittle the results are,
 and outputs the decompiled result of each peggy run to a markdown file.
 """
 
-import os
 import subprocess
+import os
 
-benchmark_dir = "benchmark"
+benchmark_dir = "benchmark/passing"
+results_dir = "results"
 
 
 class PeggyParams:
@@ -80,7 +81,7 @@ def run_peggy(classname, params: PeggyParams):
     return subprocess.check_output(command)
 
 
-def optimize_file(classname: str):
+def benchmark_file(classname: str):
     filepath = benchmark_dir + "/" + classname + ".java"
 
     # Compile the file
@@ -105,6 +106,7 @@ def optimize_file(classname: str):
             pb="glpk",
             eto=str(eto_val),
         )
+        print("Running peggy on " + classname + " with params " + str(params))
         peggy_output = run_peggy(
             classname,
             params=params,
@@ -129,4 +131,11 @@ def optimize_file(classname: str):
 
 
 if __name__ == "__main__":
-    optimize_file("LoopBasedCodeMotion")
+    # Create results dir if not exists
+    if not os.path.exists(results_dir):
+        os.makedirs(results_dir)
+
+    # Benchmark each file in `benchmark_dir`
+    for filename in os.listdir(benchmark_dir):
+        classname = os.path.splitext(filename)[0]
+        benchmark_file(classname)
