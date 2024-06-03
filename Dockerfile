@@ -3,7 +3,7 @@ FROM ubuntu:14.04.2
 
 # Install dependencies: Java 6, build essential (to build glpk), wget (to download jd-cli)
 RUN apt-get update && \
-    apt-get -y install openjdk-6-jdk build-essential wget
+    apt-get -y install openjdk-6-jdk build-essential wget git
 
 # Download the repository
 RUN git clone git@github.com:egraphs-good/peggy-comparison.git
