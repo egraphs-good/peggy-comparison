@@ -8,6 +8,7 @@ RUN apt-get update && \
 # Download the repository
 RUN git clone https://github.com/egraphs-good/peggy-comparison.git
 
+
 # Install GLPK. We just need the glpsol executable.
 RUN wget "https://ftp.gnu.org/gnu/glpk/glpk-5.0.tar.gz" && \
     tar -xzvf glpk-5.0.tar.gz && cd glpk-5.0 && \
@@ -21,3 +22,5 @@ RUN wget "https://github.com/intoolswetrust/jd-cli/releases/download/jd-cmd-0.9.
     mv jd-cli peggy-comparison && mv jd-cli.jar peggy-comparison && \
     rm jd-cli-0.9.2-dist.tar.gz && rm jd-cli.bat
 
+# Everything we need is in peggy-comparison
+WORKDIR /peggy-comparison
