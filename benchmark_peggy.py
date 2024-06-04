@@ -22,15 +22,19 @@ class PeggyParams:
 
     def __str__(self):
         return (
-            "axioms: "
+            "- axioms: "
             + self.axioms
-            + ", optimization_level: "
+            + "\n"
+            + "- optimization_level: "
             + self.optimization_level
-            + ", tmp_folder: "
+            + "\n"
+            + "- tmp_folder: "
             + self.tmp_folder
-            + ", pb: "
+            + "\n"
+            + "- pb: "
             + self.pb
-            + ", eto: "
+            + "\n"
+            + "- eto: "
             + self.eto
         )
 
@@ -78,7 +82,7 @@ def run_peggy(classname, params: PeggyParams):
         command.append("-eto")
         command.append(params.eto)
 
-    return subprocess.check_output(command)
+    return subprocess.check_output(command, stderr=subprocess.STDOUT)
 
 
 def benchmark_file(classname: str):
@@ -106,7 +110,8 @@ def benchmark_file(classname: str):
             pb="glpk",
             eto=str(eto_val),
         )
-        print("Running peggy on " + classname + " with params " + str(params))
+        print("Running peggy on " + classname + " with params ")
+        print(str(params))
         peggy_output = run_peggy(
             classname,
             params=params,
@@ -122,9 +127,10 @@ def benchmark_file(classname: str):
         with open("results/" + classname + ".md", "ab") as f:
             f.write(b"## Run \n")
             f.write(b"\n" + str(params).encode("utf-8") + b"\n\n")
-            f.write(b"Peggy output\n```\n")
+            f.write(b"### Peggy output\n```\n")
             f.write(peggy_output)
             f.write(b"```\n")
+            f.write(b"\n### Optimized")
             f.write(b"\n```java\n")
             f.write(decompiled)
             f.write(b"```\n")
