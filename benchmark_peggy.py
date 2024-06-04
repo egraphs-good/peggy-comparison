@@ -53,7 +53,7 @@ def run_peggy(classname, params: PeggyParams):
         "java",
         "-Xmx2000m",
         "-cp",
-        ".:peggy_1.0.jar:benchmark",
+        ".:peggy_1.0.jar:" + benchmark_dir,
         "peggy.optimize.java.Main",
     ]
 
