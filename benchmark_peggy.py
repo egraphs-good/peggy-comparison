@@ -143,5 +143,6 @@ if __name__ == "__main__":
 
     # Benchmark each file in `benchmark_dir`
     for filename in os.listdir(benchmark_dir):
-        classname = os.path.splitext(filename)[0]
-        benchmark_file(classname)
+        if filename.endswith(".java"):
+            classname = os.path.splitext(filename)[0]
+            benchmark_file(classname)

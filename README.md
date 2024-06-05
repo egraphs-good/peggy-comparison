@@ -16,3 +16,8 @@ Now run the image.
 ```
 docker run -it peggy
 ```
+
+# Comparison benchmark
+This benchmark is qualitative, based on analysis of the optimized output of peggy on certain small example files. These files are in the `benchmark` directory.
+
+Decompiled output for each of the benchmark Java files is stored in `results`. If you would like to re-generate these files, run `python3 benchmark_peggy.py`. In a Docker container, this took 24 min user time, 41 min total time.
