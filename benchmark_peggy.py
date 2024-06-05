@@ -39,6 +39,8 @@ class PeggyParams:
         )
 
 
+# Runs peggy on a compiled class in the benchmark directory,
+# with our default parameters
 def run_peggy_default(classname):
     run_peggy(
         classname,
@@ -52,6 +54,8 @@ def run_peggy_default(classname):
     )
 
 
+# Runs peggy on a compiled class in the benchmark directory
+# with the given params
 def run_peggy(classname, params: PeggyParams):
     command = [
         "java",
@@ -85,6 +89,8 @@ def run_peggy(classname, params: PeggyParams):
     return subprocess.check_output(command, stderr=subprocess.STDOUT)
 
 
+# Creates a results file containing optimized code with different params
+# for the class
 def benchmark_file(classname: str):
     filepath = benchmark_dir + "/" + classname + ".java"
 
