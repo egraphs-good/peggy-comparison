@@ -1,0 +1,7 @@
+*.class
+jd-cli
+jd-cli.jar
+jd-cli.bat
+tmp/
+glpk-5.0/
+optimized/
