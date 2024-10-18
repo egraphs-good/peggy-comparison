@@ -5,3 +5,4 @@ jd-cli.bat
 tmp/
 glpk-5.0/
 optimized/
+scripts/__pycache__/
