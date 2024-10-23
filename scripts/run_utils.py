@@ -16,8 +16,7 @@ class PeggyParams:
         self.pb = pb
         self.eto = eto
         self.glpkPath = '"/glpk-5.0/examples/glpsol"'
-
-    # -activate "inlineall:livsr:binop:constant" -glpkPath "/glpk-5.0/examples/glpsol"
+        self.activate = "livsr:binop:constant"
 
     def __str__(self):
         return (
@@ -38,6 +37,9 @@ class PeggyParams:
             + "\n"
             + "- glpkPath: "
             + self.glpkPath
+            + "\n"
+            + "- activate: "
+            + self.activate
         )
 
 
@@ -49,10 +51,10 @@ def run_peggy_default(classname, benchmark_dir):
         benchmark_dir,
         PeggyParams(
             axioms="axioms/java_arithmetic_axioms.xml:axioms/java_operator_axioms.xml:axioms/java_operator_costs.xml:axioms/java_util_axioms.xml",
-            optimization_level="O1",
+            optimization_level="O2",
             tmp_folder="tmp",
             pb="glpk",
-            eto="1",
+            eto="500",
         ),
     )
 
@@ -92,6 +94,10 @@ def run_peggy(classname, benchmark_dir, params: PeggyParams):
     if params.glpkPath:
         command.append("-glpkPath")
         command.append(params.glpkPath)
+
+    if params.activate:
+        command.append("-activate")
+        command.append(params.activate)
 
     try:
         return subprocess.check_output(command, stderr=subprocess.STDOUT)

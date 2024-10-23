@@ -1,5 +1,5 @@
 class LoopPeeling {
-    public int original (int n) {
+    public int original(int n) {
         int x = 0;
         int i = 0;
         while (i < n) {
@@ -9,7 +9,7 @@ class LoopPeeling {
         return x;
     }
 
-    public int expected (int n) {
+    public int expected(int n) {
         int x = 0;
         if (0 >= n) {
             x = 0;

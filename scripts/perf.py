@@ -1,6 +1,7 @@
 from run_utils import PeggyParams, run_peggy_default
 import re
 import subprocess
+import os
 
 
 # For each java file in benchmark dir
@@ -19,6 +20,13 @@ def format_method(classname, ret_type, methodname, arg_types):
     return (
         classname + ": " + ret_type + " " + methodname + "(" + ",".join(arg_types) + ")"
     )
+
+
+def method_name(signature):
+    """
+    Returns the method name from a signature
+    """
+    return signature.split()[2].split("(")[0]
 
 
 def method_lengths(file_contents):
@@ -45,7 +53,7 @@ def method_lengths(file_contents):
     file_contents = file_contents.strip()
     file_contents = file_contents.split("\n")
 
-    classname_regex = "public\s+class\s+([a-zA-z0-9]*)\s+\{"
+    classname_regex = ".*class\s+([a-zA-z0-9]*)\s+\{"
     classname = re.match(classname_regex, file_contents[0].strip()).group(1)
 
     # yes, this is hacky
@@ -53,7 +61,9 @@ def method_lengths(file_contents):
     methods = methods[:-1]
 
     # kind of crude
-    method_regex = "[a-z]*\s+([a-zA-z0-9_]*)\s+([a-zA-z0-9_]*)\(([^()]*)\)"
+    method_regex = (
+        "[public|protected|private]*\s+([a-zA-z0-9_]+)\s+([a-zA-z0-9_]*)\(([^()]*)\)"
+    )
 
     for method in methods:
         method_sig = re.search(method_regex, method)
@@ -61,12 +71,9 @@ def method_lengths(file_contents):
         method_body = method[method_sig.start() :]
         ret_type = method_sig.group(1)
         method_name = method_sig.group(2)
-        arg_types = [arg.split()[0] for arg in method_sig.group(3).split(",")]
+        arg_types = [arg.split()[0] for arg in method_sig.group(3).split(",") if arg]
 
         method_sig = format_method(classname, ret_type, method_name, arg_types)
-        print("SIG")
-        print(method_sig)
-        print("END")
 
         length = method_body.count("\n")
 
@@ -80,7 +87,12 @@ def get_time(portion, log):
     `portion` is one of PEG2PEGTIME, PBTIME, ENGINETIME, Optimization took
     """
     regex = portion + " ([0-9]*)"
-    return int(re.search(regex, log).group(1))
+
+    time = re.search(regex, log)
+    if time:
+        return int(time.group(1))
+    else:
+        return -1
 
 
 def perf_from_output(output):
@@ -104,37 +116,65 @@ def perf_from_output(output):
     return method_to_time
 
 
+columns = [
+    "name",
+    "length",
+    "PEG2PEGTIME",
+    "PBTIME",
+    "ENGINETIME",
+    "Optimization took",
+]
+
+
 def perf_file(location, classname):
     # better to use os or smth to combine filenames
     filename = location + classname + ".java"
+    print(classname)
 
     subprocess.call(["javac", filename])
 
     with open(filename) as f:
         lens = method_lengths(f.read())
-        print(lens)
 
     peggy_output = run_peggy_default(classname, location)
     method_to_time = perf_from_output(str(peggy_output))
+    method_to_time = {
+        method_name(method): time for method, time in method_to_time.items()
+    }
 
-    columns = [
-        "name",
-        "length",
-        "PEG2PEGTIME",
-        "PBTIME",
-        "ENGINETIME",
-        "Optimization took",
-    ]
-    csv = ",".join(columns) + "\n"
-    for k, v in lens.items():
-        escape_k = '"' + k + '"'
+    csv = ""
+    for method, length in lens.items():
+        # just use method names because sometimes the signatures look a little different
+        # (this is also a little hacky)
+        name = method_name(method)
+        escape_k = '"' + method + '"'
         csv += ",".join(
-            [escape_k, str(v)] + [str(method_to_time[k][col]) for col in columns[2:]]
+            [escape_k, str(length)]
+            + [str(method_to_time[name][col]) for col in columns[2:]]
         )
         csv += "\n"
 
-    with open("results/perf/" + classname + ".csv", "w") as f:
+    return csv
+
+
+if __name__ == "__main__":
+    benchmark_dir = "/peggy-comparison/benchmark/passing"
+    results_dir = "results/perf"
+    # Create results dir if not exists
+    if not os.path.exists(results_dir):
+        os.makedirs(results_dir)
+
+    # Benchmark each file in `benchmark_dir`
+    # TODO: autoformat each file in benchmark first?
+    csv = ",".join(columns) + "\n"
+    with open("results/perf/perf.csv", "w") as f:
         f.write(csv)
 
-
-perf_file("/peggy-comparison/benchmark/passing/", "LoopInvariantCodeMotion")
+    for i in range(5):
+        for filename in os.listdir(benchmark_dir):
+            if filename.endswith(".java"):
+                classname = os.path.splitext(filename)[0]
+                perf = perf_file("/peggy-comparison/benchmark/passing/", classname)
+                with open("results/perf/perf.csv", "a") as f:
+                    f.write(perf)
+    # TODO: could use the time instead or smth
