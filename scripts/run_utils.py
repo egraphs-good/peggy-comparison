@@ -102,4 +102,6 @@ def run_peggy(classname, benchmark_dir, params: PeggyParams):
     try:
         return subprocess.check_output(command, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
+        print("Command failed")
+        print(" ".join(command))
         print(e)
