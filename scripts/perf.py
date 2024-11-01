@@ -1,4 +1,4 @@
-from run_utils import PeggyParams, run_peggy_default
+from run_utils import run_peggy_default
 import re
 import subprocess
 import os
@@ -12,6 +12,16 @@ from java_utils import analyze_java_file
 # counts the size of methods in the file
 # returns data for method size, runtime of each
 # the data is in a dictionary? Classname.methodname or whatever
+
+params = {
+    "axioms": "axioms/java_arithmetic_axioms.xml:axioms/java_operator_axioms.xml:axioms/java_operator_costs.xml:axioms/java_util_axioms.xml",
+    "optimization_level": "O2",
+    "tmpFolder": "tmp",
+    "pb": "glpk",
+    "eto": "500",
+    "glpkPath": '"/glpk-5.0/examples/glpsol"',
+    "activate": "livsr:binop:constant",
+}
 
 
 def format_method(classname, ret_type, methodname, arg_types):
@@ -28,6 +38,13 @@ def method_name(signature):
     Returns the method name from a signature
     """
     return signature.split()[2].split("(")[0]
+
+
+def class_name(signature):
+    """
+    Returns the class name from a signature
+    """
+    return signature.split(":")[0]
 
 
 def method_lengths(file_contents):
@@ -68,14 +85,11 @@ def method_lengths(file_contents):
         methods = analyze_java_file(body)
 
         def sigtosig(sig):
-            print("SIG")
-            print(sig)
             res = re.search(method_regex, sig.strip())
             ret_type = res.group(1)
             method_name = res.group(2)
             arg_types = [arg.split()[0] for arg in res.group(3).split(",") if arg]
             res = format_method(classname, ret_type, method_name, arg_types)
-            print(res)
             return res
 
         for method, line_count in methods.items():
@@ -110,7 +124,14 @@ def perf_from_output(output):
         # get times
         times = {
             portion: get_time(portion, method)
-            for portion in ["PEG2PEGTIME", "PBTIME", "ENGINETIME", "Optimization took"]
+            for portion in [
+                "PEG2PEGTIME",
+                "PBTIME",
+                "ENGINETIME",
+                "Optimization took",
+                "nodes: ",
+                "values: ",
+            ]
         }
 
         method_to_time[method_name] = times
@@ -125,6 +146,8 @@ columns = [
     "PBTIME",
     "ENGINETIME",
     "Optimization took",
+    "nodes:",
+    "values:",
 ]
 
 
@@ -134,52 +157,57 @@ def perf_file(location, classname):
 
     with open(filename) as f:
         lens = method_lengths(f.read())
-    print(lens)
 
-    # peggy_output = run_peggy_default(classname, location)
-    # method_to_time = perf_from_output(str(peggy_output))
-    # method_to_time = {
-    #     method_name(method): time for method, time in method_to_time.items()
-    # }
-
-    # print(method_to_time)
+    # Get all classes
+    classnames = {class_name(method) for method in lens.keys()}
+    lens = {method_name(method): len for method, len in lens.items()}
 
     csv = ""
-    # for method, length in lens.items():
-    #     # just use method names because sometimes the signatures look a little different
-    #     # (this is also a little hacky)
-    #     name = method_name(method)
-    #     escape_k = '"' + method + '"'
-    #     csv += ",".join(
-    #         [escape_k, str(length)]
-    #         + [str(method_to_time[name][col]) for col in columns[2:]]
-    #     )
-    #     csv += "\n"
+    for classname in classnames:
+        print(classname)
+
+        peggy_output = run_peggy_default(classname, location, 300)
+        if not peggy_output:
+            print("peggy failed")
+            continue
+
+        method_to_time = perf_from_output(str(peggy_output))
+
+        for method, times in method_to_time.items():
+            # just use method names because sometimes the signatures look a little different
+            # (this is also a little hacky)
+            name = method_name(method)
+            if name in lens:
+                escape_k = '"' + method + '"'
+                csv += ",".join(
+                    [escape_k, str(lens[name])]
+                    + [str(times[col]) for col in columns[2:]]
+                )
+                csv += "\n"
 
     return csv
 
 
 if __name__ == "__main__":
-    benchmark_dir = "/peggy-comparison/uninlined-spec/compress/"
+    benchmark_dir = "/peggy-comparison/uninlined-spec/scimark/"
     results_dir = "results/perf"
+    results_file = results_dir + "/perf_scimark_2.csv"
+
     # Create results dir if not exists
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
 
     # Benchmark each file in `benchmark_dir`
     # TODO: autoformat each file in benchmark first?
-    csv = ",".join(columns) + "\n"
-    with open("results/perf/perf_spec.csv", "w") as f:
-        f.write(csv)
-
-    # TODO make this work
     subprocess.call("javac " + benchmark_dir + "*.java", shell=True)
 
-    # for i in range(5):
-    for filename in os.listdir(benchmark_dir):
-        if filename.endswith(".java"):
-            classname = os.path.splitext(filename)[0]
-            perf = perf_file(benchmark_dir, classname)
-            with open("results/perf/perf.csv", "a") as f:
-                f.write(perf)
+    with open(results_file, "w") as f:
+        f.write(",".join(columns) + "\n")
+    for i in range(5):
+        for filename in os.listdir(benchmark_dir):
+            if filename.endswith(".java"):
+                classname = os.path.splitext(filename)[0]
+                perf = perf_file(benchmark_dir, classname)
+                with open(results_file, "a") as f:
+                    f.write(perf)
     # TODO: could use the time instead or smth
