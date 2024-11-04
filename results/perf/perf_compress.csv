@@ -1,0 +1,19 @@
+name                                        ,length ,PEG2PEGTIME ,PBTIME ,ENGINETIME ,Optimization took
+"Harness: long inst_main(int)"              ,     3 ,352         ,316    ,8          ,360
+"Harness: void prepareBuffers()"            ,     7 ,3329        ,3126   ,179        ,3366
+"Harness: void runCompress(int)"            ,    18 ,5893        ,5404   ,425        ,6077
+"Decompressor: void decompress()"           ,    34 ,-1          ,-1     ,-1         ,-1
+"Decompressor: int getCode()"               ,    41 ,-1          ,-1     ,-1         ,-1
+"OutputBuffer: void writebytes(byte[],int)" ,     3 ,5501        ,4967   ,503        ,5545
+"OutputBuffer: int getLength()"             ,     1 ,387         ,363    ,2          ,397
+"OutputBuffer: void writeByte(byte)"        ,     1 ,477         ,434    ,18         ,485
+"OutputBuffer: long getCRC()"               ,     3 ,411         ,367    ,5          ,426
+"InputBuffer: int readByte()"               ,     1 ,622         ,550    ,26         ,667
+"InputBuffer: int readBytes(byte[],int)"    ,     8 ,4799        ,4356   ,407        ,4854
+"CompBase: int getMaxCode()"                ,     1 ,318         ,267    ,6          ,329
+"CodeTable: void clear(int)"                ,     3 ,9240        ,8711   ,493        ,9289
+"CodeTable: int of(int)"                    ,     1 ,464         ,425    ,15         ,483
+"CodeTable: void set(int,int)"              ,     1 ,464         ,418    ,5          ,473
+"Compressor: void output(int)"              ,    54 ,7936        ,7748   ,164        ,8181
+"Compressor: void clBlock()"                ,    21 ,1039        ,1003   ,9          ,1180
+"Compressor: void compress()"               ,    51 ,-1          ,-1     ,-1         ,-1

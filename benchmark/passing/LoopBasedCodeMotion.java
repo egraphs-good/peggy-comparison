@@ -4,12 +4,12 @@ public class LoopBasedCodeMotion {
         while (x < 3) {
             x += 1;
         }
-        return x * 500;
+        return x * 5;
     }
 
     public int expected() {
         int x = 0;
-        while (x < 3) {
+        while (x < 15) {
             x += 5;
         }
         return x;

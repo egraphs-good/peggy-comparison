@@ -3,7 +3,7 @@ public class LoopStrengthReductionModified {
         int i = 0;
         int d = 0;
         while (d < 300) {
-            System.out.println(i * 500);
+            System.out.println(i * 5);
             i = i + 1;
             if (d == 150) {
                 i = i + 3;
@@ -11,16 +11,17 @@ public class LoopStrengthReductionModified {
             d++;
         }
     }
+
     public static void expected() {
         int i = 0;
         int d = 0;
         while (d < 300) {
             System.out.println(i);
             i = i + 5;
-            if (d % 2 == 0) {
+            if (d == 150) {
                 i = i + 15;
             }
             d++;
-        }    
+        }
     }
 }

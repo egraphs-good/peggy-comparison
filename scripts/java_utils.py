@@ -185,39 +185,3 @@ def analyze_java_file(content):
         pos = end_pos + 1
 
     return methods
-
-
-def print_method_analysis(methods):
-    """Print the analysis results."""
-    print("\nMethod Line Count Analysis:")
-    print("-" * 40)
-    print("{0:<50} {1:>10}".format("Method Signature", "Line Count"))
-    print("-" * 40)
-
-    for method_signature, count in sorted(methods.items()):
-        print("{0:<50} {1:>10}".format(method_signature, count))
-    print("-" * 40)
-    total_lines = sum(methods.values())
-    print("{0:<50} {1:>10}".format("Total", total_lines))
-
-
-def main():
-    """Main function to run the analysis."""
-    import sys
-
-    if len(sys.argv) != 2:
-        print("Usage: python script.py <path_to_java_file>")
-        sys.exit(1)
-
-    file_path = sys.argv[1]
-    try:
-        methods = analyze_java_file(file_path)
-        print_method_analysis(methods)
-    except FileNotFoundError:
-        print("Error: File '{0}' not found.".format(file_path))
-    except Exception as e:
-        print("Error analyzing file: {0}".format(str(e)))
-
-
-if __name__ == "__main__":
-    main()

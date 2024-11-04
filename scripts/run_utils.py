@@ -46,8 +46,7 @@ def run_peggy(classname, benchmark_dir, params, timeout=60):
         if key != "optimization_level"
     ]
     addl = [item for sublist in addl for item in sublist]
-    command.append(addl)
-    print(addl)
+    command.extend(addl)
 
     try:
         return subprocess.check_output(
@@ -56,9 +55,8 @@ def run_peggy(classname, benchmark_dir, params, timeout=60):
     except subprocess.CalledProcessError as e:
         print("Command failed")
         print(" ".join(e.cmd))
-        print(e.output)
-        return None
+        return e.output
     except subprocess.TimeoutExpired as e:
         print("Command timed out")
         print(" ".join(command))
-        return None
+        return e.output

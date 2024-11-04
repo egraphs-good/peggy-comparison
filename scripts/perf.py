@@ -1,4 +1,4 @@
-from run_utils import run_peggy_default
+from run_utils import run_peggy
 import re
 import subprocess
 import os
@@ -18,7 +18,6 @@ params = {
     "optimization_level": "O2",
     "tmpFolder": "tmp",
     "pb": "glpk",
-    "eto": "500",
     "glpkPath": '"/glpk-5.0/examples/glpsol"',
     "activate": "livsr:binop:constant",
 }
@@ -129,8 +128,8 @@ def perf_from_output(output):
                 "PBTIME",
                 "ENGINETIME",
                 "Optimization took",
-                "nodes: ",
-                "values: ",
+                "nodes:",
+                "values:",
             ]
         }
 
@@ -166,10 +165,13 @@ def perf_file(location, classname):
     for classname in classnames:
         print(classname)
 
-        peggy_output = run_peggy_default(classname, location, 300)
+        peggy_output = run_peggy(classname, location, params, timeout=120)
         if not peggy_output:
             print("peggy failed")
             continue
+        print("PEGGY OUTPUT:")
+        print(peggy_output)
+        print("END PEGGY OUTPUT")
 
         method_to_time = perf_from_output(str(peggy_output))
 
@@ -177,37 +179,48 @@ def perf_file(location, classname):
             # just use method names because sometimes the signatures look a little different
             # (this is also a little hacky)
             name = method_name(method)
-            if name in lens:
-                escape_k = '"' + method + '"'
-                csv += ",".join(
-                    [escape_k, str(lens[name])]
-                    + [str(times[col]) for col in columns[2:]]
-                )
-                csv += "\n"
+            length = lens[name] if name in lens else -1
+            escape_k = '"' + method + '"'
+            csv += ",".join(
+                [escape_k, str(length)] + [str(times[col]) for col in columns[2:]]
+            )
+            csv += "\n"
 
     return csv
 
 
-if __name__ == "__main__":
-    benchmark_dir = "/peggy-comparison/uninlined-spec/scimark/"
-    results_dir = "results/perf"
-    results_file = results_dir + "/perf_scimark_2.csv"
+def perf_dir(results_dir, benchmark_dir):
+    print("BENCHMARKING " + benchmark_dir)
+
+    subprocess.call("javac " + benchmark_dir + "*.java", shell=True)
+    results_file = results_dir + "perf_" + benchmark_dir.replace("/", "_") + ".csv"
+    if os.path.exists(results_file):
+        print("Results file " + results_file + " already exists. Exiting.")
+        exit(1)
 
     # Create results dir if not exists
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
 
-    # Benchmark each file in `benchmark_dir`
-    # TODO: autoformat each file in benchmark first?
-    subprocess.call("javac " + benchmark_dir + "*.java", shell=True)
-
     with open(results_file, "w") as f:
         f.write(",".join(columns) + "\n")
-    for i in range(5):
-        for filename in os.listdir(benchmark_dir):
-            if filename.endswith(".java"):
-                classname = os.path.splitext(filename)[0]
-                perf = perf_file(benchmark_dir, classname)
-                with open(results_file, "a") as f:
-                    f.write(perf)
-    # TODO: could use the time instead or smth
+    for filename in os.listdir(benchmark_dir):
+        if filename.endswith(".java"):
+            classname = os.path.splitext(filename)[0]
+            perf = perf_file(benchmark_dir, classname)
+            with open(results_file, "a") as f:
+                f.write(perf)
+
+
+if __name__ == "__main__":
+    benchmark_dirs = [
+        "/peggy-comparison/uninlined-spec/scimark/",
+        "/peggy-comparison/inlined-spec/scimark/",
+        "/peggy-comparison/benchmark/passing/",
+        "/peggy-comparison/benchmark/failing/",
+        "/peggy-comparison/uninlined-spec/compress/",
+        "/peggy-comparison/inlined-spec/compress/",
+    ]
+
+    for benchmark_dir in benchmark_dirs:
+        perf_dir("results/", benchmark_dir)

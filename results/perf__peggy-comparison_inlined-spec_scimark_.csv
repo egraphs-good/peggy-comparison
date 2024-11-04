@@ -1,0 +1,15 @@
+name,length,PEG2PEGTIME,PBTIME,ENGINETIME,Optimization took,nodes:,values:
+"FFT: void <init>(int)",-1,611,450,8,846,14,14
+"FFT: long inst_main(java.lang.String[])",2,287,257,1,292,10,10
+"FFT: double test(double[])",11,61229,60616,570,61287,1826,1235
+"FFT: double num_flops(int)",3,946,736,148,1013,53,31
+"FFT: void inverse(double[])",6,32672,31631,1022,32715,1306,934
+"FFT: void transform(double[])",-1,277,259,1,282,12,12
+"FFT: double[] makeRandom(int)",5,-1,-1,-1,-1,1100,759
+"Stopwatch: double stop()",5,555,526,11,568,37,35
+"Stopwatch: void resume()",4,459,437,4,470,24,24
+"Stopwatch: void reset()",3,451,415,2,465,17,17
+"Stopwatch: double seconds()",1,548,337,25,690,14,13
+"Stopwatch: void <init>()",-1,414,383,2,421,13,13
+"Stopwatch: double read()",5,589,565,7,604,40,38
+"Stopwatch: void start()",5,489,461,5,532,28,28
