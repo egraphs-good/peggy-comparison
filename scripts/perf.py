@@ -105,7 +105,12 @@ def get_time(portion, log):
 
     time = re.search(regex, log)
     if time:
-        return int(time.group(1))
+        try:
+            return int(time.group(1))
+        except Exception as e:
+            print("Exception while parsing time")
+            print(e)
+            return -1
     else:
         return -1
 
@@ -139,6 +144,7 @@ def perf_from_output(output):
 
 
 columns = [
+    "benchmark_dir",
     "name",
     "length",
     "PEG2PEGTIME",
@@ -165,7 +171,7 @@ def perf_file(location, classname):
     for classname in classnames:
         print(classname)
 
-        peggy_output = run_peggy(classname, location, params, timeout=120)
+        peggy_output = run_peggy(classname, location, params, timeout=1800)
         if not peggy_output:
             print("peggy failed")
             continue
@@ -182,45 +188,51 @@ def perf_file(location, classname):
             length = lens[name] if name in lens else -1
             escape_k = '"' + method + '"'
             csv += ",".join(
-                [escape_k, str(length)] + [str(times[col]) for col in columns[2:]]
+                [location, escape_k, str(length)] + [str(times[col]) for col in columns[3:]]
             )
             csv += "\n"
 
     return csv
 
 
-def perf_dir(results_dir, benchmark_dir):
+def perf_dir(results_dir, benchmark_dir, results_file):
     print("BENCHMARKING " + benchmark_dir)
 
     subprocess.call("javac " + benchmark_dir + "*.java", shell=True)
-    results_file = results_dir + "perf_" + benchmark_dir.replace("/", "_") + ".csv"
-    if os.path.exists(results_file):
-        print("Results file " + results_file + " already exists. Exiting.")
-        exit(1)
+    #if os.path.exists(results_file):
+    #    print("Results file " + results_file + " already exists. Exiting.")
+    #    exit(1)
 
     # Create results dir if not exists
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
 
-    with open(results_file, "w") as f:
-        f.write(",".join(columns) + "\n")
     for filename in os.listdir(benchmark_dir):
         if filename.endswith(".java"):
-            classname = os.path.splitext(filename)[0]
-            perf = perf_file(benchmark_dir, classname)
-            with open(results_file, "a") as f:
-                f.write(perf)
+            try:
+                classname = os.path.splitext(filename)[0]
+                perf = perf_file(benchmark_dir, classname)
+                with open(results_file, "a") as f:
+                    f.write(perf)
+            except Exception as e:
+                print("Unexpected exception")
+                print(e)
 
 
 if __name__ == "__main__":
     benchmark_dirs = [
-        "/peggy-comparison/uninlined-spec/scimark/",
-        "/peggy-comparison/inlined-spec/scimark/",
-        "/peggy-comparison/benchmark/passing/",
-        "/peggy-comparison/benchmark/failing/",
-        "/peggy-comparison/uninlined-spec/compress/",
-        "/peggy-comparison/inlined-spec/compress/",
+        "uninlined-spec/scimark/",
+        "inlined-spec/scimark/",
+        "benchmark/passing/",
+        "benchmark/failing/",
+        "uninlined-spec/compress/",
+        "inlined-spec/compress/",
     ]
 
+    results_dir = "results/"
+    results_file = results_dir + "perf.csv"
+    with open(results_file, "w") as f:
+        f.write(",".join(columns) + "\n")
+
     for benchmark_dir in benchmark_dirs:
-        perf_dir("results/", benchmark_dir)
+        perf_dir(results_dir, benchmark_dir, results_file)

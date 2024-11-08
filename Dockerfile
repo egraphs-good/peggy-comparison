@@ -12,9 +12,7 @@ RUN git clone https://github.com/egraphs-good/peggy-comparison.git
 # Install GLPK. We just need the glpsol executable.
 RUN wget "https://ftp.gnu.org/gnu/glpk/glpk-5.0.tar.gz" && \
     tar -xzvf glpk-5.0.tar.gz && cd glpk-5.0 && \
-    ./configure && make install && \
-    mv examples/glpsol /usr/bin/glpsol && \
-    cd .. && rm -rf glpk-5.0 && rm glpk-5.0.tar.gz
+    ./configure && make install
 
 # Install jd-cli for command line decompiling. We need an old version to work with Java 6.
 RUN wget "https://github.com/intoolswetrust/jd-cli/releases/download/jd-cmd-0.9.2.Final/jd-cli-0.9.2-dist.tar.gz" && \
