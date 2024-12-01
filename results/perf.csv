@@ -1,218 +1,218 @@
-benchmark_dir,name,length,PEG2PEGTIME,PBTIME,ENGINETIME,Optimization took,nodes:,values:
-uninlined-spec/scimark/,"LU: int[] getPivot()",1,193,164,1,199,14,14
-uninlined-spec/scimark/,"LU: void main(int)",2,173,141,3,185,18,18
-uninlined-spec/scimark/,"LU: void insert_copy(double[][],double[][])",15,12747,12486,243,12826,840,1875
-uninlined-spec/scimark/,"LU: void solve(double[][],int[],double[])",3,-1,-1,-1,-1,995,1621
-uninlined-spec/scimark/,"LU: double[] new_copy(double[])",5,2382,1839,516,2424,1358,987
-uninlined-spec/scimark/,"LU: double num_flops(int)",2,184,139,13,195,16,13
-uninlined-spec/scimark/,"LU: int[] new_copy(int[])",5,2059,1838,207,2082,1358,986
-uninlined-spec/scimark/,"LU: int factor(double[][],int[])",37,-1,-1,-1,-1,809,2104
-uninlined-spec/scimark/,"LU: double[][] getLU()",1,173,160,0,179,14,14
-uninlined-spec/scimark/,"LU: double[][] new_copy(double[][])",5,2350,1968,365,2407,1124,1412
-uninlined-spec/scimark/,"LU: void <init>(int)",-1,238,160,6,322,14,14
-uninlined-spec/scimark/,"LU: double[] solve(double[])",3,195,167,1,203,23,23
-uninlined-spec/scimark/,"Random: void <init>(int)",-1,183,151,8,201,45,45
-uninlined-spec/scimark/,"Random: void <init>(int,double,double)",-1,191,157,10,219,57,57
-uninlined-spec/scimark/,"Random: void <init>()",-1,268,181,15,357,50,50
-uninlined-spec/scimark/,"Random: void <init>(double,double)",-1,212,166,14,240,62,62
-uninlined-spec/scimark/,"Random: void nextDoubles(double[])",89,2378,1898,443,2957,790,981
-uninlined-spec/scimark/,"Random: double nextDouble()",18,232,174,31,318,104,97
-uninlined-spec/scimark/,"SparseCompRow: double num_flops(int,int,int)",2,172,139,12,186,18,15
-uninlined-spec/scimark/,"SparseCompRow: void run()",7,171,156,1,178,28,28
-uninlined-spec/scimark/,"SparseCompRow: void main(int)",2,170,138,3,178,18,18
-uninlined-spec/scimark/,"SparseCompRow: void matmult(double[],double[],int[],int[],double[],int,int)",-1,17501,16920,551,17676,925,1282
-uninlined-spec/scimark/,"SparseCompRow: double measureSparseMatmult(int,int,double,Random)",-1,195457,195025,415,195515,1664,1757
-uninlined-spec/scimark/,"SparseCompRow: void <init>(int)",-1,231,156,5,289,14,14
-uninlined-spec/scimark/,"SOR: double num_flops(int,int,int)",4,3265,2960,277,3280,315,87
-uninlined-spec/scimark/,"SOR: void main(int)",2,172,140,4,184,18,18
-uninlined-spec/scimark/,"SOR: double execute(double,double[][],int)",21,-1,-1,-1,-1,1463,2145
-uninlined-spec/scimark/,"SOR: void <init>(int)",-1,241,160,5,326,14,14
-uninlined-spec/scimark/,"MonteCarlo: void <init>()",-1,225,152,4,307,10,10
-uninlined-spec/scimark/,"MonteCarlo: void main()",2,167,137,3,173,16,16
-uninlined-spec/scimark/,"MonteCarlo: double measureMonteCarlo(double,Random)",9,173,155,2,195,45,44
-uninlined-spec/scimark/,"MonteCarlo: double integrate(int)",10,2753,2144,583,2830,740,1024
-uninlined-spec/scimark/,"MonteCarlo: double num_flops(int)",1,158,129,8,167,10,9
-uninlined-spec/scimark/,"MonteCarlo: void run()",4,172,142,2,182,20,20
-uninlined-spec/scimark/,"FFT: void main(int)",2,189,156,1,197,18,18
-uninlined-spec/scimark/,"FFT: double test(double[])",11,7365,6985,363,7416,1668,1229
-uninlined-spec/scimark/,"FFT: void inverse(double[])",6,4384,3871,486,4431,1310,935
-uninlined-spec/scimark/,"FFT: double[] makeRandom(int)",5,1925,1564,346,1949,1101,762
-uninlined-spec/scimark/,"FFT: void <init>(int)",-1,228,149,6,286,14,14
-uninlined-spec/scimark/,"FFT: void transform_internal(double[],int)",-1,-1,-1,-1,-1,1894,1520
-uninlined-spec/scimark/,"FFT: double num_flops(int)",3,247,163,54,258,53,31
-uninlined-spec/scimark/,"FFT: void transform(double[])",-1,176,135,3,185,12,12
-uninlined-spec/scimark/,"FFT: long inst_main(java.lang.String[])",2,165,133,2,173,10,10
-uninlined-spec/scimark/,"kernel: double[] RandomizeVector(double[],Random)",3,1720,1537,158,1739,892,615
-uninlined-spec/scimark/,"kernel: double[][] RandomizeMatrix(double[][],Random)",4,2405,2176,212,2447,695,1178
-uninlined-spec/scimark/,"kernel: void <clinit>()",-1,215,188,3,227,57,57
-uninlined-spec/scimark/,"kernel: double[] RandomVector(int,Random)",4,2746,2561,163,2764,1080,759
-uninlined-spec/scimark/,"kernel: void init()",44,223,205,6,296,139,139
-uninlined-spec/scimark/,"kernel: double[] matvec(double[][],double[])",9,190,163,1,197,17,17
-uninlined-spec/scimark/,"kernel: double normabs(double[],double[])",5,1722,1374,332,1769,735,872
-uninlined-spec/scimark/,"kernel: double[][] RandomMatrix(int,int,Random)",5,1193,936,239,1228,824,1158
-uninlined-spec/scimark/,"kernel: void CopyVector(double[],double[])",3,1959,1686,254,1985,1346,970
-uninlined-spec/scimark/,"kernel: void CopyMatrix(double[][],double[][])",15,13110,12674,420,13202,843,1886
-uninlined-spec/scimark/,"kernel: double[] NewVectorCopy(double[])",5,3416,2847,536,3454,1352,977
-uninlined-spec/scimark/,"kernel: void <init>()",-1,228,155,5,309,10,10
-uninlined-spec/scimark/,"kernel: void checkResults(java.lang.String,java.lang.String,int)",8,213,190,1,242,61,61
-uninlined-spec/scimark/,"kernel: void matvec(double[][],double[],double[])",9,5077,4856,198,5121,823,1430
-uninlined-spec/scimark/,"Stopwatch: void start()",5,172,146,6,193,28,28
-uninlined-spec/scimark/,"Stopwatch: double seconds()",1,242,157,11,297,14,13
-uninlined-spec/scimark/,"Stopwatch: void <init>()",-1,158,135,2,163,13,13
-uninlined-spec/scimark/,"Stopwatch: double read()",5,174,147,9,189,40,38
-uninlined-spec/scimark/,"Stopwatch: double stop()",5,181,154,9,196,37,35
-uninlined-spec/scimark/,"Stopwatch: void resume()",4,165,141,5,175,24,24
-uninlined-spec/scimark/,"Stopwatch: void reset()",3,166,135,3,174,17,17
-inlined-spec/scimark/,"LU: int[] new_copy(int[])",5,2665,2435,204,2683,1346,971
-inlined-spec/scimark/,"LU: int[] getPivot()",5,3441,3265,154,3459,1173,871
-inlined-spec/scimark/,"LU: double[][] getLU()",10,4305,4049,241,4347,1103,1341
-inlined-spec/scimark/,"LU: void insert_copy(double[][],double[][])",15,62514,62245,241,62590,851,1858
-inlined-spec/scimark/,"LU: double[] new_copy(double[])",5,2465,1928,499,2494,1358,985
-inlined-spec/scimark/,"LU: double[] solve(double[])",26,-1,-1,-1,-1,711,1640
-inlined-spec/scimark/,"LU: void <init>(int)",-1,238,157,5,321,14,14
-inlined-spec/scimark/,"LU: double[][] new_copy(double[][])",5,8258,7885,357,8302,1119,1383
-inlined-spec/scimark/,"LU: double num_flops(int)",2,178,141,12,182,16,13
-inlined-spec/scimark/,"Random: void <init>(int)",-1,70531,70301,212,70602,791,664
-inlined-spec/scimark/,"Random: void <init>(int,double,double)",-1,126479,126264,199,126544,809,685
-inlined-spec/scimark/,"Random: void <init>()",-1,21722,21123,516,21857,795,668
-inlined-spec/scimark/,"Random: void <init>(double,double)",-1,19964,19683,261,20054,811,680
-inlined-spec/scimark/,"Random: void nextDoubles(double[])",89,2678,2518,134,3215,777,983
-inlined-spec/scimark/,"Random: double nextDouble()",18,163,143,4,226,104,97
-inlined-spec/scimark/,"SparseCompRow: double num_flops(int,int,int)",2,178,138,13,184,18,15
-inlined-spec/scimark/,"SparseCompRow: void <init>(int)",-1,233,154,5,316,14,14
-inlined-spec/scimark/,"SparseCompRow: void matmult(double[],double[],int[],int[],double[],int,int)",-1,25126,24531,535,25322,917,1292
-inlined-spec/scimark/,"SOR: double num_flops(int,int,int)",4,4891,4569,287,4897,315,87
-inlined-spec/scimark/,"SOR: double execute(double,double[][],int)",21,-1,-1,-1,-1,1314,2048
-inlined-spec/scimark/,"SOR: void <init>(int)",-1,236,160,5,294,14,14
-inlined-spec/scimark/,"MonteCarlo: void <init>()",-1,225,151,4,305,10,10
-inlined-spec/scimark/,"MonteCarlo: double num_flops(int)",1,163,129,8,167,10,9
-inlined-spec/scimark/,"FFT: void bitreverse(double[])",22,6538,5976,536,6611,1406,1571
-inlined-spec/scimark/,"FFT: void <clinit>()",-1,185,168,0,188,16,16
-inlined-spec/scimark/,"FFT: double[] makeRandom(int)",5,3558,2729,794,3589,1101,762
-inlined-spec/scimark/,"FFT: void <init>(int)",-1,231,154,6,314,14,14
-inlined-spec/scimark/,"kernel: void CopyVector(double[],double[])",3,5175,4898,260,5200,1362,986
-inlined-spec/scimark/,"kernel: void checkResults(java.lang.String,java.lang.String,int)",8,191,176,2,220,61,61
-inlined-spec/scimark/,"kernel: void CopyMatrix(double[][],double[][])",15,9412,8976,420,9504,845,1901
-inlined-spec/scimark/,"kernel: void <clinit>()",-1,203,174,4,213,57,57
-inlined-spec/scimark/,"kernel: void <init>()",-1,229,152,4,285,10,10
-inlined-spec/scimark/,"kernel: void init()",44,220,194,6,293,139,139
-inlined-spec/scimark/,"kernel: double[] matvec(double[][],double[])",9,2826,2540,267,2872,814,1385
-inlined-spec/scimark/,"kernel: double normabs(double[],double[])",5,1836,1486,334,1885,731,890
-inlined-spec/scimark/,"kernel: void matvec(double[][],double[],double[])",9,4796,4552,226,4837,815,1409
-inlined-spec/scimark/,"kernel: double[] NewVectorCopy(double[])",5,3110,2546,532,3148,1354,982
-inlined-spec/scimark/,"Stopwatch: void start()",5,190,151,8,231,33,32
-inlined-spec/scimark/,"Stopwatch: double seconds()",1,240,157,11,322,14,13
-inlined-spec/scimark/,"Stopwatch: void <init>()",-1,179,140,4,191,21,21
-inlined-spec/scimark/,"Stopwatch: double read()",5,185,154,12,221,48,44
-inlined-spec/scimark/,"Stopwatch: double stop()",5,192,158,10,226,42,39
-inlined-spec/scimark/,"Stopwatch: void resume()",4,172,144,7,192,29,28
-inlined-spec/scimark/,"Stopwatch: void reset()",3,170,138,3,181,17,17
-benchmark/passing/,"DeadLoopDeletion: void <init>()",-1,233,154,5,315,10,10
-benchmark/passing/,"DeadLoopDeletion: int original()",6,155,127,1,160,5,5
-benchmark/passing/,"LoopInvariantCodeMotion: void <init>()",-1,230,155,4,311,10,10
-benchmark/passing/,"LoopInvariantCodeMotion: void expected(int,int)",7,2054,1688,349,2091,1268,648
-benchmark/passing/,"LoopInvariantCodeMotion: void original(int,int)",7,2628,1944,650,2684,1276,648
-benchmark/passing/,"ConstantFold: int original()",3,167,128,10,172,9,9
-benchmark/passing/,"ConstantFold: void <init>()",-1,233,155,5,288,10,10
-benchmark/passing/,"LoopStrengthReduction: void original()",7,5021,3664,1327,5053,3241,1287
-benchmark/passing/,"LoopStrengthReduction: void <init>()",-1,230,153,4,312,10,10
-benchmark/passing/,"LoopStrengthReduction: void expected()",7,3650,2317,1317,3669,1796,528
-benchmark/passing/,"SimpleLoopUnswitch: int original(int)",9,2682,2117,529,2756,1093,729
-benchmark/passing/,"SimpleLoopUnswitch: void <init>()",-1,232,153,5,314,10,10
-benchmark/passing/,"IfTrue: void <init>()",-1,227,153,5,309,10,10
-benchmark/passing/,"IfTrue: int expected(int)",1,158,125,2,165,5,5
-benchmark/passing/,"IfTrue: int original(int)",5,152,124,1,157,5,5
-benchmark/passing/,"MultiVariableLoop: void <init>()",-1,230,154,5,286,10,10
-benchmark/passing/,"MultiVariableLoop: int original(int)",7,2914,2158,722,2965,1163,647
-benchmark/passing/,"BranchHoisting: int expected(int)",10,2847,2288,543,2884,1718,817
-benchmark/passing/,"BranchHoisting: void <init>()",-1,229,154,5,311,10,10
-benchmark/passing/,"BranchHoisting: int original(int)",11,-1,-1,-1,-1,-1,-1
-benchmark/passing/,"InfiniteLoop: void <init>()",-1,230,156,4,312,10,10
-benchmark/passing/,"InfiniteLoop: void main(java.lang.String[])",1,159,132,2,165,9,9
-benchmark/passing/,"InfiniteLoop: int original()",5,-1,-1,-1,-1,787,134
-benchmark/passing/,"LoopBasedCodeMotion: void <init>()",-1,230,153,4,312,10,10
-benchmark/passing/,"LoopBasedCodeMotion: int original()",5,4579,3097,1450,4601,2977,1308
-benchmark/passing/,"LoopBasedCodeMotion: int expected()",5,1266,492,758,1280,726,126
-benchmark/passing/,"FunctionInlining: int expected(int)",1,168,129,5,176,8,7
-benchmark/passing/,"FunctionInlining: int foo()",1,153,126,1,157,5,5
-benchmark/passing/,"FunctionInlining: void <init>()",-1,230,154,5,310,10,10
-benchmark/passing/,"FunctionInlining: int original(int)",1,166,134,11,176,13,12
-benchmark/passing/,"InfiniteEffectfulLoop: void main(java.lang.String[])",1,160,132,2,164,9,9
-benchmark/passing/,"InfiniteEffectfulLoop: void <init>()",-1,230,156,4,286,10,10
-benchmark/passing/,"InfiniteEffectfulLoop: int original()",6,-1,-1,-1,-1,1043,716
-benchmark/passing/,"LoopUnroll: void <init>()",-1,232,154,5,289,10,10
-benchmark/passing/,"LoopUnroll: int original(int)",5,1655,581,1046,1684,721,123
-benchmark/passing/,"LoopUnroll: int expected(int)",1,167,143,0,172,5,5
-benchmark/passing/,"SeparateLoops: void <init>()",-1,230,156,4,310,10,10
-benchmark/passing/,"SeparateLoops: int interrelated(int)",8,2826,1734,1060,2871,2228,730
-benchmark/passing/,"SeparateLoops: void unrelated(int)",10,2654,1300,1336,2684,2099,652
-benchmark/passing/,"LoopStrengthReductionModified: void original()",10,8566,7601,932,8616,2059,1373
-benchmark/passing/,"LoopStrengthReductionModified: void <init>()",-1,232,153,5,313,10,10
-benchmark/passing/,"LoopStrengthReductionModified: void expected()",10,2503,1970,516,2539,2270,1142
-benchmark/passing/,"Raytracer: void main(double,double,double,double,double)",59,9389,8899,436,9631,788,1223
-benchmark/passing/,"Raytracer: double[] vecCross(double[],double[])",5,194,156,7,210,71,65
-benchmark/passing/,"Raytracer: void <init>()",-1,233,155,4,315,10,10
-benchmark/passing/,"Raytracer: double[][] sampleRay(double,double)",28,220,184,7,256,143,143
-benchmark/passing/,"Raytracer: void buildBVH(double[][][],long[][],double[][][],long[],long[])",-1,-1,-1,-1,-1,1154,1404
-benchmark/passing/,"Raytracer: double[] vecNormalize(double[])",2,191,156,3,200,36,36
-benchmark/passing/,"Raytracer: double[] vecScale(double[],double)",1,181,146,4,189,35,32
-benchmark/passing/,"Raytracer: double vecLength(double[])",1,193,162,3,201,49,38
-benchmark/passing/,"Raytracer: double[] vecAdd(double[],double[])",1,186,150,5,196,44,41
-benchmark/passing/,"Raytracer: double dot(double[],double[])",1,188,156,7,196,45,34
-benchmark/passing/,"Raytracer: boolean bboxRayIntersect(double[][],double[][])",16,207,179,10,273,177,175
-benchmark/passing/,"Raytracer: double sqrt(double)",8,6678,6222,426,6708,1141,807
-benchmark/passing/,"Raytracer: double abs(double)",1,171,140,2,178,12,11
-benchmark/passing/,"Raytracer: double[] vecSubtract(double[],double[])",1,169,149,1,180,41,41
-benchmark/passing/,"ConditionalConstantFolding: int original(int)",7,178,137,12,203,16,14
-benchmark/passing/,"ConditionalConstantFolding: int expected()",1,146,125,1,150,5,5
-benchmark/passing/,"ConditionalConstantFolding: void <init>()",-1,225,153,4,306,10,10
-benchmark/passing/,"LoopPeeling: int original(int)",7,2627,1274,1321,2661,1842,203
-benchmark/passing/,"LoopPeeling: int expected(int)",12,2782,1456,1310,2818,1427,155
-benchmark/passing/,"LoopPeeling: void <init>()",-1,228,153,5,309,10,10
-benchmark/failing/,"UnswitchedLoop: void <init>()",-1,229,151,4,310,10,10
-benchmark/failing/,"UnswitchedLoop: int expected(int)",14,3152,2565,555,3229,1268,815
-uninlined-spec/compress/,"Decompressor: int getCode()",41,-1,-1,-1,-1,262,216
-uninlined-spec/compress/,"Decompressor: void <init>(InputBuffer,OutputBuffer)",-1,440,268,82,628,223,214
-uninlined-spec/compress/,"Decompressor: void decompress()",34,-1,-1,-1,-1,575,946
-uninlined-spec/compress/,"OutputBuffer: void writebytes(byte[],int)",3,4345,3797,509,4394,877,713
-uninlined-spec/compress/,"OutputBuffer: int getLength()",1,158,129,2,162,9,9
-uninlined-spec/compress/,"OutputBuffer: void writeByte(byte)",1,177,141,10,191,22,21
-uninlined-spec/compress/,"OutputBuffer: long getCRC()",3,188,150,10,210,30,30
-uninlined-spec/compress/,"OutputBuffer: void <init>(byte[])",-1,232,155,5,315,14,14
-uninlined-spec/compress/,"Compressor: void <init>(InputBuffer,OutputBuffer)",-1,376,241,53,535,148,145
-uninlined-spec/compress/,"Compressor: void compress()",51,-1,-1,-1,-1,1031,1115
-uninlined-spec/compress/,"CompBase: int getMaxCode()",1,162,128,5,168,12,12
-uninlined-spec/compress/,"CompBase: void <init>(InputBuffer,OutputBuffer)",-1,241,159,11,328,33,33
-uninlined-spec/compress/,"InputBuffer: int readBytes(byte[],int)",8,2736,2225,486,2795,661,640
-uninlined-spec/compress/,"InputBuffer: int readByte()",1,200,153,16,229,37,34
-uninlined-spec/compress/,"InputBuffer: void <init>(int,byte[])",-1,240,160,7,324,18,18
-uninlined-spec/compress/,"CodeTable: int of(int)",1,169,136,5,177,16,16
-uninlined-spec/compress/,"CodeTable: void set(int,int)",1,183,136,4,196,16,16
-uninlined-spec/compress/,"CodeTable: void clear(int)",3,3331,2737,550,3368,1163,854
-uninlined-spec/compress/,"CodeTable: void <init>()",-1,240,162,6,323,18,18
-uninlined-spec/compress/,"Harness: long inst_main(int)",3,159,136,1,164,19,19
-uninlined-spec/compress/,"Harness: void <clinit>()",-1,175,158,2,190,62,61
-uninlined-spec/compress/,"Harness: void runCompress(int)",18,1534,1023,460,1688,568,942
-uninlined-spec/compress/,"Harness: void <init>()",-1,228,155,5,310,10,10
-uninlined-spec/compress/,"Harness: void prepareBuffers()",7,577,321,238,625,289,779
-inlined-spec/compress/,"Decompressor: int getCode()",52,-1,-1,-1,-1,633,832
-inlined-spec/compress/,"Decompressor: void <init>(InputBuffer,OutputBuffer)",-1,8278,7715,465,8538,1123,952
-inlined-spec/compress/,"Decompressor: void decompress()",208,-1,-1,-1,-1,1179,1092
-inlined-spec/compress/,"OutputBuffer: void writebytes(byte[],int)",3,7144,6597,520,7195,885,728
-inlined-spec/compress/,"OutputBuffer: int getLength()",1,161,131,2,166,9,9
-inlined-spec/compress/,"OutputBuffer: void writeByte(byte)",1,190,142,10,202,22,21
-inlined-spec/compress/,"OutputBuffer: long getCRC()",3,200,151,7,220,30,30
-inlined-spec/compress/,"OutputBuffer: void <init>(byte[])",-1,238,158,6,323,14,14
-inlined-spec/compress/,"CodeTable: int of(int)",1,168,135,6,177,16,16
-inlined-spec/compress/,"CodeTable: void set(int,int)",1,176,134,4,188,16,16
-inlined-spec/compress/,"CodeTable: void clear(int)",3,2415,1836,538,2453,1161,852
-inlined-spec/compress/,"CodeTable: void <init>()",-1,237,159,6,319,18,18
-inlined-spec/compress/,"InputBuffer: int readBytes(byte[],int)",8,2255,1732,499,2321,671,629
-inlined-spec/compress/,"InputBuffer: int readByte()",1,204,153,17,232,37,34
-inlined-spec/compress/,"InputBuffer: void <init>(int,byte[])",-1,240,160,7,325,18,18
-inlined-spec/compress/,"Compressor: void <init>(InputBuffer,OutputBuffer)",-1,402,244,75,572,185,179
-inlined-spec/compress/,"Compressor: void compress()",312,-1,-1,-1,-1,1696,1632
-inlined-spec/compress/,"CompBase: int getMaxCode()",1,160,129,4,166,12,12
-inlined-spec/compress/,"CompBase: void <init>(InputBuffer,OutputBuffer)",-1,251,168,11,338,33,33
-inlined-spec/compress/,"Harness: void runCompress(int)",1075,-1,-1,-1,-1,5170,5084
-inlined-spec/compress/,"Harness: void <init>()",-1,229,155,4,310,10,10
+benchmark_dir            ,name                                                                          ,length ,PEG2PEGTIME ,PBTIME ,ENGINETIME ,Optimization took ,nodes: ,values:
+uninlined-spec/scimark/  ,"LU: int[] getPivot()"                                                        ,1      ,193         ,164    ,1          ,199               ,14     ,14
+uninlined-spec/scimark/  ,"LU: void main(int)"                                                          ,2      ,173         ,141    ,3          ,185               ,18     ,18
+uninlined-spec/scimark/  ,"LU: void insert_copy(double[][],double[][])"                                 ,15     ,12747       ,12486  ,243        ,12826             ,840    ,1875
+uninlined-spec/scimark/  ,"LU: void solve(double[][],int[],double[])"                                   ,3      ,-1          ,-1     ,-1         ,-1                ,995    ,1621
+uninlined-spec/scimark/  ,"LU: double[] new_copy(double[])"                                             ,5      ,2382        ,1839   ,516        ,2424              ,1358   ,987
+uninlined-spec/scimark/  ,"LU: double num_flops(int)"                                                   ,2      ,184         ,139    ,13         ,195               ,16     ,13
+uninlined-spec/scimark/  ,"LU: int[] new_copy(int[])"                                                   ,5      ,2059        ,1838   ,207        ,2082              ,1358   ,986
+uninlined-spec/scimark/  ,"LU: int factor(double[][],int[])"                                            ,37     ,-1          ,-1     ,-1         ,-1                ,809    ,2104
+uninlined-spec/scimark/  ,"LU: double[][] getLU()"                                                      ,1      ,173         ,160    ,0          ,179               ,14     ,14
+uninlined-spec/scimark/  ,"LU: double[][] new_copy(double[][])"                                         ,5      ,2350        ,1968   ,365        ,2407              ,1124   ,1412
+uninlined-spec/scimark/  ,"LU: void <init>(int)"                                                        ,-1     ,238         ,160    ,6          ,322               ,14     ,14
+uninlined-spec/scimark/  ,"LU: double[] solve(double[])"                                                ,3      ,195         ,167    ,1          ,203               ,23     ,23
+uninlined-spec/scimark/  ,"Random: void <init>(int)"                                                    ,-1     ,183         ,151    ,8          ,201               ,45     ,45
+uninlined-spec/scimark/  ,"Random: void <init>(int,double,double)"                                      ,-1     ,191         ,157    ,10         ,219               ,57     ,57
+uninlined-spec/scimark/  ,"Random: void <init>()"                                                       ,-1     ,268         ,181    ,15         ,357               ,50     ,50
+uninlined-spec/scimark/  ,"Random: void <init>(double,double)"                                          ,-1     ,212         ,166    ,14         ,240               ,62     ,62
+uninlined-spec/scimark/  ,"Random: void nextDoubles(double[])"                                          ,89     ,2378        ,1898   ,443        ,2957              ,790    ,981
+uninlined-spec/scimark/  ,"Random: double nextDouble()"                                                 ,18     ,232         ,174    ,31         ,318               ,104    ,97
+uninlined-spec/scimark/  ,"SparseCompRow: double num_flops(int,int,int)"                                ,2      ,172         ,139    ,12         ,186               ,18     ,15
+uninlined-spec/scimark/  ,"SparseCompRow: void run()"                                                   ,7      ,171         ,156    ,1          ,178               ,28     ,28
+uninlined-spec/scimark/  ,"SparseCompRow: void main(int)"                                               ,2      ,170         ,138    ,3          ,178               ,18     ,18
+uninlined-spec/scimark/  ,"SparseCompRow: void matmult(double[],double[],int[],int[],double[],int,int)" ,17     ,17501       ,16920  ,551        ,17676             ,925    ,1282
+uninlined-spec/scimark/  ,"SparseCompRow: double measureSparseMatmult(int,int,double,Random)"           ,24     ,195457      ,195025 ,415        ,195515            ,1664   ,1757
+uninlined-spec/scimark/  ,"SparseCompRow: void <init>(int)"                                             ,-1     ,231         ,156    ,5          ,289               ,14     ,14
+uninlined-spec/scimark/  ,"SOR: double num_flops(int,int,int)"                                          ,4      ,3265        ,2960   ,277        ,3280              ,315    ,87
+uninlined-spec/scimark/  ,"SOR: void main(int)"                                                         ,2      ,172         ,140    ,4          ,184               ,18     ,18
+uninlined-spec/scimark/  ,"SOR: double execute(double,double[][],int)"                                  ,21     ,-1          ,-1     ,-1         ,-1                ,1463   ,2145
+uninlined-spec/scimark/  ,"SOR: void <init>(int)"                                                       ,-1     ,241         ,160    ,5          ,326               ,14     ,14
+uninlined-spec/scimark/  ,"MonteCarlo: void <init>()"                                                   ,-1     ,225         ,152    ,4          ,307               ,10     ,10
+uninlined-spec/scimark/  ,"MonteCarlo: void main()"                                                     ,2      ,167         ,137    ,3          ,173               ,16     ,16
+uninlined-spec/scimark/  ,"MonteCarlo: double measureMonteCarlo(double,Random)"                         ,9      ,173         ,155    ,2          ,195               ,45     ,44
+uninlined-spec/scimark/  ,"MonteCarlo: double integrate(int)"                                           ,10     ,2753        ,2144   ,583        ,2830              ,740    ,1024
+uninlined-spec/scimark/  ,"MonteCarlo: double num_flops(int)"                                           ,1      ,158         ,129    ,8          ,167               ,10     ,9
+uninlined-spec/scimark/  ,"MonteCarlo: void run()"                                                      ,4      ,172         ,142    ,2          ,182               ,20     ,20
+uninlined-spec/scimark/  ,"FFT: void main(int)"                                                         ,2      ,189         ,156    ,1          ,197               ,18     ,18
+uninlined-spec/scimark/  ,"FFT: double test(double[])"                                                  ,11     ,7365        ,6985   ,363        ,7416              ,1668   ,1229
+uninlined-spec/scimark/  ,"FFT: void inverse(double[])"                                                 ,6      ,4384        ,3871   ,486        ,4431              ,1310   ,935
+uninlined-spec/scimark/  ,"FFT: double[] makeRandom(int)"                                               ,5      ,1925        ,1564   ,346        ,1949              ,1101   ,762
+uninlined-spec/scimark/  ,"FFT: void <init>(int)"                                                       ,-1     ,228         ,149    ,6          ,286               ,14     ,14
+uninlined-spec/scimark/  ,"FFT: void transform_internal(double[],int)"                                  ,51     ,-1          ,-1     ,-1         ,-1                ,1894   ,1520
+uninlined-spec/scimark/  ,"FFT: double num_flops(int)"                                                  ,3      ,247         ,163    ,54         ,258               ,53     ,31
+uninlined-spec/scimark/  ,"FFT: void transform(double[])"                                               ,1      ,176         ,135    ,3          ,185               ,12     ,12
+uninlined-spec/scimark/  ,"FFT: long inst_main(java.lang.String[])"                                     ,2      ,165         ,133    ,2          ,173               ,10     ,10
+uninlined-spec/scimark/  ,"kernel: double[] RandomizeVector(double[],Random)"                           ,3      ,1720        ,1537   ,158        ,1739              ,892    ,615
+uninlined-spec/scimark/  ,"kernel: double[][] RandomizeMatrix(double[][],Random)"                       ,4      ,2405        ,2176   ,212        ,2447              ,695    ,1178
+uninlined-spec/scimark/  ,"kernel: void <clinit>()"                                                     ,-1     ,215         ,188    ,3          ,227               ,57     ,57
+uninlined-spec/scimark/  ,"kernel: double[] RandomVector(int,Random)"                                   ,4      ,2746        ,2561   ,163        ,2764              ,1080   ,759
+uninlined-spec/scimark/  ,"kernel: void init()"                                                         ,44     ,223         ,205    ,6          ,296               ,139    ,139
+uninlined-spec/scimark/  ,"kernel: double[] matvec(double[][],double[])"                                ,9      ,190         ,163    ,1          ,197               ,17     ,17
+uninlined-spec/scimark/  ,"kernel: double normabs(double[],double[])"                                   ,5      ,1722        ,1374   ,332        ,1769              ,735    ,872
+uninlined-spec/scimark/  ,"kernel: double[][] RandomMatrix(int,int,Random)"                             ,5      ,1193        ,936    ,239        ,1228              ,824    ,1158
+uninlined-spec/scimark/  ,"kernel: void CopyVector(double[],double[])"                                  ,3      ,1959        ,1686   ,254        ,1985              ,1346   ,970
+uninlined-spec/scimark/  ,"kernel: void CopyMatrix(double[][],double[][])"                              ,15     ,13110       ,12674  ,420        ,13202             ,843    ,1886
+uninlined-spec/scimark/  ,"kernel: double[] NewVectorCopy(double[])"                                    ,5      ,3416        ,2847   ,536        ,3454              ,1352   ,977
+uninlined-spec/scimark/  ,"kernel: void <init>()"                                                       ,-1     ,228         ,155    ,5          ,309               ,10     ,10
+uninlined-spec/scimark/  ,"kernel: void checkResults(java.lang.String,java.lang.String,int)"            ,8      ,213         ,190    ,1          ,242               ,61     ,61
+uninlined-spec/scimark/  ,"kernel: void matvec(double[][],double[],double[])"                           ,9      ,5077        ,4856   ,198        ,5121              ,823    ,1430
+uninlined-spec/scimark/  ,"Stopwatch: void start()"                                                     ,5      ,172         ,146    ,6          ,193               ,28     ,28
+uninlined-spec/scimark/  ,"Stopwatch: double seconds()"                                                 ,1      ,242         ,157    ,11         ,297               ,14     ,13
+uninlined-spec/scimark/  ,"Stopwatch: void <init>()"                                                    ,-1     ,158         ,135    ,2          ,163               ,13     ,13
+uninlined-spec/scimark/  ,"Stopwatch: double read()"                                                    ,5      ,174         ,147    ,9          ,189               ,40     ,38
+uninlined-spec/scimark/  ,"Stopwatch: double stop()"                                                    ,5      ,181         ,154    ,9          ,196               ,37     ,35
+uninlined-spec/scimark/  ,"Stopwatch: void resume()"                                                    ,4      ,165         ,141    ,5          ,175               ,24     ,24
+uninlined-spec/scimark/  ,"Stopwatch: void reset()"                                                     ,3      ,166         ,135    ,3          ,174               ,17     ,17
+inlined-spec/scimark/    ,"LU: int[] new_copy(int[])"                                                   ,5      ,2665        ,2435   ,204        ,2683              ,1346   ,971
+inlined-spec/scimark/    ,"LU: int[] getPivot()"                                                        ,5      ,3441        ,3265   ,154        ,3459              ,1173   ,871
+inlined-spec/scimark/    ,"LU: double[][] getLU()"                                                      ,10     ,4305        ,4049   ,241        ,4347              ,1103   ,1341
+inlined-spec/scimark/    ,"LU: void insert_copy(double[][],double[][])"                                 ,15     ,62514       ,62245  ,241        ,62590             ,851    ,1858
+inlined-spec/scimark/    ,"LU: double[] new_copy(double[])"                                             ,5      ,2465        ,1928   ,499        ,2494              ,1358   ,985
+inlined-spec/scimark/    ,"LU: double[] solve(double[])"                                                ,26     ,-1          ,-1     ,-1         ,-1                ,711    ,1640
+inlined-spec/scimark/    ,"LU: void <init>(int)"                                                        ,-1     ,238         ,157    ,5          ,321               ,14     ,14
+inlined-spec/scimark/    ,"LU: double[][] new_copy(double[][])"                                         ,5      ,8258        ,7885   ,357        ,8302              ,1119   ,1383
+inlined-spec/scimark/    ,"LU: double num_flops(int)"                                                   ,2      ,178         ,141    ,12         ,182               ,16     ,13
+inlined-spec/scimark/    ,"Random: void <init>(int)"                                                    ,-1     ,70531       ,70301  ,212        ,70602             ,791    ,664
+inlined-spec/scimark/    ,"Random: void <init>(int,double,double)"                                      ,-1     ,126479      ,126264 ,199        ,126544            ,809    ,685
+inlined-spec/scimark/    ,"Random: void <init>()"                                                       ,-1     ,21722       ,21123  ,516        ,21857             ,795    ,668
+inlined-spec/scimark/    ,"Random: void <init>(double,double)"                                          ,-1     ,19964       ,19683  ,261        ,20054             ,811    ,680
+inlined-spec/scimark/    ,"Random: void nextDoubles(double[])"                                          ,89     ,2678        ,2518   ,134        ,3215              ,777    ,983
+inlined-spec/scimark/    ,"Random: double nextDouble()"                                                 ,18     ,163         ,143    ,4          ,226               ,104    ,97
+inlined-spec/scimark/    ,"SparseCompRow: double num_flops(int,int,int)"                                ,2      ,178         ,138    ,13         ,184               ,18     ,15
+inlined-spec/scimark/    ,"SparseCompRow: void <init>(int)"                                             ,-1     ,233         ,154    ,5          ,316               ,14     ,14
+inlined-spec/scimark/    ,"SparseCompRow: void matmult(double[],double[],int[],int[],double[],int,int)" ,24     ,25126       ,24531  ,535        ,25322             ,917    ,1292
+inlined-spec/scimark/    ,"SOR: double num_flops(int,int,int)"                                          ,4      ,4891        ,4569   ,287        ,4897              ,315    ,87
+inlined-spec/scimark/    ,"SOR: double execute(double,double[][],int)"                                  ,21     ,-1          ,-1     ,-1         ,-1                ,1314   ,2048
+inlined-spec/scimark/    ,"SOR: void <init>(int)"                                                       ,-1     ,236         ,160    ,5          ,294               ,14     ,14
+inlined-spec/scimark/    ,"MonteCarlo: void <init>()"                                                   ,-1     ,225         ,151    ,4          ,305               ,10     ,10
+inlined-spec/scimark/    ,"MonteCarlo: double num_flops(int)"                                           ,1      ,163         ,129    ,8          ,167               ,10     ,9
+inlined-spec/scimark/    ,"FFT: void bitreverse(double[])"                                              ,22     ,6538        ,5976   ,536        ,6611              ,1406   ,1571
+inlined-spec/scimark/    ,"FFT: void <clinit>()"                                                        ,-1     ,185         ,168    ,0          ,188               ,16     ,16
+inlined-spec/scimark/    ,"FFT: double[] makeRandom(int)"                                               ,5      ,3558        ,2729   ,794        ,3589              ,1101   ,762
+inlined-spec/scimark/    ,"FFT: void <init>(int)"                                                       ,-1     ,231         ,154    ,6          ,314               ,14     ,14
+inlined-spec/scimark/    ,"kernel: void CopyVector(double[],double[])"                                  ,3      ,5175        ,4898   ,260        ,5200              ,1362   ,986
+inlined-spec/scimark/    ,"kernel: void checkResults(java.lang.String,java.lang.String,int)"            ,8      ,191         ,176    ,2          ,220               ,61     ,61
+inlined-spec/scimark/    ,"kernel: void CopyMatrix(double[][],double[][])"                              ,15     ,9412        ,8976   ,420        ,9504              ,845    ,1901
+inlined-spec/scimark/    ,"kernel: void <clinit>()"                                                     ,-1     ,203         ,174    ,4          ,213               ,57     ,57
+inlined-spec/scimark/    ,"kernel: void <init>()"                                                       ,-1     ,229         ,152    ,4          ,285               ,10     ,10
+inlined-spec/scimark/    ,"kernel: void init()"                                                         ,44     ,220         ,194    ,6          ,293               ,139    ,139
+inlined-spec/scimark/    ,"kernel: double[] matvec(double[][],double[])"                                ,9      ,2826        ,2540   ,267        ,2872              ,814    ,1385
+inlined-spec/scimark/    ,"kernel: double normabs(double[],double[])"                                   ,5      ,1836        ,1486   ,334        ,1885              ,731    ,890
+inlined-spec/scimark/    ,"kernel: void matvec(double[][],double[],double[])"                           ,9      ,4796        ,4552   ,226        ,4837              ,815    ,1409
+inlined-spec/scimark/    ,"kernel: double[] NewVectorCopy(double[])"                                    ,5      ,3110        ,2546   ,532        ,3148              ,1354   ,982
+inlined-spec/scimark/    ,"Stopwatch: void start()"                                                     ,5      ,190         ,151    ,8          ,231               ,33     ,32
+inlined-spec/scimark/    ,"Stopwatch: double seconds()"                                                 ,1      ,240         ,157    ,11         ,322               ,14     ,13
+inlined-spec/scimark/    ,"Stopwatch: void <init>()"                                                    ,-1     ,179         ,140    ,4          ,191               ,21     ,21
+inlined-spec/scimark/    ,"Stopwatch: double read()"                                                    ,5      ,185         ,154    ,12         ,221               ,48     ,44
+inlined-spec/scimark/    ,"Stopwatch: double stop()"                                                    ,5      ,192         ,158    ,10         ,226               ,42     ,39
+inlined-spec/scimark/    ,"Stopwatch: void resume()"                                                    ,4      ,172         ,144    ,7          ,192               ,29     ,28
+inlined-spec/scimark/    ,"Stopwatch: void reset()"                                                     ,3      ,170         ,138    ,3          ,181               ,17     ,17
+benchmark/passing/       ,"DeadLoopDeletion: void <init>()"                                             ,-1     ,233         ,154    ,5          ,315               ,10     ,10
+benchmark/passing/       ,"DeadLoopDeletion: int original()"                                            ,6      ,155         ,127    ,1          ,160               ,5      ,5
+benchmark/passing/       ,"LoopInvariantCodeMotion: void <init>()"                                      ,-1     ,230         ,155    ,4          ,311               ,10     ,10
+benchmark/passing/       ,"LoopInvariantCodeMotion: void expected(int,int)"                             ,7      ,2054        ,1688   ,349        ,2091              ,1268   ,648
+benchmark/passing/       ,"LoopInvariantCodeMotion: void original(int,int)"                             ,7      ,2628        ,1944   ,650        ,2684              ,1276   ,648
+benchmark/passing/       ,"ConstantFold: int original()"                                                ,3      ,167         ,128    ,10         ,172               ,9      ,9
+benchmark/passing/       ,"ConstantFold: void <init>()"                                                 ,-1     ,233         ,155    ,5          ,288               ,10     ,10
+benchmark/passing/       ,"LoopStrengthReduction: void original()"                                      ,7      ,5021        ,3664   ,1327       ,5053              ,3241   ,1287
+benchmark/passing/       ,"LoopStrengthReduction: void <init>()"                                        ,-1     ,230         ,153    ,4          ,312               ,10     ,10
+benchmark/passing/       ,"LoopStrengthReduction: void expected()"                                      ,7      ,3650        ,2317   ,1317       ,3669              ,1796   ,528
+benchmark/passing/       ,"SimpleLoopUnswitch: int original(int)"                                       ,9      ,2682        ,2117   ,529        ,2756              ,1093   ,729
+benchmark/passing/       ,"SimpleLoopUnswitch: void <init>()"                                           ,-1     ,232         ,153    ,5          ,314               ,10     ,10
+benchmark/passing/       ,"IfTrue: void <init>()"                                                       ,-1     ,227         ,153    ,5          ,309               ,10     ,10
+benchmark/passing/       ,"IfTrue: int expected(int)"                                                   ,1      ,158         ,125    ,2          ,165               ,5      ,5
+benchmark/passing/       ,"IfTrue: int original(int)"                                                   ,5      ,152         ,124    ,1          ,157               ,5      ,5
+benchmark/passing/       ,"MultiVariableLoop: void <init>()"                                            ,-1     ,230         ,154    ,5          ,286               ,10     ,10
+benchmark/passing/       ,"MultiVariableLoop: int original(int)"                                        ,7      ,2914        ,2158   ,722        ,2965              ,1163   ,647
+benchmark/passing/       ,"BranchHoisting: int expected(int)"                                           ,10     ,2847        ,2288   ,543        ,2884              ,1718   ,817
+benchmark/passing/       ,"BranchHoisting: void <init>()"                                               ,-1     ,229         ,154    ,5          ,311               ,10     ,10
+benchmark/passing/       ,"BranchHoisting: int original(int)"                                           ,11     ,-1          ,-1     ,-1         ,-1                ,-1     ,-1
+benchmark/passing/       ,"InfiniteLoop: void <init>()"                                                 ,-1     ,230         ,156    ,4          ,312               ,10     ,10
+benchmark/passing/       ,"InfiniteLoop: void main(java.lang.String[])"                                 ,1      ,159         ,132    ,2          ,165               ,9      ,9
+benchmark/passing/       ,"InfiniteLoop: int original()"                                                ,5      ,-1          ,-1     ,-1         ,-1                ,787    ,134
+benchmark/passing/       ,"LoopBasedCodeMotion: void <init>()"                                          ,-1     ,230         ,153    ,4          ,312               ,10     ,10
+benchmark/passing/       ,"LoopBasedCodeMotion: int original()"                                         ,5      ,4579        ,3097   ,1450       ,4601              ,2977   ,1308
+benchmark/passing/       ,"LoopBasedCodeMotion: int expected()"                                         ,5      ,1266        ,492    ,758        ,1280              ,726    ,126
+benchmark/passing/       ,"FunctionInlining: int expected(int)"                                         ,1      ,168         ,129    ,5          ,176               ,8      ,7
+benchmark/passing/       ,"FunctionInlining: int foo()"                                                 ,1      ,153         ,126    ,1          ,157               ,5      ,5
+benchmark/passing/       ,"FunctionInlining: void <init>()"                                             ,-1     ,230         ,154    ,5          ,310               ,10     ,10
+benchmark/passing/       ,"FunctionInlining: int original(int)"                                         ,1      ,166         ,134    ,11         ,176               ,13     ,12
+benchmark/passing/       ,"InfiniteEffectfulLoop: void main(java.lang.String[])"                        ,1      ,160         ,132    ,2          ,164               ,9      ,9
+benchmark/passing/       ,"InfiniteEffectfulLoop: void <init>()"                                        ,-1     ,230         ,156    ,4          ,286               ,10     ,10
+benchmark/passing/       ,"InfiniteEffectfulLoop: int original()"                                       ,6      ,-1          ,-1     ,-1         ,-1                ,1043   ,716
+benchmark/passing/       ,"LoopUnroll: void <init>()"                                                   ,-1     ,232         ,154    ,5          ,289               ,10     ,10
+benchmark/passing/       ,"LoopUnroll: int original(int)"                                               ,5      ,1655        ,581    ,1046       ,1684              ,721    ,123
+benchmark/passing/       ,"LoopUnroll: int expected(int)"                                               ,1      ,167         ,143    ,0          ,172               ,5      ,5
+benchmark/passing/       ,"SeparateLoops: void <init>()"                                                ,-1     ,230         ,156    ,4          ,310               ,10     ,10
+benchmark/passing/       ,"SeparateLoops: int interrelated(int)"                                        ,8      ,2826        ,1734   ,1060       ,2871              ,2228   ,730
+benchmark/passing/       ,"SeparateLoops: void unrelated(int)"                                          ,10     ,2654        ,1300   ,1336       ,2684              ,2099   ,652
+benchmark/passing/       ,"LoopStrengthReductionModified: void original()"                              ,10     ,8566        ,7601   ,932        ,8616              ,2059   ,1373
+benchmark/passing/       ,"LoopStrengthReductionModified: void <init>()"                                ,-1     ,232         ,153    ,5          ,313               ,10     ,10
+benchmark/passing/       ,"LoopStrengthReductionModified: void expected()"                              ,10     ,2503        ,1970   ,516        ,2539              ,2270   ,1142
+benchmark/passing/       ,"Raytracer: void main(double,double,double,double,double)"                    ,59     ,9389        ,8899   ,436        ,9631              ,788    ,1223
+benchmark/passing/       ,"Raytracer: double[] vecCross(double[],double[])"                             ,5      ,194         ,156    ,7          ,210               ,71     ,65
+benchmark/passing/       ,"Raytracer: void <init>()"                                                    ,-1     ,233         ,155    ,4          ,315               ,10     ,10
+benchmark/passing/       ,"Raytracer: double[][] sampleRay(double,double)"                              ,28     ,220         ,184    ,7          ,256               ,143    ,143
+benchmark/passing/       ,"Raytracer: void buildBVH(double[][][],long[][],double[][][],long[],long[])"  ,100    ,-1          ,-1     ,-1         ,-1                ,1154   ,1404
+benchmark/passing/       ,"Raytracer: double[] vecNormalize(double[])"                                  ,2      ,191         ,156    ,3          ,200               ,36     ,36
+benchmark/passing/       ,"Raytracer: double[] vecScale(double[],double)"                               ,1      ,181         ,146    ,4          ,189               ,35     ,32
+benchmark/passing/       ,"Raytracer: double vecLength(double[])"                                       ,1      ,193         ,162    ,3          ,201               ,49     ,38
+benchmark/passing/       ,"Raytracer: double[] vecAdd(double[],double[])"                               ,1      ,186         ,150    ,5          ,196               ,44     ,41
+benchmark/passing/       ,"Raytracer: double dot(double[],double[])"                                    ,1      ,188         ,156    ,7          ,196               ,45     ,34
+benchmark/passing/       ,"Raytracer: boolean bboxRayIntersect(double[][],double[][])"                  ,16     ,207         ,179    ,10         ,273               ,177    ,175
+benchmark/passing/       ,"Raytracer: double sqrt(double)"                                              ,8      ,6678        ,6222   ,426        ,6708              ,1141   ,807
+benchmark/passing/       ,"Raytracer: double abs(double)"                                               ,1      ,171         ,140    ,2          ,178               ,12     ,11
+benchmark/passing/       ,"Raytracer: double[] vecSubtract(double[],double[])"                          ,1      ,169         ,149    ,1          ,180               ,41     ,41
+benchmark/passing/       ,"ConditionalConstantFolding: int original(int)"                               ,7      ,178         ,137    ,12         ,203               ,16     ,14
+benchmark/passing/       ,"ConditionalConstantFolding: int expected()"                                  ,1      ,146         ,125    ,1          ,150               ,5      ,5
+benchmark/passing/       ,"ConditionalConstantFolding: void <init>()"                                   ,-1     ,225         ,153    ,4          ,306               ,10     ,10
+benchmark/passing/       ,"LoopPeeling: int original(int)"                                              ,7      ,2627        ,1274   ,1321       ,2661              ,1842   ,203
+benchmark/passing/       ,"LoopPeeling: int expected(int)"                                              ,12     ,2782        ,1456   ,1310       ,2818              ,1427   ,155
+benchmark/passing/       ,"LoopPeeling: void <init>()"                                                  ,-1     ,228         ,153    ,5          ,309               ,10     ,10
+benchmark/failing/       ,"UnswitchedLoop: void <init>()"                                               ,-1     ,229         ,151    ,4          ,310               ,10     ,10
+benchmark/failing/       ,"UnswitchedLoop: int expected(int)"                                           ,14     ,3152        ,2565   ,555        ,3229              ,1268   ,815
+uninlined-spec/compress/ ,"Decompressor: int getCode()"                                                 ,41     ,-1          ,-1     ,-1         ,-1                ,262    ,216
+uninlined-spec/compress/ ,"Decompressor: void <init>(InputBuffer,OutputBuffer)"                         ,-1     ,440         ,268    ,82         ,628               ,223    ,214
+uninlined-spec/compress/ ,"Decompressor: void decompress()"                                             ,34     ,-1          ,-1     ,-1         ,-1                ,575    ,946
+uninlined-spec/compress/ ,"OutputBuffer: void writebytes(byte[],int)"                                   ,3      ,4345        ,3797   ,509        ,4394              ,877    ,713
+uninlined-spec/compress/ ,"OutputBuffer: int getLength()"                                               ,1      ,158         ,129    ,2          ,162               ,9      ,9
+uninlined-spec/compress/ ,"OutputBuffer: void writeByte(byte)"                                          ,1      ,177         ,141    ,10         ,191               ,22     ,21
+uninlined-spec/compress/ ,"OutputBuffer: long getCRC()"                                                 ,3      ,188         ,150    ,10         ,210               ,30     ,30
+uninlined-spec/compress/ ,"OutputBuffer: void <init>(byte[])"                                           ,-1     ,232         ,155    ,5          ,315               ,14     ,14
+uninlined-spec/compress/ ,"Compressor: void <init>(InputBuffer,OutputBuffer)"                           ,-1     ,376         ,241    ,53         ,535               ,148    ,145
+uninlined-spec/compress/ ,"Compressor: void compress()"                                                 ,51     ,-1          ,-1     ,-1         ,-1                ,1031   ,1115
+uninlined-spec/compress/ ,"CompBase: int getMaxCode()"                                                  ,1      ,162         ,128    ,5          ,168               ,12     ,12
+uninlined-spec/compress/ ,"CompBase: void <init>(InputBuffer,OutputBuffer)"                             ,-1     ,241         ,159    ,11         ,328               ,33     ,33
+uninlined-spec/compress/ ,"InputBuffer: int readBytes(byte[],int)"                                      ,8      ,2736        ,2225   ,486        ,2795              ,661    ,640
+uninlined-spec/compress/ ,"InputBuffer: int readByte()"                                                 ,1      ,200         ,153    ,16         ,229               ,37     ,34
+uninlined-spec/compress/ ,"InputBuffer: void <init>(int,byte[])"                                        ,-1     ,240         ,160    ,7          ,324               ,18     ,18
+uninlined-spec/compress/ ,"CodeTable: int of(int)"                                                      ,1      ,169         ,136    ,5          ,177               ,16     ,16
+uninlined-spec/compress/ ,"CodeTable: void set(int,int)"                                                ,1      ,183         ,136    ,4          ,196               ,16     ,16
+uninlined-spec/compress/ ,"CodeTable: void clear(int)"                                                  ,3      ,3331        ,2737   ,550        ,3368              ,1163   ,854
+uninlined-spec/compress/ ,"CodeTable: void <init>()"                                                    ,-1     ,240         ,162    ,6          ,323               ,18     ,18
+uninlined-spec/compress/ ,"Harness: long inst_main(int)"                                                ,3      ,159         ,136    ,1          ,164               ,19     ,19
+uninlined-spec/compress/ ,"Harness: void <clinit>()"                                                    ,-1     ,175         ,158    ,2          ,190               ,62     ,61
+uninlined-spec/compress/ ,"Harness: void runCompress(int)"                                              ,18     ,1534        ,1023   ,460        ,1688              ,568    ,942
+uninlined-spec/compress/ ,"Harness: void <init>()"                                                      ,-1     ,228         ,155    ,5          ,310               ,10     ,10
+uninlined-spec/compress/ ,"Harness: void prepareBuffers()"                                              ,7      ,577         ,321    ,238        ,625               ,289    ,779
+inlined-spec/compress/   ,"Decompressor: int getCode()"                                                 ,52     ,-1          ,-1     ,-1         ,-1                ,633    ,832
+inlined-spec/compress/   ,"Decompressor: void <init>(InputBuffer,OutputBuffer)"                         ,-1     ,8278        ,7715   ,465        ,8538              ,1123   ,952
+inlined-spec/compress/   ,"Decompressor: void decompress()"                                             ,208    ,-1          ,-1     ,-1         ,-1                ,1179   ,1092
+inlined-spec/compress/   ,"OutputBuffer: void writebytes(byte[],int)"                                   ,3      ,7144        ,6597   ,520        ,7195              ,885    ,728
+inlined-spec/compress/   ,"OutputBuffer: int getLength()"                                               ,1      ,161         ,131    ,2          ,166               ,9      ,9
+inlined-spec/compress/   ,"OutputBuffer: void writeByte(byte)"                                          ,1      ,190         ,142    ,10         ,202               ,22     ,21
+inlined-spec/compress/   ,"OutputBuffer: long getCRC()"                                                 ,3      ,200         ,151    ,7          ,220               ,30     ,30
+inlined-spec/compress/   ,"OutputBuffer: void <init>(byte[])"                                           ,-1     ,238         ,158    ,6          ,323               ,14     ,14
+inlined-spec/compress/   ,"CodeTable: int of(int)"                                                      ,1      ,168         ,135    ,6          ,177               ,16     ,16
+inlined-spec/compress/   ,"CodeTable: void set(int,int)"                                                ,1      ,176         ,134    ,4          ,188               ,16     ,16
+inlined-spec/compress/   ,"CodeTable: void clear(int)"                                                  ,3      ,2415        ,1836   ,538        ,2453              ,1161   ,852
+inlined-spec/compress/   ,"CodeTable: void <init>()"                                                    ,-1     ,237         ,159    ,6          ,319               ,18     ,18
+inlined-spec/compress/   ,"InputBuffer: int readBytes(byte[],int)"                                      ,8      ,2255        ,1732   ,499        ,2321              ,671    ,629
+inlined-spec/compress/   ,"InputBuffer: int readByte()"                                                 ,1      ,204         ,153    ,17         ,232               ,37     ,34
+inlined-spec/compress/   ,"InputBuffer: void <init>(int,byte[])"                                        ,-1     ,240         ,160    ,7          ,325               ,18     ,18
+inlined-spec/compress/   ,"Compressor: void <init>(InputBuffer,OutputBuffer)"                           ,-1     ,402         ,244    ,75         ,572               ,185    ,179
+inlined-spec/compress/   ,"Compressor: void compress()"                                                 ,312    ,-1          ,-1     ,-1         ,-1                ,1696   ,1632
+inlined-spec/compress/   ,"CompBase: int getMaxCode()"                                                  ,1      ,160         ,129    ,4          ,166               ,12     ,12
+inlined-spec/compress/   ,"CompBase: void <init>(InputBuffer,OutputBuffer)"                             ,-1     ,251         ,168    ,11         ,338               ,33     ,33
+inlined-spec/compress/   ,"Harness: void runCompress(int)"                                              ,1075   ,-1          ,-1     ,-1         ,-1                ,5170   ,5084
+inlined-spec/compress/   ,"Harness: void <init>()"                                                      ,-1     ,229         ,155    ,4          ,310               ,10     ,10
