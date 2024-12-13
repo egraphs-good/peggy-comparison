@@ -4,8 +4,12 @@ Explores parameters to determine how brittle the results are,
 and outputs the decompiled result of each peggy run to a markdown file.
 """
 
+# TODO: this must be done within the docker, but the jd-cli should be done
+# outside. so there should be a script that runs this from the docker and then does the decompiling.
+
 import subprocess
 import os
+import shutil
 
 benchmark_dir = "benchmark/passing"
 results_dir = "results"
@@ -97,15 +101,6 @@ def benchmark_file(classname: str):
     # Compile the file
     subprocess.call(["javac", filepath])
 
-    # Write the original file
-    with open("results/" + classname + ".md", "w") as md:
-        md.write("# " + classname + "\n")
-        md.write("## Original\n")
-        md.write("```java\n")
-        with open(benchmark_dir + "/" + classname + ".java", "r") as og:
-            md.write(og.read())
-        md.write("\n```\n")
-
     for eto_mul in range(1, 12):
         eto_val = 2**eto_mul
         # Run peggy on the file
@@ -123,23 +118,40 @@ def benchmark_file(classname: str):
             params=params,
         )
 
-        # Decompile the result using jd-cli
-        # and capture the output
-        decompiled = subprocess.check_output(
-            ["./jd-cli", "optimized/" + classname + ".class"]
+        param_dir = str(hash(str(params)))
+
+        # Copy the optimized class file to the results dir for these params
+        os.mkdir("results/" + param_dir)
+        shutil.copy(
+            "optimized/" + classname + ".class",
+            "results/" + param_dir + "/" + classname + ".class",
         )
 
+        # # Decompile the result using jd-cli
+        # # and capture the output
+        # decompiled = subprocess.check_output(
+        #     ["./jd-cli", "optimized/" + classname + ".class"]
+        # )
+
         # Store the output in a markdown file
-        with open("results/" + classname + ".md", "ab") as f:
+        with open("results/" + param_dir + "/" + classname + ".md", "a") as f:
+            f.write("# " + classname + "\n")
+            f.write("## Original\n")
+            f.write("```java\n")
+            with open(benchmark_dir + "/" + classname + ".java", "r") as og:
+                f.write(og.read())
+            f.write("\n```\n")
+
+        with open("results/" + param_dir + "/" + classname + ".md", "ab") as f:
             f.write(b"## Run \n")
             f.write(b"\n" + str(params).encode("utf-8") + b"\n\n")
             f.write(b"### Peggy output\n```\n")
             f.write(peggy_output)
             f.write(b"```\n")
-            f.write(b"\n### Optimized")
-            f.write(b"\n```java\n")
-            f.write(decompiled)
-            f.write(b"```\n")
+            # f.write(b"\n### Optimized")
+            # f.write(b"\n```java\n")
+            # f.write(decompiled)
+            # f.write(b"```\n")
 
 
 if __name__ == "__main__":
@@ -148,7 +160,8 @@ if __name__ == "__main__":
         os.makedirs(results_dir)
 
     # Benchmark each file in `benchmark_dir`
-    for filename in os.listdir(benchmark_dir):
-        if filename.endswith(".java"):
-            classname = os.path.splitext(filename)[0]
-            benchmark_file(classname)
+    benchmark_file("Benchmark")
+    # for filename in os.listdir(benchmark_dir):
+    #     if filename.endswith(".java"):
+    #         classname = os.path.splitext(filename)[0]
+    #         benchmark_file(classname)
