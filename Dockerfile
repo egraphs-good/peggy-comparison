@@ -3,13 +3,13 @@ FROM ubuntu:14.04.2
 
 # Install dependencies: Java 6, build essential (to build glpk), wget (to download jd-cli)
 RUN apt-get update && \
-    apt-get -y install openjdk-6-jdk build-essential wget git
+    apt-get -y install openjdk-6-jdk build-essential wget git 
 
 # Download the repository
 RUN git clone https://github.com/egraphs-good/peggy-comparison.git
 
 
-# Install GLPK. We just need the glpsol executable.
+# Install GLPK.
 RUN wget "https://ftp.gnu.org/gnu/glpk/glpk-5.0.tar.gz" && \
     tar -xzvf glpk-5.0.tar.gz && cd glpk-5.0 && \
     ./configure && make install

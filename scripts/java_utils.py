@@ -185,3 +185,4 @@ def analyze_java_file(content):
         pos = end_pos + 1
 
     return methods
+
