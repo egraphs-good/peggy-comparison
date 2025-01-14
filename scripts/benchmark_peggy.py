@@ -2,11 +2,25 @@ import config
 import opt_capabilities
 import os
 import perf_scaling
+import subprocess
 
 
 if __name__ == "__main__":
-    # TODO: check if the container exists and if it's running
-    # add container name to config
+    # Check if container exists and is running
+    if "true" not in (
+        subprocess.check_output(
+            [
+                "docker",
+                "container",
+                "inspect",
+                "-f",
+                "'{{.State.Running}}'",
+                config.docker_containername,
+            ]
+        ).decode("utf-8")
+    ):
+        print(f"Container {config.docker_containername} is not running. Exiting...")
+        exit()
 
     # Create results dir if not exists
     if not os.path.exists(config.results_dir):

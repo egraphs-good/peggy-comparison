@@ -10,12 +10,12 @@ from typing import Dict
 params = {
     # TODO: hard-coded path
     "axioms": "peggy/axioms/java_arithmetic_axioms.xml:peggy/axioms/java_operator_axioms.xml:peggy/axioms/java_operator_costs.xml:peggy/axioms/java_util_axioms.xml",
-    "optimization_level": "O2",
     "tmpFolder": "tmp",
     "pb": "glpk",
     "glpkPath": '"/glpk-5.0/examples/glpsol"',
     "activate": "livsr:binop:constant",
 }
+optimization_level = "O2"
 
 
 def format_method(classname, ret_type, methodname, arg_types):
@@ -77,7 +77,6 @@ def method_lengths_bytecode(filename) -> Dict[str, int]:
     Inner classes are only qualified by their name, not by outer classes,
     so this doesn't work with duplicate class names.
     """
-    # TODO: error handling
     if not filename.endswith(".java"):
         raise ValueError("Method lengths requires a Java file.")
 
@@ -87,9 +86,7 @@ def method_lengths_bytecode(filename) -> Dict[str, int]:
             f"Class file {class_filename} does not exist. Did you compile the Java file?"
         )
 
-    bytecode: str = subprocess.check_output(["javap", "-c", class_filename]).decode(
-        "utf-8"
-    )
+    bytecode = subprocess.check_output(["javap", "-c", class_filename]).decode("utf-8")
 
     # Split by class
     classname_regex = r"class\s+([a-zA-z0-9]*).*\{.*"
@@ -212,6 +209,7 @@ def perf_file(location, filename):
             classname,
             location,
             params,
+            optimization_level=optimization_level,
             timeout=1800,
             container_name=config.docker_containername,
         )

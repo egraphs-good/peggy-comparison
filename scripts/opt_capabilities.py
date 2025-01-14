@@ -23,7 +23,6 @@ def benchmark_file(
     filepath = benchmark_dir + "/" + classname + ".java"
 
     if compile:
-        # TODO: error handling?
         subprocess.check_output(
             [
                 "docker",
@@ -40,9 +39,6 @@ def benchmark_file(
         # Run peggy on the file
         params = {
             "axioms": "peggy/axioms/java_arithmetic_axioms.xml:peggy/axioms/java_operator_axioms.xml:peggy/axioms/java_operator_costs.xml:peggy/axioms/java_util_axioms.xml",
-            # TODO: optimization_level is a special case (it's required, and not labeled optimization_level
-            # and should not be included in this dictionary
-            "optimization_level": "O2",
             "tmpFolder": "tmp",
             "pb": "glpk",
             "eto": str(eto_val),
@@ -53,6 +49,7 @@ def benchmark_file(
         # TODO: might want to distinguish between failures?
         peggy_output = run_utils.run_peggy(
             classname,
+            optimization_level="O2",
             params=params,
             benchmark_dir=benchmark_dir,
             container_name=container_name,
@@ -71,7 +68,6 @@ def benchmark_file(
             os.path.join(results_dir, param_dir, classname + ".class"),
         )
 
-        # TODO: use a modern version of jd-cli
         # Decompile the result using jd-cli
         # and capture the output
         decompiled = subprocess.check_output(

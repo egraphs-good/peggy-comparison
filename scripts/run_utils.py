@@ -27,20 +27,27 @@ def run_peggy_default(classname, benchmark_dir, timeout=60):
         benchmark_dir,
         {
             "axioms": "axioms/java_arithmetic_axioms.xml:axioms/java_operator_axioms.xml:axioms/java_operator_costs.xml:axioms/java_util_axioms.xml",
-            "optimization_level": "O2",
             "tmpFolder": "tmp",
             "pb": "glpk",
             "eto": "500",
             "glpkPath": '"/glpk-5.0/examples/glpsol"',
             "activate": "livsr:binop:constant",
         },
+        optimization_level="O2",
         timeout=timeout,
     )
 
 
 # Runs peggy on a compiled class in the benchmark directory
 # with the given params
-def run_peggy(classname, benchmark_dir, params, timeout=60, container_name=None):
+def run_peggy(
+    classname,
+    benchmark_dir,
+    params,
+    optimization_level,
+    timeout=60,
+    container_name=None,
+):
     """
     Runs peggy, within a docker container if specified,
     on a compiled class in the benchmark directory with the given params.
@@ -68,7 +75,7 @@ def run_peggy(classname, benchmark_dir, params, timeout=60, container_name=None)
         ]
     )
 
-    command.append("-" + params["optimization_level"])
+    command.append("-" + optimization_level)
     command.append(classname)
 
     addl = [

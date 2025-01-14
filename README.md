@@ -4,38 +4,27 @@ For the original peggy project, please refer to the [peggy documentation](https:
 
 # Overview
 
-There are two benchmarks.
+There are two benchmarks:
 
-## Optimization capabilities (OC) (qualitative)
+- **optimization capabilities (OC) (qualitative)**: This benchmark produces a comparison of 
 
-This benchmark produces a comparison of 
+- **performance and scaling (PS) (quantitative)**: This benchmark...
 
-
-## Performance and scaling (PS) (quantitative)
-
-
-# Dockerfile Setup
-The Dockerfile will clone this repository and install several dependencies.
-
-First, build the image:
-
-```
-docker build -t peggy .
-```
-
-Now run the image.
-```
-docker run -it peggy
-```
 
 # Running the benchmarks
 
-TODO: don't run it in the docker container. 
+## Installation
 
-`conda activate peggy`
-`docker start peggy`
+You will need [Docker](https://docs.docker.com/get-started/get-docker/) and the docker daemon must be running.
 
-Run `python3 benchmark_peggy.py` in the Docker container.
+Optionally, if you would like to use the run script without modification, you will need conda. Otherwise, see the run script for the required Python version and packages.
+
+## Running
+
+The script `run.sh` creates a Docker container for peggy to run in,  Simply run:
+
+```./run.sh```
+
 
 NOTE: It's hard to stop the benchmark file because it runs subprocesses in docker? think the best way is to kill it?
 
