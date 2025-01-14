@@ -1,10 +1,22 @@
-"""
-Runs peggy on all Java files in the benchmark directory.
-Explores parameters to determine how brittle the results are,
-and outputs the decompiled result of each peggy run to a markdown file.
-"""
-
 import subprocess
+from enum import Enum
+from dataclasses import dataclass
+import os
+from typing import List
+
+DEBUG = True
+
+
+class ResultType(Enum):
+    SUCCESS = 0
+    TIMEOUT = 1
+    FAILURE = 2
+
+
+@dataclass
+class Result:
+    result: ResultType
+    output: str
 
 
 # Runs peggy on a compiled class in the benchmark directory,
@@ -28,14 +40,33 @@ def run_peggy_default(classname, benchmark_dir, timeout=60):
 
 # Runs peggy on a compiled class in the benchmark directory
 # with the given params
-def run_peggy(classname, benchmark_dir, params, timeout=60):
-    command = [
-        "java",
-        "-Xmx2000m",
-        "-cp",
-        ".:peggy_1.0.jar:" + benchmark_dir,
-        "peggy.optimize.java.Main",
-    ]
+def run_peggy(classname, benchmark_dir, params, timeout=60, container_name=None):
+    """
+    Runs peggy, within a docker container if specified,
+    on a compiled class in the benchmark directory with the given params.
+    The class must have been compiled with the version of JPathLikeava in the container.
+    The container must be running.
+    """
+    command = []
+    if container_name:
+        command = [
+            "docker",
+            "exec",
+            "-it",
+            container_name,
+        ]
+
+    command.extend(
+        [
+            "java",
+            "-Xmx2000m",
+            "-cp",
+            # TODO: this path is hard-coded.
+            "/peggy-comparison/peggy/peggy_1.0.jar:"
+            + os.path.join("/peggy-comparison", benchmark_dir),
+            "peggy.optimize.java.Main",
+        ]
+    )
 
     command.append("-" + params["optimization_level"])
     command.append(classname)
@@ -49,14 +80,15 @@ def run_peggy(classname, benchmark_dir, params, timeout=60):
     command.extend(addl)
 
     try:
-        return subprocess.check_output(
+        output = subprocess.check_output(
             command, stderr=subprocess.STDOUT, timeout=timeout
         )
+        return Result(ResultType.SUCCESS, output)
     except subprocess.CalledProcessError as e:
-        print("Command failed")
-        print(" ".join(e.cmd))
-        return e.output
+        if DEBUG:
+            print(f"Command failed\n{" ".join(command)}")
+        return Result(ResultType.FAILURE, e.output)
     except subprocess.TimeoutExpired as e:
-        print("Command timed out")
-        print(" ".join(command))
-        return e.output
+        if DEBUG:
+            print(f"Command timed out\n{" ".join(command)}")
+        return Result(ResultType.TIMEOUT, e.output)

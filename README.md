@@ -32,7 +32,12 @@ docker run -it peggy
 
 TODO: don't run it in the docker container. 
 
+`conda activate peggy`
+`docker start peggy`
+
 Run `python3 benchmark_peggy.py` in the Docker container.
+
+NOTE: It's hard to stop the benchmark file because it runs subprocesses in docker? think the best way is to kill it?
 
 TODO: approx time??
 

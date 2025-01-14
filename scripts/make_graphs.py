@@ -49,26 +49,26 @@ def clean_data(results_file):
 
 
 def time_vs_x_plot(data, transparency, size, xcol, xlabel, output_filename):
-    fig, _ax = plt.subplots()
+    fig, ax = plt.subplots()
 
-    fig.xlabel(xlabel)
-    fig.ylabel("solver time (seconds)")
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel("solver time (seconds)")
 
     # passing
     work = data[data["PBTIME"] >= 0]
     work = work[work[xcol] >= 0]
-    fig.scatter(work[xcol], work["PBTIME"], c="blue", s=size, alpha=transparency)
+    ax.scatter(work[xcol], work["PBTIME"], c="blue", s=size, alpha=transparency)
 
     # failing
     # TODO: distinguish from timeout
     ymax = max(work["PBTIME"])
     fail = data[(data["PBTIME"] < 0)]
-    fig.scatter(
+    ax.scatter(
         fail[xcol], [ymax * 1.3] * len(fail), c="red", s=size, alpha=transparency
     )
 
-    fig.yscale("log")
-    fig.xscale("log")
+    ax.set_yscale("log")
+    ax.set_xscale("log")
 
     fig.savefig(output_filename, bbox_inches="tight")
-    fig.cla()
+    fig.clear()

@@ -1,22 +1,15 @@
+import config
 import make_graphs
 import os
 import re
 import subprocess
-from java_utils import analyze_java_file
-from run_utils import run_peggy
+from run_utils import run_peggy, Result, ResultType
 from typing import Dict
 
 
-# For each java file in benchmark dir
-# call perf)file
-# For each file, perf_file
-# runs peggy on the file
-# counts the size of methods in the file
-# returns data for method size, runtime of each
-# the data is in a dictionary? Classname.methodname or whatever
-
 params = {
-    "axioms": "axioms/java_arithmetic_axioms.xml:axioms/java_operator_axioms.xml:axioms/java_operator_costs.xml:axioms/java_util_axioms.xml",
+    # TODO: hard-coded path
+    "axioms": "peggy/axioms/java_arithmetic_axioms.xml:peggy/axioms/java_operator_axioms.xml:peggy/axioms/java_operator_costs.xml:peggy/axioms/java_util_axioms.xml",
     "optimization_level": "O2",
     "tmpFolder": "tmp",
     "pb": "glpk",
@@ -63,7 +56,11 @@ def bytecode_line_counts(bytecode: str) -> Dict[str, int]:
         if "Code:" in line:
             # previous line is the method signature
             in_method = bytecode_lines[i - 1]
-        elif in_method and (line.strip() == "" or line.strip() == "}"):
+        elif in_method and (
+            line.strip() == ""
+            or line.strip() == "}"
+            or line.strip() == "Exception table:"
+        ):
             # end of method, previous instruction is the last
             linecount = int(bytecode_lines[i - 1].split(":")[0])
             method_to_len[in_method] = linecount
@@ -81,14 +78,25 @@ def method_lengths_bytecode(filename) -> Dict[str, int]:
     so this doesn't work with duplicate class names.
     """
     # TODO: error handling
-    bytecode: str = subprocess.check_output(["javap", "-c", filename]).decode("utf-8")
+    if not filename.endswith(".java"):
+        raise ValueError("Method lengths requires a Java file.")
+
+    class_filename = f"{filename[:-5]}.class"
+    if not os.path.exists(class_filename):
+        raise ValueError(
+            f"Class file {class_filename} does not exist. Did you compile the Java file?"
+        )
+
+    bytecode: str = subprocess.check_output(["javap", "-c", class_filename]).decode(
+        "utf-8"
+    )
 
     # Split by class
-    classname_regex = "class\s+([a-zA-z0-9]*).*\{.*"
+    classname_regex = r"class\s+([a-zA-z0-9]*).*\{.*"
     classes = re.split(classname_regex, bytecode)[1:]
 
     method_regex = (
-        "[public|protected|private]?\s*([a-zA-z0-9_]+)\s+([a-zA-z0-9_]+)\(([^()]*)\);"
+        r"[public|protected|private]?\s*([a-zA-z0-9_]+)\s+([a-zA-z0-9_]+)\(([^()]*)\);"
     )
 
     method_to_len = dict()
@@ -99,16 +107,23 @@ def method_lengths_bytecode(filename) -> Dict[str, int]:
         def sigtosig(sig):
             # Convert signature from bytecode to signature that matches peggy log output
             res = re.search(method_regex, sig.strip())
-            ret_type = res.group(1)
-            method_name = res.group(2)
-            arg_types = [arg.split()[0] for arg in res.group(3).split(",") if arg]
-            res = format_method(classname, ret_type, method_name, arg_types)
-            return res
+            if res:
+                # TODO: could handle better
+                ret_type = res.group(1)
+                method_name = res.group(2)
+                arg_types = [arg.split()[0] for arg in res.group(3).split(",") if arg]
+                res = format_method(classname, ret_type, method_name, arg_types)
+                return res
+            else:
+                print(f"Failed to parse method signature: {sig}")
+                return None
 
         # Format method signature, including the class name,
         # and add to whole-file dict
         for method, line_count in methods.items():
-            method_to_len[sigtosig(method)] = line_count
+            formatted_sig = sigtosig(method)
+            if formatted_sig:
+                method_to_len[formatted_sig] = line_count
 
     return method_to_len
 
@@ -128,6 +143,7 @@ def get_time(portion, log):
             print(e)
             return -1
     else:
+        # TODO: this likely indicates a timeout or failure
         return -1
 
 
@@ -172,9 +188,14 @@ columns = [
 ]
 
 
-def perf_file(location, classname):
-    # TODO: better to use os or smth to combine filenames
-    filename = location + classname + ".java"
+def perf_file(location, filename):
+    """
+    Run peggy on all classes in a file.
+    Return csv-formatted results with the runtime and formulation size for each
+    method.
+    """
+
+    filename = os.path.join(location, filename)
 
     lens = method_lengths_bytecode(filename)
 
@@ -186,19 +207,30 @@ def perf_file(location, classname):
     for classname in classnames:
         print(classname)
 
-        peggy_output = run_peggy(classname, location, params, timeout=1800)
-        if not peggy_output:
-            print("peggy failed")
-            continue
+        # TODO: hard-coded parameters
+        peggy_result = run_peggy(
+            classname,
+            location,
+            params,
+            timeout=1800,
+            container_name=config.docker_containername,
+        )
+        match peggy_result:
+            case Result(ResultType.FAILURE, output):
+                print("peggy failed")
+            case Result(ResultType.TIMEOUT, output):
+                print("peggy timed out")
+
         print("PEGGY OUTPUT:")
-        print(peggy_output)
+        print(peggy_result.output)
         print("END PEGGY OUTPUT")
 
-        method_to_time = perf_from_output(str(peggy_output))
+        method_to_time = perf_from_output(str(peggy_result.output))
 
         for method, times in method_to_time.items():
             # just use method names because sometimes the signatures look a little different
             # (this is also a little hacky)
+            # TODO: fix that
             name = method_name(method)
             length = lens[name] if name in lens else -1
             escape_k = '"' + method + '"'
@@ -214,18 +246,15 @@ def perf_file(location, classname):
 def perf_dir(benchmark_dir, results_file):
     print("BENCHMARKING " + benchmark_dir)
 
-    subprocess.call("javac " + benchmark_dir + "*.java", shell=True)
+    subprocess.call(
+        "docker exec -it peggy javac " + benchmark_dir + "*.java", shell=True
+    )
 
     for filename in os.listdir(benchmark_dir):
         if filename.endswith(".java"):
-            try:
-                classname = os.path.splitext(filename)[0]
-                perf = perf_file(benchmark_dir, classname)
-                with open(results_file, "a") as f:
-                    f.write(perf)
-            except Exception as e:
-                print("Unexpected exception")
-                print(e)
+            perf = perf_file(benchmark_dir, filename)
+            with open(results_file, "a") as f:
+                f.write(perf)
 
 
 def benchmark_dirs(
@@ -239,9 +268,8 @@ def benchmark_dirs(
         perf_dir(benchmark_dir, results_filename)
 
     # make the graphs
-
-
-if __name__ == "__main__":
-    lens = method_lengths_bytecode("java/benchmark/Benchmark.class")
-    for k, v in lens.items():
-        print(k, v)
+    make_graphs.make_graphs(
+        results_filename,
+        time_vs_lines_filename=time_vs_lines_filename,
+        time_vs_nodes_filename=time_vs_nodes_filename,
+    )
