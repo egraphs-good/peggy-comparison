@@ -27,9 +27,7 @@ To setup, run `./setup.sh`. This may take a while (10 minutes).
 Make sure the Docker daemon is running. Then, run:
 
 ```
-docker start peggy
-conda activate peggy
-python3 scripts/benchmark_peggy.py
+source run.sh
 ```
 
 TODO: benchmark shouldn't produce relevant output, this should be captured instead

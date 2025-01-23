@@ -20,3 +20,5 @@ docker run -d -v "$DIR:/peggy-comparison"  --name $container_name -i -t $image_n
 
 # Create the python environment needed to run the benchmark scripts
 conda create -n $conda_env_name python=3.13.0 matplotlib=3.9.2 pandas=2.2.3
+
+conda init
