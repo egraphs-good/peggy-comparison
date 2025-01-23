@@ -1,14 +1,14 @@
-This repository performs qualitative and quantitative benchmarks on the [peggy](https://goto.ucsd.edu/~mstepp/peggy/) equality saturation engine and compiler. Its purpose is to compare peggy's performance to [eggcc](https://github.com/egraphs-good/eggcc), another optimizing compiler using equality saturation, on similar example files.
+This repository performs qualitative and quantitative benchmarks on the [Peggy](https://goto.ucsd.edu/~mstepp/peggy/) equality saturation engine and compiler. Its purpose is to compare Peggy's performance to [eggcc](https://github.com/egraphs-good/eggcc), another optimizing compiler using equality saturation, on similar example files.
 
-For the original peggy project, please refer to the [peggy documentation](https://goto.ucsd.edu/~mstepp/peggy/). This is not the original peggy project.
+For the original Peggy project, please refer to the [Peggy documentation](https://goto.ucsd.edu/~mstepp/peggy/). This is not the original Peggy project.
 
 # Overview
 
 There are two benchmarks:
 
-- **optimization capabilities (OC) (qualitative)**: This benchmark produces a comparison of 
+- **optimization capabilities (OC) (qualitative)**: This benchmark produces a comparison of optimized output at different numbers of iterations of Peggy's equality saturation engine.
 
-- **performance and scaling (PS) (quantitative)**: This benchmark...
+- **performance and scaling (PS) (quantitative)**: This benchmark... TODO
 
 
 # Running the benchmarks
@@ -17,22 +17,32 @@ There are two benchmarks:
 
 You will need [Docker](https://docs.docker.com/get-started/get-docker/) and the docker daemon must be running.
 
-Optionally, if you would like to use the run script without modification, you will need conda. Otherwise, see the run script for the required Python version and packages.
+If you would like to use the setup script without modification, you will also need conda. Otherwise, if you would like to use a different Python environment, see the setup script for the required Python version and packages.
+
+To setup, run `./setup.sh`. This may take a while (10 minutes).
+
 
 ## Running
 
-The script `run.sh` creates a Docker container for peggy to run in,  Simply run:
+Make sure the Docker daemon is running. Then, run:
 
-```./run.sh```
+```
+docker start peggy
+conda activate peggy
+python3 scripts/benchmark_peggy.py
+```
 
+TODO: benchmark shouldn't produce relevant output, this should be captured instead
 
-NOTE: It's hard to stop the benchmark file because it runs subprocesses in docker? think the best way is to kill it?
+Note that this script runs subprocesses in the Docker container. If you want to interrupt the script, you may also want to `docker stop peggy` to stop subprocesses in the container.
 
 TODO: approx time??
 
 This will produce several outputs in the `results` directory:
 
 - `oc/<params>`: A directory corresponding to the set of params passed to peggy on which it was run.
+
+NOTE: this isn't correct rn
 - `oc/<params>/params.json`: These are the params with which Peggy was run to produce the output in this directory.
 - `oc/<params>/peggy_log.txt`: This is the captured output from running Peggy on `Benchmark.java`.
 - `oc/<params>/Benchmark.java`: This is the decompiled optimized benchmark produced by running Peggy.
