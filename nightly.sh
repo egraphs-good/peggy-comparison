@@ -11,6 +11,9 @@ set -o pipefail
 # run setup.sh
 source setup.sh
 
+# run run.sh
+source run.sh
+
 # determine physical directory of this script
 src="${BASH_SOURCE[0]}"
 while [ -L "$src" ]; do
