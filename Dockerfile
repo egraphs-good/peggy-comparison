@@ -1,5 +1,5 @@
 # We need old ubuntu so that the package manager includes Java 6.
-FROM java:6-jdk
+FROM dockerfile/ubuntu
 
 # Install dependencies: Java 6, build essential (to build glpk), wget (to download jd-cli)
 RUN apt-get update && \
