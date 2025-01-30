@@ -2,5 +2,5 @@
 .PHONY: nightly
 
 nightly:
-	bash infra/nightly.sh
+	bash nightly.sh
 
