@@ -1,5 +1,9 @@
 set -euxo pipefail
 
+
+docker --version
+export DOCKER_ENABLE_DEPRECATED_PULL_SCHEMA_1_IMAGE=1
+
 # get an absolute path to the current directory
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
