@@ -68,20 +68,23 @@ def benchmark_file(
         if not os.path.exists(os.path.join(results_dir, param_dir)):
             os.makedirs(os.path.join(results_dir, param_dir))
 
-        shutil.copy(
-            os.path.join("optimized", classname + ".class"),
-            os.path.join(results_dir, param_dir, classname + ".class"),
-        )
+        decompiled = "TIMEOUT"
+        # if the optimized file exists, copy it to results dir
+        if os.path.exists("optimized/" + classname + ".class"):
+            shutil.copy(
+                os.path.join("optimized", classname + ".class"),
+                os.path.join(results_dir, param_dir, classname + ".class"),
+            )
 
-        # Decompile the result using jd-cli
-        # and capture the output
-        decompiled = subprocess.check_output(
-            # TODO: hardcoded path
-            [
-                "./jd-cli",
-                "optimized/" + classname + ".class",
-            ]
-        )
+            # Decompile the result using jd-cli
+            # and capture the output
+            decompiled = subprocess.check_output(
+                # TODO: hardcoded path
+                [
+                    "./jd-cli",
+                    "optimized/" + classname + ".class",
+                ]
+            )
 
         # Store the output in a markdown file
         if not os.path.exists(os.path.join(results_dir, param_dir, classname + ".md")):

@@ -244,9 +244,11 @@ def perf_file(location, filename):
 def perf_dir(benchmark_dir, results_file):
     print("BENCHMARKING " + benchmark_dir)
 
-    subprocess.call(
-        "docker exec -it peggy javac " + benchmark_dir + "*.java", shell=True
-    )
+    output = subprocess.check_output(
+        "docker exec peggy javac " + benchmark_dir + "*.java", shell=True
+    ).decode("utf-8")
+    
+    print(output)
 
     for filename in os.listdir(benchmark_dir):
         if filename.endswith(".java"):
