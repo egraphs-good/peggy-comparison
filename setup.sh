@@ -1,5 +1,8 @@
 set -euxo pipefail
 
+# check that we have javap
+javap --help
+
 
 docker --version
 export DOCKER_ENABLE_DEPRECATED_PULL_SCHEMA_1_IMAGE=1

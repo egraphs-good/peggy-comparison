@@ -6,4 +6,5 @@ tmp/
 glpk-5.0/
 optimized/
 scripts/__pycache__/
+results
 __pycache__/
