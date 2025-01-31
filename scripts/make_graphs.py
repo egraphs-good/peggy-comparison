@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 def make_graphs(results_file, time_vs_lines_filename, time_vs_nodes_filename):
-    matplotlib.rcParams["text.usetex"] = True
+    # matplotlib.rcParams["text.usetex"] = True TODO was this important? not working nightly
     matplotlib.rcParams["font.family"] = "STIXGeneral"
     plt.rcParams["font.size"] = 20
     transparency = 0.2
