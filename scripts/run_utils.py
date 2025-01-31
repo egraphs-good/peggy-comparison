@@ -58,7 +58,6 @@ def run_peggy(
         command = [
             "docker",
             "exec",
-            "-it",
             container_name,
         ]
 
@@ -94,7 +93,7 @@ def run_peggy(
         return Result(ResultType.SUCCESS, output)
     except subprocess.CalledProcessError as e:
         if DEBUG:
-            print(f"Command failed\n{" ".join(command)}")
+            print(f"Command failed\n{" ".join(command)}\nOutput:\n{e.output}")
         return Result(ResultType.FAILURE, e.output)
     except subprocess.TimeoutExpired as e:
         if DEBUG:

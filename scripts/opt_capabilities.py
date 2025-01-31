@@ -23,16 +23,21 @@ def benchmark_file(
     filepath = benchmark_dir + "/" + classname + ".java"
 
     if compile:
-        subprocess.check_output(
-            [
-                "docker",
-                "exec",
-                "-it",
-                config.docker_containername,
-                "javac",
-                filepath,
-            ],
-        )
+        try:
+            subprocess.check_output(
+                [
+                    "docker",
+                    "exec",
+                    config.docker_containername,
+                    "javac",
+                    filepath,
+                ],
+                stderr=subprocess.STDOUT
+            )
+        except subprocess.CalledProcessError as e:
+            print("Error compiling " + classname)
+            print(e.output)
+            raise e
 
     # TODO: choose a good set - 250, 500, 1000?
     for eto_val in [500]:
@@ -62,21 +67,23 @@ def benchmark_file(
         if not os.path.exists(os.path.join(results_dir, param_dir)):
             os.makedirs(os.path.join(results_dir, param_dir))
 
-        # TODO: hardcoded path
-        shutil.copy(
-            os.path.join("optimized", classname + ".class"),
-            os.path.join(results_dir, param_dir, classname + ".class"),
-        )
+        decompiled = "TIMEOUT"
+        # if the optimized file exists, copy it to results dir
+        if os.path.exists("optimized/" + classname + ".class"):
+            shutil.copy(
+                os.path.join("optimized", classname + ".class"),
+                os.path.join(results_dir, param_dir, classname + ".class"),
+            )
 
-        # Decompile the result using jd-cli
-        # and capture the output
-        decompiled = subprocess.check_output(
-            # TODO: hardcoded path
-            [
-                "./jd-cli",
-                "optimized/" + classname + ".class",
-            ]
-        )
+            # Decompile the result using jd-cli
+            # and capture the output
+            decompiled = subprocess.check_output(
+                # TODO: hardcoded path
+                [
+                    "./jd-cli",
+                    "optimized/" + classname + ".class",
+                ]
+            )
 
         # Store the output in a markdown file
         if not os.path.exists(os.path.join(results_dir, param_dir, classname + ".md")):

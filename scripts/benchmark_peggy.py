@@ -16,7 +16,7 @@ if __name__ == "__main__":
                 "-f",
                 "'{{.State.Running}}'",
                 config.docker_containername,
-            ]
+            ],
         ).decode("utf-8")
     ):
         print(f"Container {config.docker_containername} is not running. Exiting...")
