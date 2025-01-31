@@ -23,16 +23,21 @@ def benchmark_file(
     filepath = benchmark_dir + "/" + classname + ".java"
 
     if compile:
-        subprocess.check_output(
-            [
-                "docker",
-                "exec",
-                "-it",
-                config.docker_containername,
-                "javac",
-                filepath,
-            ],
-        )
+        try:
+            subprocess.check_output(
+                [
+                    "docker",
+                    "exec",
+                    "-it",
+                    config.docker_containername,
+                    "javac",
+                    filepath,
+                ],
+            )
+        except subprocess.CalledProcessError as e:
+            print("Error compiling " + classname)
+            print(e.output)
+            raise e
 
     # TODO: choose a good set - 250, 500, 1000?
     for eto_val in [500]:
