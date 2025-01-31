@@ -17,7 +17,6 @@ if __name__ == "__main__":
                 "'{{.State.Running}}'",
                 config.docker_containername,
             ],
-            stderr=subprocess.STDOUT
         ).decode("utf-8")
     ):
         print(f"Container {config.docker_containername} is not running. Exiting...")

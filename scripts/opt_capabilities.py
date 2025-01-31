@@ -33,6 +33,7 @@ def benchmark_file(
                     "javac",
                     filepath,
                 ],
+                stderr=subprocess.STDOUT
             )
         except subprocess.CalledProcessError as e:
             print("Error compiling " + classname)
