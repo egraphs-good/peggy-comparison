@@ -59,7 +59,6 @@ def run_peggy(
         command = [
             "docker",
             "exec",
-            "-it",
             container_name,
         ]
 
