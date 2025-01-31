@@ -32,7 +32,7 @@ def benchmark_file(
                     "javac",
                     filepath,
                 ],
-                stderr=subprocess.STDOUT
+                stderr=subprocess.STDOUT,
             )
         except subprocess.CalledProcessError as e:
             print("Error compiling " + classname)
@@ -46,6 +46,7 @@ def benchmark_file(
             "axioms": "peggy/axioms/java_arithmetic_axioms.xml:peggy/axioms/java_operator_axioms.xml:peggy/axioms/java_operator_costs.xml:peggy/axioms/java_util_axioms.xml",
             "tmpFolder": "tmp",
             "pb": "glpk",
+            "activate": "livsr:binop:constant",
             "eto": str(eto_val),
         }
         print("Running peggy on " + classname + " with params ")
