@@ -8,7 +8,7 @@ There are two benchmarks:
 
 - **optimization capabilities (OC) (qualitative)**: This benchmark produces a comparison of optimized output at different numbers of iterations of Peggy's equality saturation engine.
 
-- **performance and scaling (PS) (quantitative)**: This benchmark... TODO
+- **performance and scaling (PS) (quantitative)**: This benchmark evaluates how Peggy's performance (measured as optimization time) scales with the size of the input program.
 
 
 # Running the benchmarks

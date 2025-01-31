@@ -12,7 +12,12 @@ RUN git clone https://github.com/egraphs-good/peggy-comparison.git
 # Install GLPK.
 RUN wget "https://ftp.gnu.org/gnu/glpk/glpk-5.0.tar.gz" && \
     tar -xzvf glpk-5.0.tar.gz && cd glpk-5.0 && \
-    ./configure && make install
+    ./configure && make install && \
+    # We copy the executable to bin because Peggy expects it to be at this location.
+    # Passing -glpkPath pointing to solver in the example directory doesn't seem to work.
+    # Peggy fails due to not finding glpsol at "/usr/bin/glpsol".
+    cp /glpk-5.0/examples/glpsol /usr/bin/glpsol
+
 
 # Install jd-cli for command line decompiling. We need an old version to work with Java 6.
 RUN wget "https://github.com/intoolswetrust/jd-cli/releases/download/jd-cmd-0.9.2.Final/jd-cli-0.9.2-dist.tar.gz" && \

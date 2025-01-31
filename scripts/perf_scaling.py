@@ -12,7 +12,6 @@ params = {
     "axioms": "peggy/axioms/java_arithmetic_axioms.xml:peggy/axioms/java_operator_axioms.xml:peggy/axioms/java_operator_costs.xml:peggy/axioms/java_util_axioms.xml",
     "tmpFolder": "tmp",
     "pb": "glpk",
-    "glpkPath": '"/glpk-5.0/examples/glpsol"',
     "activate": "livsr:binop:constant",
 }
 optimization_level = "O2"
@@ -185,7 +184,7 @@ columns = [
 ]
 
 
-def perf_file(location, filename):
+def perf_file(location, filename, output_filename):
     """
     Run peggy on all classes in a file.
     Return csv-formatted results with the runtime and formulation size for each
@@ -210,18 +209,24 @@ def perf_file(location, filename):
             location,
             params,
             optimization_level=optimization_level,
+            # TODO: adjust this timeout to be longer
             timeout=1800,
             container_name=config.docker_containername,
         )
-        match peggy_result:
-            case Result(ResultType.FAILURE, output):
-                print("peggy failed")
-            case Result(ResultType.TIMEOUT, output):
-                print("peggy timed out")
+        with open(output_filename, "a") as f:
+            match peggy_result:
+                case Result(ResultType.FAILURE, output):
+                    # TODO: write this to an output/log file instead
+                    with open(output_filename, "a") as f:
+                        f.write("Peggy failed")
+                case Result(ResultType.TIMEOUT, output):
+                    with open(output_filename, "a") as f:
+                        f.write("Peggy timed out")
 
-        print("PEGGY OUTPUT:")
-        print(peggy_result.output)
-        print("END PEGGY OUTPUT")
+            # TODO: write this to an output/log file instead
+            f.write("PEGGY OUTPUT:")
+            f.write(peggy_result.output)
+            f.write("END PEGGY OUTPUT")
 
         method_to_time = perf_from_output(str(peggy_result.output))
 
@@ -241,7 +246,7 @@ def perf_file(location, filename):
     return csv
 
 
-def perf_dir(benchmark_dir, results_file):
+def perf_dir(benchmark_dir, results_file, output_filename):
     print("BENCHMARKING " + benchmark_dir)
 
     subprocess.call(
@@ -250,20 +255,24 @@ def perf_dir(benchmark_dir, results_file):
 
     for filename in os.listdir(benchmark_dir):
         if filename.endswith(".java"):
-            perf = perf_file(benchmark_dir, filename)
+            perf = perf_file(benchmark_dir, filename, output_filename)
             with open(results_file, "a") as f:
                 f.write(perf)
 
 
 def benchmark_dirs(
-    dirs, results_filename, time_vs_lines_filename, time_vs_nodes_filename
+    dirs,
+    results_filename,
+    time_vs_lines_filename,
+    time_vs_nodes_filename,
+    output_filename,
 ):
     # benchmark the directories
     with open(results_filename, "w") as f:
         f.write(",".join(columns) + "\n")
 
     for benchmark_dir in dirs:
-        perf_dir(benchmark_dir, results_filename)
+        perf_dir(benchmark_dir, results_filename, perf_from_output, output_filename)
 
     # make the graphs
     make_graphs.make_graphs(

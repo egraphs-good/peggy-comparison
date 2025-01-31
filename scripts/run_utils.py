@@ -30,7 +30,6 @@ def run_peggy_default(classname, benchmark_dir, timeout=60):
             "tmpFolder": "tmp",
             "pb": "glpk",
             "eto": "500",
-            "glpkPath": '"/glpk-5.0/examples/glpsol"',
             "activate": "livsr:binop:constant",
         },
         optimization_level="O2",
@@ -85,6 +84,8 @@ def run_peggy(
     ]
     addl = [item for sublist in addl for item in sublist]
     command.extend(addl)
+
+    print(" ".join(command))
 
     try:
         output = subprocess.check_output(

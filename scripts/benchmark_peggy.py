@@ -50,4 +50,5 @@ if __name__ == "__main__":
         time_vs_nodes_filename=os.path.join(
             ps_results_dir, config.ps_time_vs_nodes_filename
         ),
+        output_filename=os.path.join(ps_results_dir, config.ps_output_filename),
     )

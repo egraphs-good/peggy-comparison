@@ -59,10 +59,10 @@ def benchmark_file(
         param_dir = str(eto_val)
 
         # Copy the optimized class file to the results dir for these params
-        # TODO: hardcoded path
         if not os.path.exists(os.path.join(results_dir, param_dir)):
             os.makedirs(os.path.join(results_dir, param_dir))
 
+        # TODO: hardcoded path
         shutil.copy(
             os.path.join("optimized", classname + ".class"),
             os.path.join(results_dir, param_dir, classname + ".class"),

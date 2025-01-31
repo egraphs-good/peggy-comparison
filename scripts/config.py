@@ -17,5 +17,6 @@ ps_benchmark_dirs = [
     # "java/polybench/",
 ]
 ps_results_filename = "perf.csv"
+ps_output_filename = "output.txt"
 ps_time_vs_lines_filename = "time_vs_lines.png"
 ps_time_vs_nodes_filename = "time_vs_nodes.png"
