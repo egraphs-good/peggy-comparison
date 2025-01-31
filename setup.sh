@@ -23,3 +23,11 @@ docker build -t $image_name .
 
 # The container will have a volume corresponding to this directory.
 docker run -d -v "$DIR:/peggy-comparison"  --name $container_name -i -t $image_name
+
+
+# remove any local jd-cli installation
+rm -rf jd-cli-0.9.2-dist.tar.gz jd-cli-0.9.2 || true
+wget "https://github.com/intoolswetrust/jd-cli/releases/download/jd-cmd-0.9.2.Final/jd-cli-0.9.2-dist.tar.gz"
+tar -xzvf jd-cli-0.9.2-dist.tar.gz
+
+rm -rf jd-cli-0.9.2-dist.tar.gz
