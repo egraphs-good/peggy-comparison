@@ -3,6 +3,7 @@ import make_graphs
 import os
 import re
 import subprocess
+from collections import defaultdict
 from run_utils import run_peggy, Result, ResultType
 from typing import Dict
 
@@ -26,14 +27,14 @@ def format_method(classname, ret_type, methodname, arg_types):
     )
 
 
-def method_name(signature):
+def get_method_name(signature):
     """
     Returns the method name from a signature
     """
     return signature.split()[2].split("(")[0]
 
 
-def class_name(signature):
+def get_class_name(signature):
     """
     Returns the class name from a signature
     """
@@ -196,52 +197,95 @@ def perf_file(location, filename, output_filename):
     lens = method_lengths_bytecode(filename)
 
     # Get all classes
-    classnames = {class_name(method) for method in lens.keys()}
-    lens = {method_name(method): len for method, len in lens.items()}
+    classname_to_methods = defaultdict(list)
+    for method in lens.keys():
+        class_name = get_class_name(method)
+        classname_to_methods[class_name].append(method)
+
+    lens = {get_method_name(method): len for method, len in lens.items()}
 
     csv = ""
-    for classname in classnames:
+    for classname, methods in classname_to_methods.items():
         print(classname)
+        print(methods)
 
-        # TODO: hard-coded parameters
-        peggy_result = run_peggy(
-            classname,
-            location,
-            params,
-            optimization_level=optimization_level,
-            # TODO: adjust this timeout to be longer
-            timeout=1800,
-            container_name=config.docker_containername,
-        )
-        with open(output_filename, "a") as f:
-            match peggy_result:
-                case Result(ResultType.FAILURE, output):
-                    # TODO: write this to an output/log file instead
-                    with open(output_filename, "a") as f:
-                        f.write("Peggy failed")
-                case Result(ResultType.TIMEOUT, output):
-                    with open(output_filename, "a") as f:
-                        f.write("Peggy timed out")
+        # Run one method at a time to get a more precise timeout
+        for method in methods:
+            methods_to_exclude = [
+                f"<{other_method}>"
+                for other_method in methods
+                if other_method != method
+            ]
+            methods_to_exclude.append(f"<{classname}: void <init>()>")
 
-            # TODO: write this to an output/log file instead
-            f.write("PEGGY OUTPUT:")
-            f.write(peggy_result.output)
-            f.write("END PEGGY OUTPUT")
+            params["exclude"] = "::".join(methods_to_exclude)
 
-        method_to_time = perf_from_output(str(peggy_result.output))
-
-        for method, times in method_to_time.items():
-            # just use method names because sometimes the signatures look a little different
-            # (this is also a little hacky)
-            # TODO: fix that
-            name = method_name(method)
-            length = lens[name] if name in lens else -1
-            escape_k = '"' + method + '"'
-            csv += ",".join(
-                [location, escape_k, str(length)]
-                + [str(times[col]) for col in columns[3:]]
+            # TODO: hard-coded parameters
+            peggy_result = run_peggy(
+                classname,
+                location,
+                params,
+                optimization_level=optimization_level,
+                # TODO: adjust this timeout
+                timeout=1800,
+                container_name=config.docker_containername,
             )
-            csv += "\n"
+
+            with open(output_filename, "ab") as f:
+                match peggy_result:
+                    case Result(ResultType.FAILURE, output):
+                        # TODO: write this to an output/log file instead
+                        with open(output_filename, "a") as f:
+                            f.write("Peggy failed")
+                    case Result(ResultType.TIMEOUT, output):
+                        with open(output_filename, "a") as f:
+                            f.write("Peggy timed out")
+
+                f.write(b"PEGGY OUTPUT:")
+                f.write(peggy_result.output)
+                f.write(b"END PEGGY OUTPUT")
+
+                method_to_time = perf_from_output(str(peggy_result.output))
+                if len(method_to_time) > 1:
+                    # TODO: can check that the methods are being skipped in the output
+                    raise RuntimeError(
+                        f"Methods not excluded properly. Tried to exclude all except \
+                                       {method} but got {method_to_time.keys()}."
+                    )
+                if len(method_to_time) == 0:
+                    print(
+                        f"WARNING: method {method} not processed by Peggy. Skipping..."
+                    )
+                    continue
+
+                method, times = method_to_time.popitem()
+
+                # TODO: this logic is too complicated
+                # If the time is -1 but result is SUCCESS, it's still a failure
+                times = {
+                    col: (
+                        time
+                        if time != -1
+                        else (
+                            peggy_result.result.name
+                            if peggy_result.result != ResultType.SUCCESS
+                            else ResultType.FAILURE.name
+                        )
+                    )
+                    for col, time in times.items()
+                }
+
+                # just use method names because sometimes the signatures look a little different
+                # (this is also a little hacky)
+                # TODO: fix that
+                name = get_method_name(method)
+                length = lens[name] if name in lens else -1
+                escape_k = '"' + method + '"'
+                csv += ",".join(
+                    [location, escape_k, str(length)]
+                    + [str(times[col]) for col in columns[3:]]
+                )
+                csv += "\n"
 
     return csv
 
@@ -252,7 +296,7 @@ def perf_dir(benchmark_dir, results_file, output_filename):
     output = subprocess.check_output(
         "docker exec peggy javac " + benchmark_dir + "*.java", shell=True
     ).decode("utf-8")
-    
+
     print(output)
 
     for filename in os.listdir(benchmark_dir):
@@ -274,7 +318,7 @@ def benchmark_dirs(
         f.write(",".join(columns) + "\n")
 
     for benchmark_dir in dirs:
-        perf_dir(benchmark_dir, results_filename, perf_from_output, output_filename)
+        perf_dir(benchmark_dir, results_filename, output_filename)
 
     # make the graphs
     make_graphs.make_graphs(
