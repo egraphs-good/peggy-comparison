@@ -7,7 +7,7 @@ docker_containername = "peggy"
 oc_benchmark_dir = "java/benchmark"
 oc_benchmark_classname = "Benchmark"
 
-# TODO:  restore these
+# TODO: ad the rest of specjvm
 ps_benchmark_dirs = [
     # "java/uninlined-spec/scimark/",
     # "java/inlined-spec/scimark/",

@@ -72,7 +72,6 @@ def time_vs_x_plot(data, transparency, size, xcol, xlabel, output_filename):
 
     # failing
     ymax = max(work["PBTIME"])
-    print(ymax)
     fail = data[(data["PBTIME"] == FAILURE)]
     ax.scatter(
         fail[xcol], [ymax * 1.3] * len(fail), c="red", s=size, alpha=transparency

@@ -136,11 +136,11 @@ def get_time(portion, log):
         try:
             return int(time.group(1))
         except Exception as e:
-            print("Exception while parsing time")
+            print("Exception while parsing time, skipping...")
             print(e)
             return -1
     else:
-        # TODO: this likely indicates a timeout or failure
+        # This indicates a timeout or failure
         return -1
 
 
@@ -206,11 +206,9 @@ def perf_file(location, filename, output_filename):
 
     csv = ""
     for classname, methods in classname_to_methods.items():
-        print(classname)
-        print(methods)
-
         # Run one method at a time to get a more precise timeout
         for method in methods:
+            print(f"Running Peggy on {method}...")
             methods_to_exclude = [
                 f"<{other_method}>"
                 for other_method in methods
@@ -233,59 +231,54 @@ def perf_file(location, filename, output_filename):
 
             with open(output_filename, "ab") as f:
                 match peggy_result:
-                    case Result(ResultType.FAILURE, output):
-                        # TODO: write this to an output/log file instead
-                        with open(output_filename, "a") as f:
-                            f.write("Peggy failed")
-                    case Result(ResultType.TIMEOUT, output):
-                        with open(output_filename, "a") as f:
-                            f.write("Peggy timed out")
+                    case Result(ResultType.FAILURE, _output):
+                        f.write(b"Peggy failed")
+                    case Result(ResultType.TIMEOUT, _output):
+                        f.write(b"Peggy timed out")
 
                 f.write(b"PEGGY OUTPUT:")
                 f.write(peggy_result.output)
                 f.write(b"END PEGGY OUTPUT")
 
-                method_to_time = perf_from_output(str(peggy_result.output))
-                if len(method_to_time) > 1:
-                    # TODO: can check that the methods are being skipped in the output
-                    raise RuntimeError(
-                        f"Methods not excluded properly. Tried to exclude all except \
-                                       {method} but got {method_to_time.keys()}."
-                    )
-                if len(method_to_time) == 0:
-                    print(
-                        f"WARNING: method {method} not processed by Peggy. Skipping..."
-                    )
-                    continue
-
-                method, times = method_to_time.popitem()
-
-                # TODO: this logic is too complicated
-                # If the time is -1 but result is SUCCESS, it's still a failure
-                times = {
-                    col: (
-                        time
-                        if time != -1
-                        else (
-                            peggy_result.result.name
-                            if peggy_result.result != ResultType.SUCCESS
-                            else ResultType.FAILURE.name
-                        )
-                    )
-                    for col, time in times.items()
-                }
-
-                # just use method names because sometimes the signatures look a little different
-                # (this is also a little hacky)
-                # TODO: fix that
-                name = get_method_name(method)
-                length = lens[name] if name in lens else -1
-                escape_k = '"' + method + '"'
-                csv += ",".join(
-                    [location, escape_k, str(length)]
-                    + [str(times[col]) for col in columns[3:]]
+            method_to_time = perf_from_output(str(peggy_result.output))
+            if len(method_to_time) > 1:
+                # TODO: can check that the methods are being skipped in the output
+                raise RuntimeError(
+                    f"Methods not excluded properly. Tried to exclude all except \
+                                    {method} but got {method_to_time.keys()}."
                 )
-                csv += "\n"
+            if len(method_to_time) == 0:
+                print(f"WARNING: method {method} not processed by Peggy. Skipping...")
+                continue
+
+            method, times = method_to_time.popitem()
+
+            # TODO: this logic is too complicated
+            # If the time is -1 but result is SUCCESS, it's still a failure
+            times = {
+                col: (
+                    time
+                    if time != -1
+                    else (
+                        peggy_result.result.name
+                        if peggy_result.result != ResultType.SUCCESS
+                        else ResultType.FAILURE.name
+                    )
+                )
+                for col, time in times.items()
+            }
+
+            # just use method names because sometimes the signatures look a little different
+            # (this is also a little hacky)
+            # TODO: fix that
+            name = get_method_name(method)
+            length = lens[name] if name in lens else -1
+            escape_k = '"' + method + '"'
+            csv += ",".join(
+                [location, escape_k, str(length)]
+                + [str(times[col]) for col in columns[3:]]
+            )
+            csv += "\n"
 
     return csv
 
@@ -296,8 +289,6 @@ def perf_dir(benchmark_dir, results_file, output_filename):
     output = subprocess.check_output(
         "docker exec peggy javac " + benchmark_dir + "*.java", shell=True
     ).decode("utf-8")
-
-    print(output)
 
     for filename in os.listdir(benchmark_dir):
         if filename.endswith(".java"):

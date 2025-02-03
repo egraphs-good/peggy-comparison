@@ -39,8 +39,7 @@ def benchmark_file(
             print(e.output)
             raise e
 
-    # TODO: choose a good set - 250, 500, 1000?
-    for eto_val in [500]:
+    for eto_val in [250, 500, 1000]:
         # Run peggy on the file
         params = {
             "axioms": "peggy/axioms/java_arithmetic_axioms.xml:peggy/axioms/java_operator_axioms.xml:peggy/axioms/java_operator_costs.xml:peggy/axioms/java_util_axioms.xml",
@@ -49,10 +48,8 @@ def benchmark_file(
             "activate": "livsr:binop:constant",
             "eto": str(eto_val),
         }
-        print("Running peggy on " + classname + " with params ")
-        print(str(params))
+        print(f"Running Peggy on {classname} for eto {eto_val}...")
 
-        # TODO: might want to distinguish between failures?
         peggy_output = run_utils.run_peggy(
             classname,
             optimization_level="O2",

@@ -4,6 +4,7 @@ from dataclasses import dataclass
 import os
 from typing import List
 
+# TODO: make this global across other files?
 DEBUG = True
 
 
@@ -83,8 +84,6 @@ def run_peggy(
     ]
     addl = [item for sublist in addl for item in sublist]
     command.extend(addl)
-
-    print(" ".join(command))
 
     try:
         output = subprocess.check_output(
