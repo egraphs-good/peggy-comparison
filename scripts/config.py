@@ -7,14 +7,14 @@ docker_containername = "peggy"
 oc_benchmark_dir = "java/benchmark"
 oc_benchmark_classname = "Benchmark"
 
-# TODO: ad the rest of specjvm
+# TODO: add the rest of specjvm
 ps_benchmark_dirs = [
-    # "java/uninlined-spec/scimark/",
-    # "java/inlined-spec/scimark/",
+    "java/uninlined-spec/scimark/",
+    "java/inlined-spec/scimark/",
     "java/benchmark/",
-    # "java/uninlined-spec/compress/",
-    # "java/inlined-spec/compress/",
-    # "java/polybench/",
+    "java/uninlined-spec/compress/",
+    "java/inlined-spec/compress/",
+    "java/polybench/",
 ]
 ps_results_filename = "perf.csv"
 ps_output_filename = "output.txt"
