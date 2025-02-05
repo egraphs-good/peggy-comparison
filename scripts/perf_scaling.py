@@ -207,6 +207,16 @@ def perf_file(location, filename, output_filename):
     csv = ""
     for classname, methods in classname_to_methods.items():
         # Run one method at a time to get a more precise timeout
+        methods = [
+            # Constructor is <init>
+            # TODO: not sure what to do about <clinit>
+            method.replace(f" public {classname}(", " void <init>(")
+            .replace(f" ublic {classname}(", " void <init>(")
+            .replace(f" {classname}(", " void <init>(")
+            for method in methods
+        ]
+        # print(methods)
+
         for method in methods:
             print(f"Running Peggy on {method}...")
             methods_to_exclude = [
@@ -214,7 +224,7 @@ def perf_file(location, filename, output_filename):
                 for other_method in methods
                 if other_method != method
             ]
-            methods_to_exclude.append(f"<{classname}: void <init>()>")
+            methods_to_exclude.append(f"<{classname}: void <clinit>()>")
 
             params["exclude"] = "::".join(methods_to_exclude)
 
@@ -225,29 +235,30 @@ def perf_file(location, filename, output_filename):
                 params,
                 optimization_level=optimization_level,
                 # TODO: adjust this timeout
-                timeout=1800,
+                timeout=60,
                 container_name=config.docker_containername,
             )
 
             with open(output_filename, "ab") as f:
                 match peggy_result:
                     case Result(ResultType.FAILURE, _output):
-                        f.write(b"Peggy failed")
+                        f.write(b"\nPeggy failed\n")
                     case Result(ResultType.TIMEOUT, _output):
-                        f.write(b"Peggy timed out")
+                        f.write(b"\nPeggy timed out\n")
 
-                f.write(b"PEGGY OUTPUT:")
+                f.write(b"PEGGY OUTPUT:\n")
                 f.write(peggy_result.output)
-                f.write(b"END PEGGY OUTPUT")
+                f.write(b"END PEGGY OUTPUT\n")
 
             method_to_time = perf_from_output(str(peggy_result.output))
             if len(method_to_time) > 1:
                 # TODO: can check that the methods are being skipped in the output
-                raise RuntimeError(
-                    f"Methods not excluded properly. Tried to exclude all except \
+                # Note that this might happen if there is <init> or <clinit>
+                print(
+                    f"WARNING: Methods not excluded properly. Tried to exclude all except \
                                     {method} but got {method_to_time.keys()}."
                 )
-            if len(method_to_time) == 0:
+            elif len(method_to_time) == 0:
                 print(f"WARNING: method {method} not processed by Peggy. Skipping...")
                 continue
 

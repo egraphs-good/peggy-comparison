@@ -27,15 +27,16 @@ if __name__ == "__main__":
         os.makedirs(config.results_dir)
 
     # Optimization capabilities benchmark
-    oc_results_dir = os.path.join(config.results_dir, "oc")
-    if not os.path.exists(oc_results_dir):
-        os.makedirs(oc_results_dir)
-    opt_capabilities.benchmark_file(
-        classname=config.oc_benchmark_classname,
-        benchmark_dir=config.oc_benchmark_dir,
-        results_dir=oc_results_dir,
-        container_name=config.docker_containername,
-    )
+    # TODO: uncomment
+    # oc_results_dir = os.path.join(config.results_dir, "oc")
+    # if not os.path.exists(oc_results_dir):
+    #     os.makedirs(oc_results_dir)
+    # opt_capabilities.benchmark_file(
+    #     classname=config.oc_benchmark_classname,
+    #     benchmark_dir=config.oc_benchmark_dir,
+    #     results_dir=oc_results_dir,
+    #     container_name=config.docker_containername,
+    # )
 
     # Performance scaling benchmark
     ps_results_dir = os.path.join(config.results_dir, "ps")
