@@ -27,6 +27,7 @@ To setup, run `./setup.sh`. This may take a while (10 minutes).
 Make sure the Docker daemon is running. Then, run:
 
 ```
+conda activate peggy
 source run.sh
 ```
 

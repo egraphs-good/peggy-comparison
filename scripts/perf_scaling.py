@@ -210,8 +210,10 @@ def perf_file(location, filename, output_filename):
         methods = [
             # Constructor is <init>
             method.replace(f" public {classname}(", " void <init>(")
-            .replace(f" ublic {classname}(", " void <init>(")
-            .replace(f" {classname}(", " void <init>(")
+            # TODO: figure out why this exists
+            .replace(f" ublic {classname}(", " void <init>(").replace(
+                f" {classname}(", " void <init>("
+            )
             for method in methods
         ]
         # print(methods)
@@ -245,7 +247,8 @@ def perf_file(location, filename, output_filename):
                         f.write(b"\nPeggy timed out\n")
 
                 f.write(b"PEGGY OUTPUT:\n")
-                f.write(peggy_result.output)
+                if peggy_result.output:
+                    f.write(peggy_result.output)
                 f.write(b"END PEGGY OUTPUT\n")
 
             method_to_time = perf_from_output(str(peggy_result.output))
