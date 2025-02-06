@@ -209,7 +209,6 @@ def perf_file(location, filename, output_filename):
         # Run one method at a time to get a more precise timeout
         methods = [
             # Constructor is <init>
-            # TODO: not sure what to do about <clinit>
             method.replace(f" public {classname}(", " void <init>(")
             .replace(f" ublic {classname}(", " void <init>(")
             .replace(f" {classname}(", " void <init>(")
@@ -234,8 +233,7 @@ def perf_file(location, filename, output_filename):
                 location,
                 params,
                 optimization_level=optimization_level,
-                # TODO: adjust this timeout
-                timeout=60,
+                timeout=config.ps_per_method_timeout_seconds,
                 container_name=config.docker_containername,
             )
 
@@ -252,13 +250,13 @@ def perf_file(location, filename, output_filename):
 
             method_to_time = perf_from_output(str(peggy_result.output))
             if len(method_to_time) > 1:
-                # TODO: can check that the methods are being skipped in the output
                 # Note that this might happen if there is <init> or <clinit>
                 print(
                     f"WARNING: Methods not excluded properly. Tried to exclude all except \
                                     {method} but got {method_to_time.keys()}."
                 )
             elif len(method_to_time) == 0:
+                # Note that this will happen if the method contains exceptions.
                 print(f"WARNING: method {method} not processed by Peggy. Skipping...")
                 continue
 

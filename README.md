@@ -30,20 +30,16 @@ Make sure the Docker daemon is running. Then, run:
 source run.sh
 ```
 
-TODO: benchmark shouldn't produce relevant output, this should be captured instead
-
+This may take several hours.
 Note that this script runs subprocesses in the Docker container. If you want to interrupt the script, you may also want to `docker stop peggy` to stop subprocesses in the container.
 
-TODO: approx time??
 
 This will produce several outputs in the `results` directory:
 
-- `oc/<params>`: A directory corresponding to the set of params passed to peggy on which it was run.
-
-NOTE: this isn't correct rn
-- `oc/<params>/params.json`: These are the params with which Peggy was run to produce the output in this directory.
-- `oc/<params>/peggy_log.txt`: This is the captured output from running Peggy on `Benchmark.java`.
-- `oc/<params>/Benchmark.java`: This is the decompiled optimized benchmark produced by running Peggy.
+- `oc/<eto>`: A directory corresponding to the eto (number of engine iterations) passed to peggy on which it was run.
+- `oc/<eto>/Benchmark.md`: This is the captured output from running Peggy on `Benchmark.java` and the decompiled result.
+- `oc/<eto>/Benchmark.class`: This is the optimized result from running Peggy on `Benchmark.java`.
 - `ps/perf.csv`: This is a csv containing the results of the performance benchmark on peggy.
-- `ps/time_vs_lines.png`: A graph plotting the solver time of Peggy vs. the number of lines of its input.
+- `ps/time_vs_lines.png`: A graph plotting the solver time of Peggy vs. the number of lines of Java bytecode of its input.
 - `ps/time_vs_nodes.png`: A graph plotting the solver time of Peggy vs. the number of nodes in the solver formulation.
+- `ps/output.txt`: The output produced by Peggy from running the performance benchmark. Useful to see the causes of failures.
