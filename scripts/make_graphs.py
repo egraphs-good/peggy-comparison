@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
+from run_utils import ResultType
 
 
 def make_graphs(results_file, time_vs_lines_filename, time_vs_nodes_filename):
@@ -30,6 +31,10 @@ def make_graphs(results_file, time_vs_lines_filename, time_vs_nodes_filename):
     )
 
 
+TIMEOUT = -1
+FAILURE = -2
+
+
 def clean_data(results_file):
     data = pd.read_csv(results_file)
 
@@ -42,9 +47,16 @@ def clean_data(results_file):
         & ~(data["name"].str.contains("<clinit>"))
     ]
 
-    # scale to seconds
+    # scale to seconds,
+    # indicate timeout and failure by -1 or -2
     for timecol in ["PEG2PEGTIME", "PBTIME", "ENGINETIME", "Optimization took"]:
-        data[timecol] = data[timecol] / 1000
+        data[timecol] = data[timecol].apply(
+            lambda x: (
+                TIMEOUT
+                if x == "TIMEOUT"
+                else (FAILURE if x == "FAILURE" else int(x) / 1000)
+            )
+        )
 
     return data
 
@@ -56,16 +68,24 @@ def time_vs_x_plot(data, transparency, size, xcol, xlabel, output_filename):
     ax.set_ylabel("solver time (seconds)")
 
     # passing
-    work = data[data["PBTIME"] >= 0]
-    work = work[work[xcol] >= 0]
-    ax.scatter(work[xcol], work["PBTIME"], c="blue", s=size, alpha=transparency)
+    work = data[data["PBTIME"].apply(lambda x: x != FAILURE and x != TIMEOUT)]
+    ax.scatter(work[xcol], work["PBTIME"], c="green", s=size, alpha=transparency)
 
     # failing
-    # TODO: distinguish from timeout
     ymax = max(work["PBTIME"])
-    fail = data[(data["PBTIME"] < 0)]
+    fail = data[(data["PBTIME"] == FAILURE)]
     ax.scatter(
         fail[xcol], [ymax * 1.3] * len(fail), c="red", s=size, alpha=transparency
+    )
+
+    # timeout
+    timeout = data[(data["PBTIME"] == TIMEOUT)]
+    ax.scatter(
+        timeout[xcol],
+        [ymax * 1.3] * len(timeout),
+        c="purple",
+        s=size,
+        alpha=transparency,
     )
 
     ax.set_yscale("log")
