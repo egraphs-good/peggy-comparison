@@ -88,8 +88,5 @@ def time_vs_x_plot(data, transparency, size, xcol, xlabel, output_filename):
         alpha=transparency,
     )
 
-    ax.set_yscale("log")
-    ax.set_xscale("log")
-
     fig.savefig(output_filename, bbox_inches="tight")
     fig.clear()

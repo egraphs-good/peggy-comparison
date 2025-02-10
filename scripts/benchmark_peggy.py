@@ -23,8 +23,8 @@ if __name__ == "__main__":
         exit()
 
     # Create results dir if not exists
-    if not os.path.exists(config.results_dir):
-        os.makedirs(config.results_dir)
+    if not os.path.exists(config.data_dir):
+        os.makedirs(config.data_dir)
 
     # Optimization capabilities benchmark
     # oc_results_dir = os.path.join(config.results_dir, "oc")
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     # )
 
     # Performance scaling benchmark
-    ps_results_dir = os.path.join(config.results_dir, "ps")
+    ps_results_dir = os.path.join(config.data_dir, "ps")
     if not os.path.exists(ps_results_dir):
         os.makedirs(ps_results_dir)
     perf_scaling.benchmark_dirs(

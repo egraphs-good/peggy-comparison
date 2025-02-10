@@ -1,4 +1,5 @@
-results_dir = "nightly/data"
+data_dir = "nightly/data"
+
 
 # NOTE: if you create the docker container with a different name,
 # update this value
