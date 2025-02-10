@@ -112,7 +112,7 @@ def method_lengths_bytecode(filename) -> Dict[str, int]:
                 res = format_method(classname, ret_type, method_name, arg_types)
                 return res
             else:
-                print(f"Failed to parse method signature: {sig}")
+                print(f"Failed to parse method signature: {sig}", flush=True)
                 return None
 
         # Format method signature, including the class name,
@@ -136,8 +136,8 @@ def get_time(portion, log):
         try:
             return int(time.group(1))
         except Exception as e:
-            print("Exception while parsing time, skipping...")
-            print(e)
+            print("Exception while parsing time, skipping...", flush=True)
+            print(e, flush=True)
             return -1
     else:
         # This indicates a timeout or failure
@@ -219,7 +219,7 @@ def perf_file(location, filename, output_filename):
         # print(methods)
 
         for method in methods:
-            print(f"Running Peggy on {method}...")
+            print(f"Running Peggy on {method}...", flush=True)
             methods_to_exclude = [
                 f"<{other_method}>"
                 for other_method in methods
@@ -256,11 +256,11 @@ def perf_file(location, filename, output_filename):
                 # Note that this might happen if there is <init> or <clinit>
                 print(
                     f"WARNING: Methods not excluded properly. Tried to exclude all except \
-                                    {method} but got {method_to_time.keys()}."
+                                    {method} but got {method_to_time.keys()}.", flush=True
                 )
             elif len(method_to_time) == 0:
                 # Note that this will happen if the method contains exceptions.
-                print(f"WARNING: method {method} not processed by Peggy. Skipping...")
+                print(f"WARNING: method {method} not processed by Peggy. Skipping...", flush=True)
                 continue
 
             method, times = method_to_time.popitem()
@@ -296,7 +296,7 @@ def perf_file(location, filename, output_filename):
 
 
 def perf_dir(benchmark_dir, results_file, output_filename):
-    print("BENCHMARKING " + benchmark_dir)
+    print("BENCHMARKING " + benchmark_dir, flush=True)
 
     output = subprocess.check_output(
         "docker exec peggy javac " + benchmark_dir + "*.java", shell=True
