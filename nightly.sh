@@ -8,12 +8,6 @@ set -x -e
 # if anything in a pipeline fails, fail the whole pipeline
 set -o pipefail
 
-# run setup.sh
-source setup.sh
-
-# run run.sh
-source run.sh
-
 # determine physical directory of this script
 src="${BASH_SOURCE[0]}"
 while [ -L "$src" ]; do
@@ -40,9 +34,16 @@ rm -rf $NIGHTLY_DIR
 mkdir -p "$NIGHTLY_DIR" "$NIGHTLY_DIR/data" "$OUTPUT_DIR"
 
 
+# run setup.sh
+source setup.sh
+
+# run run.sh
+source run.sh
+
+
+
 # copy data directory to output
 cp -r "$DATA_DIR" "$OUTPUT_DIR"
-
 
 
 # This is the uploading part, copied directly from Herbie's nightly script.
