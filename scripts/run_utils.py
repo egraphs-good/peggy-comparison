@@ -22,7 +22,7 @@ class Result:
 
 # Runs peggy on a compiled class in the benchmark directory,
 # with our default parameters
-def run_peggy_default(classname, benchmark_dir, timeout=60):
+def run_peggy_default(classname, benchmark_dir, timeout):
     return run_peggy(
         classname,
         benchmark_dir,
@@ -45,7 +45,7 @@ def run_peggy(
     benchmark_dir,
     params,
     optimization_level,
-    timeout=60,
+    timeout,
     container_name=None,
 ):
     """
