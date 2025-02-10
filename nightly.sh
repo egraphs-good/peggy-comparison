@@ -26,7 +26,7 @@ MYDIR="$(cd -P "$(dirname "$src")" && pwd)"
 # Absolute directory paths
 NIGHTLY_DIR="$MYDIR/nightly"
 OUTPUT_DIR="$NIGHTLY_DIR/output"
-DATA_DIR="$MYDIR/nightly/data"
+DATA_DIR="$NIGHTLY_DIR/data"
 
 # Make sure we're in the right place
 cd $MYDIR
@@ -41,7 +41,7 @@ mkdir -p "$NIGHTLY_DIR" "$NIGHTLY_DIR/data" "$OUTPUT_DIR"
 
 
 # copy data directory to output
-cp -r $DATA_DIR $OUTPUT_DIR
+cp -r "$DATA_DIR" "$OUTPUT_DIR"
 
 
 
