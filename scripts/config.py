@@ -1,4 +1,4 @@
-results_dir = "results"
+results_dir = "nightly/data"
 
 # NOTE: if you create the docker container with a different name,
 # update this value
@@ -10,11 +10,11 @@ oc_benchmark_classname = "Benchmark"
 # TODO: add the rest of specjvm
 ps_benchmark_dirs = [
     "java/uninlined-spec/scimark/",
-    "java/inlined-spec/scimark/",
-    "java/benchmark/",
+    #"java/inlined-spec/scimark/",
+    #"java/benchmark/",
     "java/uninlined-spec/compress/",
-    "java/inlined-spec/compress/",
-    "java/polybench/",
+    #"java/inlined-spec/compress/",
+    #"java/polybench/",
 ]
 ps_results_filename = "perf.csv"
 ps_output_filename = "output.txt"

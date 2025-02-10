@@ -37,7 +37,11 @@ echo "Switching to nighly script directory: $MYDIR"
 
 rm -rf $NIGHTLY_DIR
 # Prepare output directories
-mkdir -p "$NIGHTLY_DIR" "$NIGHTLY_DIR/data" "$NIGHTLY_DIR/data/llvm" "$OUTPUT_DIR"
+mkdir -p "$NIGHTLY_DIR" "$NIGHTLY_DIR/data" "$OUTPUT_DIR"
+
+
+# copy data directory to output
+cp -r $DATA_DIR $OUTPUT_DIR
 
 
 
