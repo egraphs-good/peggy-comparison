@@ -28,7 +28,6 @@ def benchmark_file(
                 [
                     "docker",
                     "exec",
-                    "-u root",
                     config.docker_containername,
                     "javac",
                     filepath,
