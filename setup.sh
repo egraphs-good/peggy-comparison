@@ -15,6 +15,8 @@ image_name=peggy
 # config.py.
 container_name=peggy
 
+docker ps
+
 # remove any docker images named peggy
 docker rm -f $container_name || true
 
