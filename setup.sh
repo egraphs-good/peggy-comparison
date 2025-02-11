@@ -25,7 +25,7 @@ docker rm -f $container_name || true
 docker build -t $image_name .
 
 # The container will have a volume corresponding to this directory.
-docker run -d -v "$DIR:/peggy-comparison"  --name $container_name -i -t $image_name
+docker run --user $(id -u):$(id -g) -d -v "$DIR:/peggy-comparison"  --name $container_name -i -t $image_name
 
 
 # remove any local jd-cli installation
