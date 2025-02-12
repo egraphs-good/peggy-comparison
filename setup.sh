@@ -15,6 +15,8 @@ image_name=peggy
 # config.py.
 container_name=peggy
 
+docker ps
+
 # remove any docker images named peggy
 docker rm -f $container_name || true
 
@@ -25,6 +27,7 @@ docker rm -f $container_name || true
 docker build -t $image_name .
 
 # The container will have a volume corresponding to this directory.
+rm -rf tmp nightly
 docker run --user $(id -u):$(id -g) -d -v "$DIR:/peggy-comparison"  --name $container_name -i -t $image_name
 
 
