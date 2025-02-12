@@ -65,7 +65,7 @@ def benchmark_file(
         if not os.path.exists(os.path.join(results_dir, param_dir)):
             os.makedirs(os.path.join(results_dir, param_dir))
 
-        decompiled = "TIMEOUT"
+        decompiled = "TIMEOUT".encode("utf-8")
         # if the optimized file exists, copy it to results dir
         if os.path.exists("optimized/" + classname + ".class"):
             shutil.copy(
