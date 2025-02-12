@@ -23,5 +23,9 @@ RUN wget "https://github.com/intoolswetrust/jd-cli/releases/download/jd-cmd-0.9.
     mv jd-cli peggy-comparison && mv jd-cli.jar peggy-comparison && \
     rm jd-cli-0.9.2-dist.tar.gz && rm jd-cli.bat
 
+# We are going to run /usr under a non-root, 
+# and glpk dumps files under /usr, so we just give everyone every permission
+RUN chmod -R 777 /usr
+
 # Everything we need will be in peggy-comparison
 WORKDIR /peggy-comparison
