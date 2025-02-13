@@ -106,8 +106,11 @@ def method_lengths_bytecode(filename) -> Dict[str, int]:
 
         def sigtosig(sig):
             # Convert signature from bytecode to signature that matches peggy log output
-            print(sig.strip())
-            res = re.findall(method_regex, sig.strip())[0]
+            res = re.findall(method_regex, sig.strip())
+            if len(res) > 0:
+                res = res[0]
+            else:
+                print('WARNING: skipping', sig.strip())
             if res:
                 ret_type = res[-3] if len(res) >= 3 and res[-3] != '' else 'void'
                 method_name = res[-2] if res[-2] != classname else '<init>'
