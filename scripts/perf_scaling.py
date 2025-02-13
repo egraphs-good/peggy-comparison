@@ -64,7 +64,7 @@ def bytecode_line_counts(bytecode: str) -> Dict[str, int]:
             line.strip() == ""
             or line.strip() == "}"
             or line.strip() == "Exception table:"
-        ):t
+        ):
             method_to_len[in_method] = linecount
             in_method = None
         linecount += 1
