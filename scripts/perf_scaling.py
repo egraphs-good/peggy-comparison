@@ -202,7 +202,8 @@ def perf_file(location, filename, output_filename):
         class_name = get_class_name(method)
         classname_to_methods[class_name].append(method)
 
-    lens = {get_method_name(method): len for method, len in lens.items()}
+    # print(list(lens.keys()))
+    # lens = {get_method_name(method): len for method, len in lens.items()}
 
     csv = ""
     for classname, methods in classname_to_methods.items():
@@ -283,8 +284,12 @@ def perf_file(location, filename, output_filename):
             # just use method names because sometimes the signatures look a little different
             # (this is also a little hacky)
             # TODO: fix that
-            name = get_method_name(method)
-            length = lens[name] if name in lens else -1
+            # name = get_method_name(method)
+            # length = lens[name] if name in lens else -1
+            # print(method)
+            length = lens[method] if method in lens else -1
+            if method not in lens:
+                print("cannot find the lengths of method f{method}")
             escape_k = '"' + method + '"'
             csv += ",".join(
                 [location, escape_k, str(length)]
