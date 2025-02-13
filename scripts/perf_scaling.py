@@ -52,19 +52,22 @@ def bytecode_line_counts(bytecode: str) -> Dict[str, int]:
     method_to_len = dict()
 
     in_method = None
+    # Previously we use the byte offset of the .class file as the number of lines
+    # which is inaccurate
+    linecount = 0
     for i, line in enumerate(bytecode_lines):
         if "Code:" in line:
             # previous line is the method signature
             in_method = bytecode_lines[i - 1]
+            linecount = 0
         elif in_method and (
             line.strip() == ""
             or line.strip() == "}"
             or line.strip() == "Exception table:"
-        ):
-            # end of method, previous instruction is the last
-            linecount = int(bytecode_lines[i - 1].split(":")[0])
+        ):t
             method_to_len[in_method] = linecount
             in_method = None
+        linecount += 1
 
     return method_to_len
 
@@ -271,7 +274,7 @@ def perf_file(location, filename, output_filename):
             times = {
                 col: (
                     time
-                    if time != -1
+                    if time != -1 and peggy_result.result == ResultType.SUCCESS
                     else (
                         peggy_result.result.name
                         if peggy_result.result != ResultType.SUCCESS
@@ -289,7 +292,7 @@ def perf_file(location, filename, output_filename):
             # print(method)
             length = lens[method] if method in lens else -1
             if method not in lens:
-                print("cannot find the lengths of method f{method}")
+                print(f"cannot find the lengths of method {method}")
             escape_k = '"' + method + '"'
             csv += ",".join(
                 [location, escape_k, str(length)]

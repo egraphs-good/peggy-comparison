@@ -89,7 +89,12 @@ def run_peggy(
         output = subprocess.check_output(
             command, stderr=subprocess.STDOUT, timeout=timeout
         )
-        return Result(ResultType.SUCCESS, output)
+        if b"Error processing" in output:
+            if DEBUG:
+                print(f"Command failed\n{" ".join(command)}\nOutput:\n{output}")
+            return Result(ResultType.FAILURE, output)
+        else:
+            return Result(ResultType.SUCCESS, output)
     except subprocess.CalledProcessError as e:
         if DEBUG:
             print(f"Command failed\n{" ".join(command)}\nOutput:\n{e.output}")
