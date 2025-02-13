@@ -71,9 +71,9 @@ public final class Harness {
     }
 
     static class Source {
-        private byte[] buffer;
-        private long crc;
-        private int length;
+        public byte[] buffer;
+        public long crc;
+        public int length;
         static int MAX_LENGTH;
 
         public Source(String fileName) {
@@ -97,7 +97,7 @@ public final class Harness {
             return buffer;
         }
 
-        private static byte[] fillBuffer(String fileName) {
+        public static byte[] fillBuffer(String fileName) {
             try {
                 FileInputStream sif = new FileInputStream(fileName);
                 int length = (int) new File(fileName).length();

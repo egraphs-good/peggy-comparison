@@ -96,7 +96,7 @@ def method_lengths_bytecode(filename) -> Dict[str, int]:
     classes = re.split(classname_regex, bytecode)[1:]
 
     method_regex = (
-        r"[public|protected|private]?\s*([a-zA-z0-9_]+)\s+([a-zA-z0-9_]+)\(([^()]*)\);"
+        r"(public|protected|private|static|\s)*(([a-zA-z0-9_]+)\s)*([a-zA-z0-9_]+)\(([^()]*)\);"
     )
 
     method_to_len = dict()
@@ -106,12 +106,13 @@ def method_lengths_bytecode(filename) -> Dict[str, int]:
 
         def sigtosig(sig):
             # Convert signature from bytecode to signature that matches peggy log output
-            res = re.search(method_regex, sig.strip())
+            print(sig.strip())
+            res = re.findall(method_regex, sig.strip())[0]
             if res:
-                # TODO: could handle better
-                ret_type = res.group(1)
-                method_name = res.group(2)
-                arg_types = [arg.split()[0] for arg in res.group(3).split(",") if arg]
+                ret_type = res[-3] if len(res) >= 3 and res[-3] != '' else 'void'
+                method_name = res[-2] if res[-2] != classname else '<init>'
+                arg_types = [arg.split()[0] for arg in res[-1].split(",") if arg]
+                print(arg_types, method_name, classname, ret_type)
                 res = format_method(classname, ret_type, method_name, arg_types)
                 return res
             else:

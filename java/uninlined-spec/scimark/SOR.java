@@ -50,7 +50,7 @@ public class SOR {
         return Gi_Sum;
     }
 
-    private static final ThreadLocal<double[][]> threadLocalMatrix = new ThreadLocal<double[][]>() {
+    public static final ThreadLocal<double[][]> threadLocalMatrix = new ThreadLocal<double[][]>() {
         @Override
         protected double[][] initialValue() {
             return new double[kernel.CURRENT_SOR_SIZE][kernel.CURRENT_SOR_SIZE];

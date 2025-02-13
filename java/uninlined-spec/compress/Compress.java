@@ -82,9 +82,9 @@ final class Compress {
 }
 
 final class InputBuffer {
-    private int cnt;
-    private int current;
-    private byte[] buffer;
+    public int cnt;
+    public int current;
+    public byte[] buffer;
 
     public InputBuffer(int c, byte[] b) {
         cnt = c;
@@ -108,8 +108,8 @@ final class InputBuffer {
 }
 
 final class OutputBuffer {
-    private int cnt;
-    private byte[] buffer;
+    public int cnt;
+    public byte[] buffer;
 
     public OutputBuffer(byte[] b) {
         buffer = b;
@@ -137,7 +137,7 @@ final class OutputBuffer {
 }
 
 final class CodeTable {
-    private short tab[];
+    public short tab[];
 
     public CodeTable() {
         tab = new short[Compress.HSIZE];
@@ -212,21 +212,21 @@ class CompBase {
  */
 
 final class Compressor extends CompBase {
-    private final static int CHECK_GAP = 10000; /* ratio check interval */
+    public final static int CHECK_GAP = 10000; /* ratio check interval */
 
-    private int ratio;
+    public int ratio;
 
-    private int checkpoint;
+    public int checkpoint;
 
-    private int inCount; /* length of input */
+    public int inCount; /* length of input */
 
-    private int outCount; /* # of codes output */
+    public int outCount; /* # of codes output */
 
-    private int bytesOut; /* length of compressed output */
+    public int bytesOut; /* length of compressed output */
 
-    private HashTable htab;
+    public HashTable htab;
 
-    private CodeTable codetab;
+    public CodeTable codetab;
 
     public Compressor(InputBuffer in, OutputBuffer out) {
         super(in, out);
@@ -327,7 +327,7 @@ final class Compressor extends CompBase {
      * a BITS character long buffer (so that 8 codes will fit in it exactly).
      */
 
-    private void output(int code) {
+    public void output(int code) {
         int rOff = offset, bits = bitsNumber;
         int bp = 0;
 
@@ -408,7 +408,7 @@ final class Compressor extends CompBase {
     }
 
     /* table clear for block compress */
-    private void clBlock() {
+    public void clBlock() {
         int rat;
 
         checkpoint = inCount + CHECK_GAP;
@@ -436,7 +436,7 @@ final class Compressor extends CompBase {
 
     static final class HashTable { // moved 4/15/98 dm/kmd
         /*
-         * Use protected instead of private to allow access by parent class of inner
+         * Use protected instead of public to allow access by parent class of inner
          * class. wnb 4/17/98
          */
 
@@ -478,13 +478,13 @@ final class Compressor extends CompBase {
  */
 
 final class Decompressor extends CompBase {
-    private int size;
+    public int size;
 
-    private CodeTable tabPrefix;
+    public CodeTable tabPrefix;
 
-    private SuffixTable tabSuffix;
+    public SuffixTable tabSuffix;
 
-    private DeStack deStack;
+    public DeStack deStack;
 
     public Decompressor(InputBuffer in, OutputBuffer out) {
         super(in, out);
@@ -584,7 +584,7 @@ final class Decompressor extends CompBase {
      * Outputs: code or -1 is returned.
      */
 
-    private int getCode() {
+    public int getCode() {
         int code;
         int rOff, bits;
         int bp = 0;
@@ -646,7 +646,7 @@ final class Decompressor extends CompBase {
 
     static final class DeStack { // moved 4/15/98 dm/kmd
         /*
-         * Use protected instead of private to allow access by parent class of inner
+         * Use protected instead of public to allow access by parent class of inner
          * class. wnb 4/17/98
          */
 

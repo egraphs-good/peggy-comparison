@@ -1309,7 +1309,7 @@ public class FFT {
         }
     }
 
-    private static final ThreadLocal<double[]> threadLocalVector = new ThreadLocal<double[]>() {
+    public static final ThreadLocal<double[]> threadLocalVector = new ThreadLocal<double[]>() {
         @Override
         protected double[] initialValue() {
             return new double[kernel.CURRENT_FFT_SIZE];

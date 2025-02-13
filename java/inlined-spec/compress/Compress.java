@@ -1482,7 +1482,7 @@ final class Compressor extends CompBase {
 
     static final class HashTable {
         /*
-         * Use protected instead of private to allow access by parent class of inner
+         * Use protected instead of public to allow access by parent class of inner
          * class. wnb 4/17/98
          */
         protected int tab[];
@@ -1826,7 +1826,7 @@ final class Decompressor extends CompBase {
      * Read one code from the standard input. If EOF, return -1. Inputs: stdin
      * Outputs: code or -1 is returned.
      */
-    private int getCode() {
+    public int getCode() {
         int code;
         int rOff, bits;
         int bp = 0;
@@ -1895,7 +1895,7 @@ final class Decompressor extends CompBase {
 
     static final class DeStack {
         /*
-         * Use protected instead of private to allow access by parent class of inner
+         * Use protected instead of public to allow access by parent class of inner
          * class. wnb 4/17/98
          */
         protected byte tab[];
