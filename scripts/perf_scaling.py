@@ -56,7 +56,7 @@ def bytecode_line_counts(bytecode: str) -> Dict[str, int]:
     # which is inaccurate
     linecount = 0
     for i, line in enumerate(bytecode_lines):
-        if "Code:" in line:
+        if line.endswith('Code:'):
             # previous line is the method signature
             in_method = bytecode_lines[i - 1]
             linecount = 0
