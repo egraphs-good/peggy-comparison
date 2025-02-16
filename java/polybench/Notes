@@ -1,0 +1,10 @@
+Minor differences that appear like rounding:
+
+- Covariance
+- Syrk
+- Trmm
+- GramSchmidt (mostly 0 or -0)
+
+Wrong
+
+- Deriche
