@@ -30,9 +30,9 @@
  * @version 14 October 1997, revised 1999-04-24
  */
 public class Stopwatch {
-    private boolean running;
-    private double last_time;
-    private double total;
+    public boolean running;
+    public double last_time;
+    public double total;
 
     /**
      * Return system time (in seconds)

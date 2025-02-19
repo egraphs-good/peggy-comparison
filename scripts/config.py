@@ -10,12 +10,19 @@ oc_benchmark_classname = "Benchmark"
 
 # TODO: add the rest of specjvm
 ps_benchmark_dirs = [
+    "java/polybench/datamining/",
+    "java/polybench/linear-algebra/blas/",
+    "java/polybench/linear-algebra/kernels/",
+    "java/polybench/linear-algebra/solvers/",
+    "java/polybench/medley/",
+    "java/polybench/stencils/",
+
     "java/uninlined-spec/scimark/",
-    #"java/inlined-spec/scimark/",
-    #"java/benchmark/",
+    "java/inlined-spec/scimark/",
     "java/uninlined-spec/compress/",
-    #"java/inlined-spec/compress/",
-    #"java/polybench/",
+    "java/inlined-spec/compress/",
+
+    #"java/benchmark/",
 ]
 ps_results_filename = "perf.csv"
 ps_output_filename = "output.txt"

@@ -52,19 +52,22 @@ def bytecode_line_counts(bytecode: str) -> Dict[str, int]:
     method_to_len = dict()
 
     in_method = None
+    # Previously we use the byte offset of the .class file as the number of lines
+    # which is inaccurate
+    linecount = 0
     for i, line in enumerate(bytecode_lines):
-        if "Code:" in line:
+        if line.endswith('Code:'):
             # previous line is the method signature
             in_method = bytecode_lines[i - 1]
+            linecount = 0
         elif in_method and (
             line.strip() == ""
             or line.strip() == "}"
             or line.strip() == "Exception table:"
         ):
-            # end of method, previous instruction is the last
-            linecount = int(bytecode_lines[i - 1].split(":")[0])
             method_to_len[in_method] = linecount
             in_method = None
+        linecount += 1
 
     return method_to_len
 
@@ -93,7 +96,7 @@ def method_lengths_bytecode(filename) -> Dict[str, int]:
     classes = re.split(classname_regex, bytecode)[1:]
 
     method_regex = (
-        r"[public|protected|private]?\s*([a-zA-z0-9_]+)\s+([a-zA-z0-9_]+)\(([^()]*)\);"
+        r"(public|protected|private|static|\s)*(([a-zA-z0-9_]+)\s)*([a-zA-z0-9_]+)\(([^()]*)\);"
     )
 
     method_to_len = dict()
@@ -103,12 +106,16 @@ def method_lengths_bytecode(filename) -> Dict[str, int]:
 
         def sigtosig(sig):
             # Convert signature from bytecode to signature that matches peggy log output
-            res = re.search(method_regex, sig.strip())
+            res = re.findall(method_regex, sig.strip())
+            if len(res) > 0:
+                res = res[0]
+            else:
+                print('WARNING: skipping', sig.strip())
             if res:
-                # TODO: could handle better
-                ret_type = res.group(1)
-                method_name = res.group(2)
-                arg_types = [arg.split()[0] for arg in res.group(3).split(",") if arg]
+                ret_type = res[-3] if len(res) >= 3 and res[-3] != '' else 'void'
+                method_name = res[-2] if res[-2] != classname else '<init>'
+                arg_types = [arg.split()[0] for arg in res[-1].split(",") if arg]
+                print(arg_types, method_name, classname, ret_type)
                 res = format_method(classname, ret_type, method_name, arg_types)
                 return res
             else:
@@ -202,7 +209,8 @@ def perf_file(location, filename, output_filename):
         class_name = get_class_name(method)
         classname_to_methods[class_name].append(method)
 
-    lens = {get_method_name(method): len for method, len in lens.items()}
+    # print(list(lens.keys()))
+    # lens = {get_method_name(method): len for method, len in lens.items()}
 
     csv = ""
     for classname, methods in classname_to_methods.items():
@@ -270,7 +278,7 @@ def perf_file(location, filename, output_filename):
             times = {
                 col: (
                     time
-                    if time != -1
+                    if time != -1 and peggy_result.result == ResultType.SUCCESS
                     else (
                         peggy_result.result.name
                         if peggy_result.result != ResultType.SUCCESS
@@ -283,8 +291,12 @@ def perf_file(location, filename, output_filename):
             # just use method names because sometimes the signatures look a little different
             # (this is also a little hacky)
             # TODO: fix that
-            name = get_method_name(method)
-            length = lens[name] if name in lens else -1
+            # name = get_method_name(method)
+            # length = lens[name] if name in lens else -1
+            # print(method)
+            length = lens[method] if method in lens else -1
+            if method not in lens:
+                print(f"cannot find the lengths of method {method}")
             escape_k = '"' + method + '"'
             csv += ",".join(
                 [location, escape_k, str(length)]

@@ -226,8 +226,8 @@ public class LU {
         }
     }
 
-    private double LU_[][];
-    private int pivot_[];
+    public double LU_[][];
+    public int pivot_[];
 
     public double measureLU(int N, double min_time, Random R) {
         double A[][] = kernel.RandomMatrix(N, N, R);

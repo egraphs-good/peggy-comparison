@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Check if correct number of arguments is provided
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <folder> <name>"
+    exit 1
+fi
+
+# Assign arguments to variables
+FOLDER=$1
+NAME=$2
+
+cd $FOLDER
+
+# Compile the program
+javac $NAME.java
+
+# Run the compiled program and redirect stderr to output file
+java $NAME > $NAME.out
+
+cd ..

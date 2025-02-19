@@ -15,6 +15,7 @@ image_name=peggy
 # config.py.
 container_name=peggy
 
+# list all current available dockers
 docker ps
 
 # remove any docker images named peggy

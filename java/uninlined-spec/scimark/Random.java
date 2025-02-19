@@ -19,22 +19,22 @@ public class Random {
      * -
      */
     int seed = 0;
-    private int m[];
-    private int i = 4;
-    private int j = 16;
-    private static final int mdig = 32;
-    private static final int one = 1;
-    private static final int m1 = (one << mdig - 2) + ((one << mdig - 2) - one);
-    private static final int m2 = one << mdig / 2;
+    public int m[];
+    public int i = 4;
+    public int j = 16;
+    public static final int mdig = 32;
+    public static final int one = 1;
+    public static final int m1 = (one << mdig - 2) + ((one << mdig - 2) - one);
+    public static final int m2 = one << mdig / 2;
     /*
      * For mdig = 32 : m1 = 2147483647, m2 = 65536
      * For mdig = 64 : m1 = 9223372036854775807, m2 = 4294967296
      */
-    private double dm1 = 1.0 / (double) m1;
-    private boolean haveRange = false;
-    private double left = 0.0;
-    private double right = 1.0;
-    private double width = 1.0;
+    public double dm1 = 1.0 / (double) m1;
+    public boolean haveRange = false;
+    public double left = 0.0;
+    public double right = 1.0;
+    public double width = 1.0;
 
     /*
      * -----------------------------------------------------------------------------
@@ -224,9 +224,9 @@ public class Random {
     }
 
     /*----------------------------------------------------------------------------
-     PRIVATE METHODS
+     public METHODS
      ------------------------------------------------------------------------ */
-    private void initialize(int seed) {
+    public void initialize(int seed) {
         int jseed, k0, k1, j0, j1, iloop;
         this.seed = seed;
         m = new int[17];
