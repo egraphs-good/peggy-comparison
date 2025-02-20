@@ -8,9 +8,9 @@ def make_graphs(results_file, time_vs_lines_filename, time_vs_nodes_filename):
     # for kirsten thesis font
     # matplotlib.rcParams["text.usetex"] = True TODO was this important? not working nightly
     #matplotlib.rcParams["font.family"] = "STIXGeneral"
-    plt.rcParams["font.size"] = 20
-    transparency = 0.2
-    size = 100
+    plt.rcParams["font.size"] = 10
+    transparency = 0.3
+    size = 150
 
     peggy_data = clean_data(results_file)
     eggcc_data = pd.read_csv("eggcc.csv")
@@ -35,7 +35,7 @@ def make_graphs(results_file, time_vs_lines_filename, time_vs_nodes_filename):
         eggcc_ycol="extraction",
         xcol="length",
         xlabel="method length (number of lines)",
-        ylabel="solver time (seconds)",
+        ylabel="extraction time (seconds)",
         output_filename='time_vs_lines_pb.png',
     )
     ratio_plot(
@@ -49,7 +49,7 @@ def make_graphs(results_file, time_vs_lines_filename, time_vs_nodes_filename):
         eggcc_denom="compile",
         xcol="length",
         xlabel="method length (number of lines)",
-        ylabel="solver time / compilation time",
+        ylabel="extraction run-time percentage",
         output_filename='ratio_pb.png',
     )
 
@@ -85,16 +85,21 @@ def time_vs_x_plot(peggy_data, eggcc_data, transparency, size, peggy_ycol, eggcc
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
 
+    length = eggcc_data['length']
+    time = eggcc_data[eggcc_ycol]
+    ax.scatter(length, time, facecolors='lightskyblue', edgecolors='blue', s=size, alpha=transparency, marker='o', label='eggcc')
+
     # passing
     work = peggy_data[peggy_data[peggy_ycol].apply(lambda x: x != FAILURE and x != TIMEOUT)]
-    ax.scatter(work[xcol], work[peggy_ycol], c="green", s=size, alpha=transparency)
+    ax.scatter(work[xcol], work[peggy_ycol], facecolors='lightgreen', edgecolors='green', s=size, alpha=transparency, marker='^', label='peggy')
 
     ymax = max(work[peggy_ycol])
 
     # failing
     fail = peggy_data[(peggy_data[peggy_ycol] == FAILURE)]
     ax.scatter(
-        fail[xcol], [ymax * 1.3] * len(fail), c="red", s=size, alpha=transparency
+        fail[xcol], [ymax * 1.3] * len(fail), facecolors='lightsalmon', edgecolors="red", s=size, alpha=transparency, marker='^',
+        label='peggy (failure)'
     )
 
     # timeout
@@ -102,14 +107,15 @@ def time_vs_x_plot(peggy_data, eggcc_data, transparency, size, peggy_ycol, eggcc
     ax.scatter(
         timeout[xcol],
         [ymax * 1.3] * len(timeout),
-        c="purple",
+        facecolors='plum',
+        edgecolors="purple",
         s=size,
         alpha=transparency,
+        marker='^',
+        label='peggy (timeout)'
     )
 
-    length = eggcc_data['length']
-    time = eggcc_data[eggcc_ycol]
-    ax.scatter(length, time, c="blue", s=size, alpha=transparency)
+    ax.legend()
 
     fig.savefig(output_filename, bbox_inches="tight")
     fig.clear()
@@ -122,8 +128,9 @@ def ratio_plot(peggy_data, eggcc_data, transparency, size, peggy_num, peggy_deno
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
 
-    ax.scatter(peggy_data[xcol], peggy_data[peggy_num] / peggy_data[peggy_denom], c="green", s=size, alpha=transparency)
-    ax.scatter(eggcc_data[xcol], eggcc_data[eggcc_num] / eggcc_data[eggcc_denom], c="blue", s=size, alpha=transparency)
+    ax.scatter(eggcc_data[xcol], eggcc_data[eggcc_num] / eggcc_data[eggcc_denom], facecolors='lightskyblue', edgecolors='blue',  s=size, alpha=transparency, marker='o', label='eggcc')
+    ax.scatter(peggy_data[xcol], peggy_data[peggy_num] / peggy_data[peggy_denom], facecolors='lightgreen', edgecolors='green', s=size, alpha=transparency, marker='^', label='peggy')
+    ax.legend()
 
     fig.savefig(output_filename, bbox_inches="tight")
     fig.clear()
