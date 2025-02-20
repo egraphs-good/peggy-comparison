@@ -1,0 +1,3 @@
+[submodule "eggcc"]
+	path = eggcc
+	url = https://github.com/egraphs-good/eggcc/
