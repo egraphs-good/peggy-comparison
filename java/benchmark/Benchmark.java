@@ -1,5 +1,39 @@
 public class Benchmark {
 
+    public static int conditionalInvariantCodeMotion(int n, int m) {
+        int k = 0;
+        int k2 = 0;
+        if (n < m) {
+            k = n * m;
+            k2 = k * 3;
+        } else {
+            k = n * m;
+            k2 = k * 2;
+        }
+        return k2;
+
+    }
+
+    public static int conditionalSpliting(int n, int m, int k) {
+        if (n == m || n == k) {
+            return (n - m) + (n - k);
+        } else {
+            return k;
+        }
+    }
+
+    public static int conditionalOrdering(int n, int m, int k) {
+        if (n == m) {
+            if (n == k) {
+                return n + m + k;
+            } else {
+                return n * m + k;
+            }
+        } else {
+            return n * m * k;
+        }
+    }
+
     public static int branchHoistingOriginal(int n) {
         int y = 0;
         int x = 0;
