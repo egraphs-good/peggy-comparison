@@ -3,7 +3,7 @@ data_dir = "nightly/data"
 
 # NOTE: if you create the docker container with a different name,
 # update this value
-docker_containername = "peggy2"
+docker_containername = "peggy"
 
 oc_benchmark_dir = "java/benchmark"
 oc_benchmark_classname = "Benchmark"

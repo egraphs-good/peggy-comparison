@@ -13,7 +13,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 image_name=peggy
 # If you use a different name for the container, you must also update
 # config.py.
-container_name=peggy2
+container_name=peggy
 
 # list all current available dockers
 docker ps
