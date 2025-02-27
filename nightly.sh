@@ -7,6 +7,9 @@ echo "Beginning peggy nightly script..."
 set -x -e
 # if anything in a pipeline fails, fail the whole pipeline
 set -o pipefail
+export PATH=~/.cargo/bin:$PATH
+
+rustup update
 
 # determine physical directory of this script
 src="${BASH_SOURCE[0]}"
