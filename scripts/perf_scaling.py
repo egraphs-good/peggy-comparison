@@ -342,7 +342,7 @@ def benchmark_dirs(
     ratio_vs_lines_filename,
     output_filename,
 ):
-    subprocess.run("cd eggcc && cargo build --release", shell=True)
+    subprocess.run("cd eggcc && rustup update && cargo build --release", shell=True)
     # benchmark the directories
     with open(results_filename, "w") as f:
         f.write(",".join(columns) + "\n")
