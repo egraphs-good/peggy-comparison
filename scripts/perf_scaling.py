@@ -2,6 +2,7 @@ import config
 import make_graphs
 import os
 import re
+import json
 import subprocess
 from collections import defaultdict
 from run_utils import run_peggy, Result, ResultType
@@ -187,21 +188,23 @@ columns = [
     "PBTIME",
     "ENGINETIME",
     "Optimization took",
-    "nodes:",
-    "values:",
+    # "nodes:",
+    # "values:",
+    "EGGCC_compiletime",
+    "EGGCC_extracttime",
 ]
 
 
-def perf_file(location, filename, output_filename):
+def perf_file(peggy_location, eggcc_location, filename, output_filename):
     """
-    Run peggy on all classes in a file.
+    Run peggy and eggcc on all classes in a file.
     Return csv-formatted results with the runtime and formulation size for each
     method.
     """
 
-    filename = os.path.join(location, filename)
+    peggy_filename = os.path.join(peggy_location, filename)
 
-    lens = method_lengths_bytecode(filename)
+    lens = method_lengths_bytecode(peggy_filename)
 
     # Get all classes
     classname_to_methods = defaultdict(list)
@@ -211,67 +214,69 @@ def perf_file(location, filename, output_filename):
 
     # print(list(lens.keys()))
     # lens = {get_method_name(method): len for method, len in lens.items()}
-
+    assert(len(classname_to_methods) == 1)
     csv = ""
     for classname, methods in classname_to_methods.items():
-        # Run one method at a time to get a more precise timeout
-        methods = [
-            # Constructor is <init>
-            method.replace(f" public {classname}(", " void <init>(")
-            # TODO: figure out why this exists
-            .replace(f" ublic {classname}(", " void <init>(").replace(
-                f" {classname}(", " void <init>("
-            )
-            for method in methods
-        ]
-        # print(methods)
 
-        for method in methods:
-            print(f"Running Peggy on {method}...", flush=True)
-            methods_to_exclude = [
-                f"<{other_method}>"
-                for other_method in methods
-                if other_method != method
-            ]
-            methods_to_exclude.append(f"<{classname}: void <clinit>()>")
+        ###################
+        # eggcc
+        ###################
+        eggcc_filename = filename.lower()[:-len('.java')] + '.bril'
+        eggcc_filename = os.path.join(eggcc_location, eggcc_filename)
+        try:
+            output = subprocess.check_output(
+                f'eggcc/target/release/eggcc {eggcc_filename} --run-data-out /tmp/profile.json',
+                shell=True
+            ).decode('utf-8')
+        except Exception as e:
+            print("Exception while running eggcc, skipping...", flush=True)
+            print(e, flush=True)
+            continue
+            
+        with open('/tmp/profile.json') as f:
+            eggcc_data = json.load(f)
+            secs = eggcc_data["eggcc_compile_time"]["secs"]
+            nanos = eggcc_data["eggcc_compile_time"]["nanos"]
+            eggcc_compile_time = secs * 1e3 + nanos / 1e6
 
-            params["exclude"] = "::".join(methods_to_exclude)
+            secs = eggcc_data["eggcc_extraction_time"]["secs"]
+            nanos = eggcc_data["eggcc_extraction_time"]["nanos"]
+            eggcc_extraction_time = secs * 1e3 + nanos / 1e6
 
-            # TODO: hard-coded parameters
-            peggy_result = run_peggy(
-                classname,
-                location,
-                params,
-                optimization_level=optimization_level,
-                timeout=config.ps_per_method_timeout_seconds,
-                container_name=config.docker_containername,
-            )
+        ###################
+        # Peggy
+        ###################
+        print(f"Running Peggy on {classname}...", flush=True)
 
-            with open(output_filename, "ab") as f:
-                match peggy_result:
-                    case Result(ResultType.FAILURE, _output):
-                        f.write(b"\nPeggy failed\n")
-                    case Result(ResultType.TIMEOUT, _output):
-                        f.write(b"\nPeggy timed out\n")
+        # TODO: hard-coded parameters
+        peggy_result = run_peggy(
+            classname,
+            peggy_location,
+            params,
+            optimization_level=optimization_level,
+            timeout=config.ps_per_method_timeout_seconds,
+            container_name=config.docker_containername,
+        )
 
-                f.write(b"PEGGY OUTPUT:\n")
-                if peggy_result.output:
-                    f.write(peggy_result.output)
-                f.write(b"END PEGGY OUTPUT\n")
+        with open(output_filename, "ab") as f:
+            match peggy_result:
+                case Result(ResultType.FAILURE, _output):
+                    f.write(b"\nPeggy failed\n")
+                case Result(ResultType.TIMEOUT, _output):
+                    f.write(b"\nPeggy timed out\n")
 
-            method_to_time = perf_from_output(str(peggy_result.output))
-            if len(method_to_time) > 1:
-                # Note that this might happen if there is <init> or <clinit>
-                print(
-                    f"WARNING: Methods not excluded properly. Tried to exclude all except \
-                                    {method} but got {method_to_time.keys()}.", flush=True
-                )
-            elif len(method_to_time) == 0:
-                # Note that this will happen if the method contains exceptions.
-                print(f"WARNING: method {method} not processed by Peggy. Skipping...", flush=True)
-                continue
+            f.write(b"PEGGY OUTPUT:\n")
+            if peggy_result.output:
+                f.write(peggy_result.output)
+            f.write(b"END PEGGY OUTPUT\n")
 
-            method, times = method_to_time.popitem()
+        method_to_time = perf_from_output(str(peggy_result.output))
+        
+        assert(len(method_to_time) > 0)
+
+        total_length = 0
+        total_times = {}
+        for (method, times) in method_to_time.items():
 
             # TODO: this logic is too complicated
             # If the time is -1 but result is SUCCESS, it's still a failure
@@ -288,35 +293,44 @@ def perf_file(location, filename, output_filename):
                 for col, time in times.items()
             }
 
-            # just use method names because sometimes the signatures look a little different
-            # (this is also a little hacky)
-            # TODO: fix that
-            # name = get_method_name(method)
-            # length = lens[name] if name in lens else -1
-            # print(method)
-            length = lens[method] if method in lens else -1
-            if method not in lens:
-                print(f"cannot find the lengths of method {method}")
-            escape_k = '"' + method + '"'
-            csv += ",".join(
-                [location, escape_k, str(length)]
-                + [str(times[col]) for col in columns[3:]]
-            )
-            csv += "\n"
+            assert(method in lens)
+            length = lens[method]
+
+            total_length += length
+
+            def combine_time(t1, t2):
+                if 'TIMEOUT' in [t1, t2]:
+                    return 'TIMEOUT'
+                elif 'FAILURE' in [t1, t2]:
+                    return 'FAILURE'
+                else:
+                    return t1 + t2
+
+            total_times = {
+                col: combine_time(time, total_times.get(col, 0))
+                for col, time in times.items()
+            }
+
+        csv += ",".join(
+            [peggy_location, filename, str(total_length)]
+            + [str(total_times[col]) for col in columns[3:-2]]
+            + [str(eggcc_compile_time), str(eggcc_extraction_time)]
+        )
+        csv += "\n"
 
     return csv
 
 
-def perf_dir(benchmark_dir, results_file, output_filename):
-    print("BENCHMARKING " + benchmark_dir, flush=True)
+def perf_dir(peggy_benchmark_dir, eggcc_benchmark_dir, results_file, output_filename):
+    print("BENCHMARKING " + peggy_benchmark_dir, flush=True)
 
     output = subprocess.check_output(
-        "docker exec peggy javac " + benchmark_dir + "*.java", shell=True
+        "docker exec peggy javac " + peggy_benchmark_dir + "*.java", shell=True
     ).decode("utf-8")
 
-    for filename in os.listdir(benchmark_dir):
+    for filename in os.listdir(peggy_benchmark_dir):
         if filename.endswith(".java"):
-            perf = perf_file(benchmark_dir, filename, output_filename)
+            perf = perf_file(peggy_benchmark_dir, eggcc_benchmark_dir, filename, output_filename)
             with open(results_file, "a") as f:
                 f.write(perf)
 
@@ -325,19 +339,20 @@ def benchmark_dirs(
     dirs,
     results_filename,
     time_vs_lines_filename,
-    time_vs_nodes_filename,
+    ratio_vs_lines_filename,
     output_filename,
 ):
+    subprocess.run("cd eggcc && cargo build --release", shell=True)
     # benchmark the directories
     with open(results_filename, "w") as f:
         f.write(",".join(columns) + "\n")
 
     for benchmark_dir in dirs:
-        perf_dir(benchmark_dir, results_filename, output_filename)
+        perf_dir(benchmark_dir[0], benchmark_dir[1], results_filename, output_filename)
 
     # make the graphs
     make_graphs.make_graphs(
         results_filename,
         time_vs_lines_filename=time_vs_lines_filename,
-        time_vs_nodes_filename=time_vs_nodes_filename,
+        ratio_vs_lines_filename=ratio_vs_lines_filename,
     )

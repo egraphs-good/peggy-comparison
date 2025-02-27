@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from run_utils import ResultType
 import csv
 
-def make_graphs(results_file, time_vs_lines_filename, time_vs_nodes_filename):
+def make_graphs(peggy_results_file, time_vs_lines_filename, ratio_vs_lines_filename):
     # for kirsten thesis font
     # matplotlib.rcParams["text.usetex"] = True TODO was this important? not working nightly
     #matplotlib.rcParams["font.family"] = "STIXGeneral"
@@ -12,32 +12,32 @@ def make_graphs(results_file, time_vs_lines_filename, time_vs_nodes_filename):
     transparency = 0.3
     size = 150
 
-    peggy_data = clean_data(results_file)
-    eggcc_data = pd.read_csv("eggcc.csv")
+    peggy_data = clean_data(peggy_results_file)
+    eggcc_data = peggy_data
     time_vs_x_plot(
         peggy_data,
         eggcc_data,
         transparency,
         size,
         peggy_ycol="PEG2PEGTIME",
-        eggcc_ycol="compile",
+        eggcc_ycol="EGGCC_compiletime",
         xcol="length",
         xlabel="method length (number of lines)",
         ylabel="compilation time (seconds)",
         output_filename=time_vs_lines_filename,
     )
-    time_vs_x_plot(
-        peggy_data,
-        eggcc_data,
-        transparency,
-        size,
-        peggy_ycol="PBTIME",
-        eggcc_ycol="extraction",
-        xcol="length",
-        xlabel="method length (number of lines)",
-        ylabel="extraction time (seconds)",
-        output_filename='time_vs_lines_pb.png',
-    )
+    # time_vs_x_plot(
+    #     peggy_data,
+    #     eggcc_data,
+    #     transparency,
+    #     size,
+    #     peggy_ycol="PBTIME",
+    #     eggcc_ycol="extraction",
+    #     xcol="length",
+    #     xlabel="method length (number of lines)",
+    #     ylabel="extraction time (seconds)",
+    #     output_filename='time_vs_lines_pb.png',
+    # )
     ratio_plot(
         peggy_data,
         eggcc_data,
@@ -45,12 +45,12 @@ def make_graphs(results_file, time_vs_lines_filename, time_vs_nodes_filename):
         size,
         peggy_num="PBTIME",
         peggy_denom="PEG2PEGTIME",
-        eggcc_num="extraction",
-        eggcc_denom="compile",
+        eggcc_num="EGGCC_extracttime",
+        eggcc_denom="EGGCC_compiletime",
         xcol="length",
         xlabel="method length (number of lines)",
         ylabel="extraction run-time percentage",
-        output_filename='ratio_pb.png',
+        output_filename=ratio_vs_lines_filename,
     )
 
 
@@ -67,7 +67,7 @@ def clean_data(results_file):
     data = data[data["length"] < 500]
     # scale to seconds,
     # indicate timeout and failure by -1 or -2
-    for timecol in ["PEG2PEGTIME", "PBTIME", "ENGINETIME", "Optimization took"]:
+    for timecol in ["PEG2PEGTIME", "PBTIME", "ENGINETIME", "Optimization took", 'EGGCC_compiletime', 'EGGCC_extracttime']:
         data[timecol] = data[timecol].apply(
             lambda x: (
                 TIMEOUT
@@ -98,7 +98,7 @@ def time_vs_x_plot(peggy_data, eggcc_data, transparency, size, peggy_ycol, eggcc
     # failing
     fail = peggy_data[(peggy_data[peggy_ycol] == FAILURE)]
     ax.scatter(
-        fail[xcol], [ymax * 1.3] * len(fail), facecolors='lightsalmon', edgecolors="red", s=size, alpha=transparency, marker='^',
+        fail[xcol], [ymax * 1.] * len(fail), facecolors='lightsalmon', edgecolors="red", s=size, alpha=transparency, marker='^',
         label='peggy (failure)'
     )
 
@@ -106,7 +106,7 @@ def time_vs_x_plot(peggy_data, eggcc_data, transparency, size, peggy_ycol, eggcc
     timeout = peggy_data[(peggy_data[peggy_ycol] == TIMEOUT)]
     ax.scatter(
         timeout[xcol],
-        [ymax * 1.3] * len(timeout),
+        [ymax * 1.] * len(timeout),
         facecolors='plum',
         edgecolors="purple",
         s=size,
@@ -136,4 +136,4 @@ def ratio_plot(peggy_data, eggcc_data, transparency, size, peggy_num, peggy_deno
     fig.clear()
 
 if __name__ == "__main__":
-    make_graphs("perf.csv", "time_vs_lines_filename.png", "time_vs_nodes_filename.png")
+    make_graphs("perf.csv", "time_vs_lines_filename.pdf", "ratio_vs_lines_filename.pdf")
