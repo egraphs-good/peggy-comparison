@@ -33,24 +33,11 @@ rm -rf $NIGHTLY_DIR
 # Prepare output directories
 mkdir -p "$NIGHTLY_DIR" "$NIGHTLY_DIR/data" "$OUTPUT_DIR"
 
-
 # run setup.sh
 source setup.sh
 
 # run run.sh
 source run.sh
 
-
-
 # copy data directory to output
 cp -r "$DATA_DIR" "$OUTPUT_DIR"
-
-
-# This is the uploading part, copied directly from Herbie's nightly script.
-DIR="$OUTPUT_DIR"
-B=$(git rev-parse --abbrev-ref HEAD)
-C=$(git rev-parse HEAD | sed 's/\(..........\).*/\1/')
-RDIR="$(date +%s):$(hostname):$B:$C"
-
-# Upload the artifact!
-nightly-results publish --name "$RDIR" "$DIR"
